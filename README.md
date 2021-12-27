@@ -12,8 +12,8 @@ About Hardware
 About Software
 
 1. It often fail to turn corners which consist of black lines.
-2. It wan not able to save people(collect balls).
-3. It was not able to deside to turn left or right to avoid a obstacle.
+2. It was not able to save people(collect balls).
+3. It was not able to decide to turn left or right to avoid a obstacle.
 
 etc...
 
