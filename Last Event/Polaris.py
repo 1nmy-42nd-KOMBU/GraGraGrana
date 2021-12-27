@@ -50,7 +50,7 @@ def line():
     Kd = 1.4
     last_error = 0
     Silber_refrection = 40
-    Black_refrection = 5
+    Black_refrection = 15
 
     while True:
         #GREEN
