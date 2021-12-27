@@ -30,4 +30,4 @@ About software
 
 1. Use values of refrection of color sensors to decide black lines
 2. Do our bsst
-3. First, turn one direction and measure distanse to a wall. Second, if there were a wall, turn 180°
+3. Turn right and measure distance to a wall. Second, if there is a wall, turn 180°
