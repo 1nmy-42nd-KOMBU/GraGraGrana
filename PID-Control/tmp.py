@@ -12,7 +12,7 @@ def pid_control(base_power):
     errors.append(error)
     del errors[0]
 
-    u = Kp * error + Ki * sum(errors) + Kd * (error - errors[-2])
+    u = Kp * error + Ki * sum(errors) + Kd * (error - errors[-2]) #操作量Kp*e+Ki∫e*dt+Kd*dt
 
     left_motor.run(base_power + u)
     right_motor.run(base_power - u)
