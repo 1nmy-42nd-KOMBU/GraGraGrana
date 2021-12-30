@@ -35,6 +35,8 @@ turn180 = 0
 #ここまでは事前にやっとく
 errors = [0,0,0,0,0]
 
+informations_return = []
+
 #ボタン入力があるまで待機
 while not any(ev3.buttons.pressed()):
     wait(10)

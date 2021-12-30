@@ -95,3 +95,21 @@ class Motor:
             right_motor.run_time(right_speed, run_time, stop_type, wait_type)
             if not wait_type:
                 wait(run_time)
+
+class Sensors:
+    def all_refrection(self):
+        return CS1.refrection(), CS2.refrection(), CS3.refrection(), CS4.refrection()
+    
+    def all_color(self):
+        return CS1.color(), CS2.color(), CS3.color(), CS4.color()
+    
+    def part_refrection(self,which_return):
+        if 1 in which_return:
+            informations_return.append(CS1.refrection())
+        if 2 in which_return:
+            informations_return.append(CS2.refrection())
+        if 3 in which_return:
+            informations_return.append(CS3.refrection())
+        if 4 in which_return:
+            informations_return.append(CS4.refrection())
+        return informations_return
