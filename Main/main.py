@@ -22,6 +22,19 @@ TS_right = TouchSensor(portS)
 left_motor = Motor(port)
 right_motor = Motor(port)
 
+# 定義
+black_hightest_refrection = 10
+silber_lowest_refrection = 40
+Kp = 1.5
+Ki = 0.5
+Kd = 1.3
+individual_difference = 0 #cs2-cs3　個体差
+
+turn90 = 0
+turn180 = 0
+#ここまでは事前にやっとく
+errors = [0,0,0,0,0]
+
 #ボタン入力があるまで待機
 while not any(ev3.buttons.pressed()):
     wait(10)
