@@ -1,7 +1,10 @@
 def line_trace():
     while True:
         #silber
-        run=1
+        if any(i > silber_lowest_refrection for i in all_refrection()):
+            break
+        #black
+        
 
     class Turn:
 
@@ -112,4 +115,15 @@ class Sensors:
             informations_return.append(CS3.refrection())
         if 4 in which_return:
             informations_return.append(CS4.refrection())
+        return informations_return
+    
+    def part_color(self,which_return):
+        if 1 in which_return:
+            informations_return.append(CS1.color())
+        if 2 in which_return:
+            informations_return.append(CS2.color())
+        if 3 in which_return:
+            informations_return.append(CS3.color())
+        if 4 in which_return:
+            informations_return.append(CS4.color())
         return informations_return
