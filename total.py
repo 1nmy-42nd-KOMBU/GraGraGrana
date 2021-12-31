@@ -142,12 +142,12 @@ class Turn:
         tank.angle(-25,25,tmp)
         tank.angle(25,25,tmp)
         tank.angle(-25,25,tmp)
-        while mid_left_color.color() != "Color.BLACK" or mid_right_color.color() != "Color.BLACK":
+        while CS2.color() != "Color.BLACK" or CS3.color() != "Color.BLACK":
             tank.speed(25,25)
         tank.angle(25,25,360)
-        while mid_right_color.color() != "Color.BLACK":
+        while CS3.color() != "Color.BLACK":
             tank.speed(25,-25)
-        while mid_left_color.color() != "Color.WHITE" or mid_right_color.color() != "Color.WHITE":
+        while CS2.color() != "Color.WHITE" or CS3.color() != "Color.WHITE":
             tank.speed(25,-25)
 
 
