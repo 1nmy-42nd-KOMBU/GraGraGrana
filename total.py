@@ -63,7 +63,7 @@ while True:
     if "Color.GREEN" in sensors.part_color(2,3):
         turn.turn_green()
     #red
-    if any(i == "Color.RED" for i in sensors.all_color()):
+    if "Color.RED" in sensors.all_color():
         break
 
     motor.pid_control(40)
