@@ -38,6 +38,8 @@ individual_difference = 0 #cs2-cs3　個体差
 
 turn90 = 0
 turn180 = 0
+
+move_a_tile = tmp
 #ここまでは事前にやっとく
 errors = [0,0,0,0,0]
 
@@ -71,7 +73,24 @@ while True:
 # ---------------------------------------------------------------------------------
 
 def rescue():
-    run=1
+    saving = Saving()
+    
+    saving.open
+    tank.angle(40,40,move_a_tile) #move s tile
+    
+
+    class Saving:
+        def forward(self):
+            run=1
+        
+        def backward(self):
+            run=1
+        
+        def bucket_up(self):
+            run=1
+        
+        def bucket_down(self):
+            run=1
 
 # ---------------------------------------------------------------------------------
 
