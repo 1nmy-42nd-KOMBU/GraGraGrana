@@ -5,6 +5,7 @@ Kd = 1.3
 individual_difference = 0 #cs2-cs3
 #ここまでは事前にやっとく
 errors = [0,0,0,0,0]
+SYAKKE = DriveBase(left_motor, right_motor, wheel_diameter=tmp, axle_track=tmp)
 
 def pid_control(base_power):
     error = CS2.refrection() - CS3.refrection() - individual_difference
@@ -14,5 +15,4 @@ def pid_control(base_power):
 
     u = Kp * error + Ki * sum(errors) + Kd * (error - errors[-2]) #操作量Kp*e+Ki∫e*dt+Kd*dt
 
-    left_motor.run(base_power + u)
-    right_motor.run(base_power - u)
+    SYAKKE.drive(base_power, u)

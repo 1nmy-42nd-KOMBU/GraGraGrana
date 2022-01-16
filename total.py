@@ -21,6 +21,7 @@ TS_right = TouchSensor(portS)
 # モーターのインスタンスの生成
 left_motor = Motor(port)
 right_motor = Motor(port)
+SYAKKE = DriveBase(left_motor, right_motor, wheel_diameter=tmp, axle_track=tmp)
 
 turn = Turn()
 motor = Motor()
@@ -179,8 +180,7 @@ class Motor:
         del errors[0]
         u = Kp * error + Ki * sum(errors) + Kd * (error - errors[-2]) #操作量Kp*e+Ki∫e*dt+Kd*dt
 
-        left_motor.run(base_power + u)
-        right_motor.run(base_power - u)
+        SYAKKE.drive(base_power, u)
     
     class Tank:
 
