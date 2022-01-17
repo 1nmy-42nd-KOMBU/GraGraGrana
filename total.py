@@ -184,19 +184,21 @@ class Motor:
     
     class Tank:
 
-        def speed(self, left_speed, right_speed):
-            left_motor.run(left_speed)
-            right_motor.run(right_speed)
+        def speed(self, speed, steering):
+            SYAKKE.drive(speed,steering)
         
-        def angle(self, left_speed, right_speed,angle):# 要検討
-            left_motor.run_angle(left_speed, angle, stop_type = Stop.BLAKE, wait_type = False)
-            right_motor.run_angle(right_speed, angle, stop_type = Stop.BRAKE, wait_type = False)
-            if not wait_type:
-                wait(run_time)
+        def angle(self, speed, steering,angle):# 要検討
+            pass
+            # settings(speed, straight_acceleration, steering, turn_acceleration)
 
-        def time(self, left_speed, right_speed, run_time, stop_type = Stop.BLAKE, wait_type = False):
-            left_motor.run_time(left_speed, run_time, stop_type,wait_type)
-            right_motor.run_time(right_speed, run_time, stop_type, wait_type)
+            # left_motor.run_angle(speed, angle, stop_type = Stop.BLAKE, wait_type = False)
+            # right_motor.run_angle(steering, angle, stop_type = Stop.BRAKE, wait_type = False)
+            # if not wait_type:
+            #     wait(run_time)
+
+        def time(self, speed, steering, run_time, stop_type = Stop.BLAKE, wait_type = False):
+            left_motor.run_time(speed, run_time, stop_type,wait_type)
+            right_motor.run_time(steering, run_time, stop_type, wait_type)
             if not wait_type:
                 wait(run_time)
 
