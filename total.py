@@ -77,7 +77,7 @@ def rescue():
     saving = Saving()
     
     saving.open
-    tank.angle(40,40,move_a_tile) #move s tile
+    tank.angle(40, 40, move_a_tile, Stop.BRAKE) #move s tile
     
 
     class Saving:
@@ -98,7 +98,7 @@ def rescue():
 class Turn:
 
     def turn_black(self,direction):
-        tank.angle(30,30,90) # 黒の上に乗る
+        tank.angle(30, 30, 90, Stop.BRAKE) # 黒の上に乗る
         # 十字路のジャッジ
         if CS1.refrection() < black_hightest_refrection and CS4.refrection() < black_hightest_refrection:
             limit = time.time() + 2.0
@@ -106,7 +106,7 @@ class Turn:
                 motor.pid_control(40) # 黒線上を脱する
 
             if direction == "left": # left
-                tank.angle(40,20,360) # 軌道修正&位置調整
+                tank.angle(40,20,360,Stop.BRAKE) # 軌道修正&位置調整
                 while (CS1.color() != "Color.BLACK") or (CS3.color() != "Color.BLACK" or CS4.color() != "Color.BLACK"):
                     tank.speed(-30,30)
                 if CS1.color() == "Color.BLACK": # 90
@@ -117,7 +117,7 @@ class Turn:
                         tank.speed(30,-30)
 
         else: # right
-            tank.angle(20,40,360)
+            tank.angle(20,40,360,Stop.BRAKE)
             while (CS4.color() != "Color.BLACK") or (CS2.color() != "Color.BLACK" or CS1.color() != "Color.BLACK"):
                 tank.speed(30,-30)
             if CS4.color() == "Color.BLACK": # 90
@@ -128,7 +128,7 @@ class Turn:
                     tank.speed(-30,30)
 
     def turn_green(self):
-        tank.angle(30,30,90) # go a bit
+        tank.angle(30,30,90,Stop.BRAKE) # go a bit
         if CS2.color() == "Color.GREEN" and CS3.color() == "Color.GREEN":
             while not CS2.color() == "Color.WHITE" and CS3.color() == "Color.WHITE":
                 tank.speed(30,-30)
@@ -138,7 +138,7 @@ class Turn:
                 tank.speed(30,-30)
 
         elif CS2.color() == "Color.BLACK": # left
-            tank.angle(30,30,360) # 線の中央に乗る
+            tank.angle(30,30,360,Stop.BRAKE) # 線の中央に乗る
             while not CS4.color() == "Color.BLACK":
                 tank.speed(-30,30)
             while not CS2.color() == "Color.BLACK":
@@ -146,7 +146,7 @@ class Turn:
             while not CS2.color() == "Color.BLACK" and CS3.color() == "Color.BLACK":
                 tank.speed(-30,30)
         else: #right
-            tank.angle(30,30,360) # 線の中央に乗る
+            tank.angle(30,30,360,Stop.BRAKE) # 線の中央に乗る
             while not CS1.color() == "Color.BLACK":
                 tank.speed(30,-30)
             while not CS3.color() == "Color.BLACK":
@@ -157,14 +157,14 @@ class Turn:
     def avoid():
         run=1
         
-        tank.angle(25,-25,tmp)
-        tank.angle(25,25,tmp)
-        tank.angle(-25,25,tmp)
-        tank.angle(25,25,tmp)
-        tank.angle(-25,25,tmp)
+        tank.angle(25,-25,tmp,Stop.BRAKE)
+        tank.angle(25,25,tmp,Stop.BRAKE)
+        tank.angle(-25,25,tmp,Stop.BRAKE)
+        tank.angle(25,25,tmp,Stop.BRAKE)
+        tank.angle(-25,25,tmp,Stop.BRAKE)
         while CS2.color() != "Color.BLACK" or CS3.color() != "Color.BLACK":
             tank.speed(25,25)
-        tank.angle(25,25,360)
+        tank.angle(25,25,360,Stop.BRAKE)
         while CS3.color() != "Color.BLACK":
             tank.speed(25,-25)
         while CS2.color() != "Color.WHITE" or CS3.color() != "Color.WHITE":
@@ -189,24 +189,21 @@ class Motor:
     
     class Tank:
 
-        def speed(self, speed, steering):
-            SYAKKE.drive(speed,steering)
+        def speed(self, base_power, steering):
+            SYAKKE.drive(speedL(base_power), steering)
         
-        def angle(self, speed, steering,angle):# 要検討
-            pass
-            # settings(speed, straight_acceleration, steering, turn_acceleration)
+        def angle(self, base_power, steering, target_angle, stop_type = Stop.BRAKE):# 要検討
+            left_motor.reset_angle(0) # パラメーターのリセット
+            right_motor.reset_angle(0)
 
-            # left_motor.run_angle(speed, angle, stop_type = Stop.BLAKE, wait_type = False)
-            # right_motor.run_angle(steering, angle, stop_type = Stop.BRAKE, wait_type = False)
-            # if not wait_type:
-            #     wait(run_time)
+            SYAKKE.drive(speedL(base_power), steering)
+            while left_motor.angle() < target_angle and right_motor.angle() < target_angle:
+                wait(10)
+            SYAKKE.stop(stop_type)
 
-        def time(self, speed, steering, run_time, stop_type = Stop.BLAKE, wait_type = False):
-            left_motor.run_time(speed, run_time, stop_type,wait_type)
-            right_motor.run_time(steering, run_time, stop_type, wait_type)
-            if not wait_type:
-                wait(run_time)
-
+        def time(self, base_power, steering, run_time, stop_type = Stop.BRAKE):
+            SYAKKE.drive_time(speedL(base_power), steering, run_time)
+            SYAKKE.stop(stop_type)
 
 class Sensors:
     def all_refrection(self):
