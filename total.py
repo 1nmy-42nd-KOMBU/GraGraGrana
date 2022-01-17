@@ -170,6 +170,11 @@ class Turn:
         while CS2.color() != "Color.WHITE" or CS3.color() != "Color.WHITE":
             tank.speed(25,-25)
 
+def speedL(base_power):
+    return base_power / 100 * 1050
+
+def speedM(base_power):
+    return base_power / 100 * 1560
 
 class Motor:
 
@@ -180,7 +185,7 @@ class Motor:
         del errors[0]
         u = Kp * error + Ki * sum(errors) + Kd * (error - errors[-2]) #操作量Kp*e+Ki∫e*dt+Kd*dt
 
-        SYAKKE.drive(base_power, u)
+        SYAKKE.drive(speedL(base_power), u)
     
     class Tank:
 
@@ -201,6 +206,7 @@ class Motor:
             right_motor.run_time(steering, run_time, stop_type, wait_type)
             if not wait_type:
                 wait(run_time)
+
 
 class Sensors:
     def all_refrection(self):

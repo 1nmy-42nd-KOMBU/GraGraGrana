@@ -1,0 +1,2 @@
+The rated maximum speed of the Lego EV3 large motor is 1050 deg/s.
+The rated maximum speed of the Lego EV3 medium motor is 1560 deg/s.
