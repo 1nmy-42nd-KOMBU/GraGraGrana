@@ -81,10 +81,10 @@ def rescue():
     
 
     class Saving:
-        def forward(self):
+        def fence_forward(self):
             run=1
         
-        def backward(self):
+        def fence_backward(self):
             run=1
         
         def bucket_up(self):
