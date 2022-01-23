@@ -109,50 +109,65 @@ class Turn:
                 tank.angle(40,20,360,Stop.BRAKE) # 軌道修正&位置調整
                 while (CS1.color() != "Color.BLACK") or (CS3.color() != "Color.BLACK" or CS4.color() != "Color.BLACK"):
                     tank.speed(-30,30)
+                    SYAKKE.stop(BREAK)
                 if CS1.color() == "Color.BLACK": # 90
                     while not CS2.color() == "Color.WHITE" and CS3.color() == "Color.WHITE":
                         tank.speed(-30,30)
+                        SYAKKE.stop(BREAK)
                 else:
                     while not CS2.color() == "Color.WHITE" and CS3.color() == "Color.WHITE":
                         tank.speed(30,-30)
+                        SYAKKE.stop(BREAK)
 
         else: # right
             tank.angle(20,40,360,Stop.BRAKE)
             while (CS4.color() != "Color.BLACK") or (CS2.color() != "Color.BLACK" or CS1.color() != "Color.BLACK"):
                 tank.speed(30,-30)
+                SYAKKE.stop(BREAK)
             if CS4.color() == "Color.BLACK": # 90
                 while not CS3.color() == "Color.WHITE" and CS2.color() == "Color.WHITE":
                     tank.speed(30,-30)
+                    SYAKKE.stop(BREAK)
             else:
                 while not CS2.color() == "Color.WHITE" and CS3.color() == "Color.WHITE":
                     tank.speed(-30,30)
+                    SYAKKE.stop(BREAK)
 
     def turn_green(self):
         tank.angle(30,30,90,Stop.BRAKE) # go a bit
         if CS2.color() == "Color.GREEN" and CS3.color() == "Color.GREEN":
             while not CS2.color() == "Color.WHITE" and CS3.color() == "Color.WHITE":
                 tank.speed(30,-30)
+                SYAKKE.stop(BREAK)
             while not CS3.color() == "Color.BLACK":
                 tank.speed(30,-30)
+                SYAKKE.stop(BREAK)
             while not CS2.color() == "Color.WHITE" and CS3.color() == "Color.WHITE":
                 tank.speed(30,-30)
+                SYAKKE.stop(BREAK)
 
         elif CS2.color() == "Color.BLACK": # left
             tank.angle(30,30,360,Stop.BRAKE) # 線の中央に乗る
             while not CS4.color() == "Color.BLACK":
                 tank.speed(-30,30)
+                SYAKKE.stop(BREAK)
             while not CS2.color() == "Color.BLACK":
                 tank.speed(-30,30)
+                SYAKKE.stop(BREAK)
             while not CS2.color() == "Color.BLACK" and CS3.color() == "Color.BLACK":
                 tank.speed(-30,30)
+                SYAKKE.stop(BREAK)
         else: #right
             tank.angle(30,30,360,Stop.BRAKE) # 線の中央に乗る
             while not CS1.color() == "Color.BLACK":
                 tank.speed(30,-30)
+                SYAKKE.stop(BREAK)
             while not CS3.color() == "Color.BLACK":
                 tank.speed(30,-30)
+                SYAKKE.stop(BREAK)
             while not CS2.color() == "Color.BLACK" and CS3.color() == "Color.BLACK":
                 tank.speed(30,-30)
+                SYAKKE.stop(BREAK)
 
     def avoid():
         run=1
@@ -164,11 +179,14 @@ class Turn:
         tank.angle(-25,25,tmp,Stop.BRAKE)
         while CS2.color() != "Color.BLACK" or CS3.color() != "Color.BLACK":
             tank.speed(25,25)
+        SYAKKE.stop(BREAK)
         tank.angle(25,25,360,Stop.BRAKE)
         while CS3.color() != "Color.BLACK":
             tank.speed(25,-25)
+            SYAKKE.stop(BREAK)
         while CS2.color() != "Color.WHITE" or CS3.color() != "Color.WHITE":
             tank.speed(25,-25)
+            SYAKKE.stop(BREAK)
 
 def speedL(base_power):
     return base_power / 100 * 1050
@@ -197,7 +215,7 @@ class Motor:
             right_motor.reset_angle(0)
 
             SYAKKE.drive(speedL(base_power), steering)
-            while left_motor.angle() < target_angle and right_motor.angle() < target_angle:
+            while abs(left_motor.angle()) < target_angle and abs(right_motor.angle()) < target_angle:
                 wait(10)
             SYAKKE.stop(stop_type)
 
