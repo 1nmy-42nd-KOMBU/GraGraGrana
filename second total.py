@@ -15,8 +15,8 @@ ColorSensor2 = ColorSensor(PortS2)
 ColorSensor3 = ColorSensor(PortS3)
 ColorSensor4 = ColorSensor(PortS4)
 
-TS_left = TouchSensor(portS)
-TS_right = TouchSensor(portS)
+TouchSensor_left = TouchSensor(portS)
+TouchSensor_right = TouchSensor(portS)
 
 # ----------------------------------------------------------------------------------------------------
 # モーターのインスタンスの生成
@@ -37,36 +37,77 @@ Kd = 1.3
 individual_difference = 0 #ColorSensor2-ColorSensor3　個体差
 errors = [0,0,0,0,0]
 # ----------------------------------------------------------------------------------------------------
+class Sensor_basic_color:
+    def __init__(self,port):
+        self.port = port
+    
+    def color(self):
+        if self.port == 1:
+            info_calor = ColorSensor1.color()
+        elif self.port == 2:
+            info_calor = ColorSensor2.color()
+        elif self.port == 3:
+            info_calor = ColorSensor3.color()
+        elif self.port == 4:
+            info_calor = ColorSensor4.color()
+        return info_color
+    
+    def refrection(self):
+        if self.port == 1:
+            info_refrection = ColorSensor1.refrection()
+        elif self.port == 2:
+            info_refrection = ColorSensor2.refrection()
+        elif self.port == 3:
+            info_refrection = ColorSensor3.refrection()
+        elif self.port == 4:
+            info_refrection = ColorSensor4.refrection()
+        return info_refrection
+
+CS1 = Sensor_basic_color(1)
+CS2 = Sensor_basic_color(2)
+CS3 = Sensor_basic_color(3)
+CS4 = Sensor_basic_color(4)
+# ----------------------------------------------------------------------------------------------------]
+class Sensor_basic_touchsensor:
+    def __init__(self,port):
+        self.port = port
+    
+    def pressed(self):
+        pass
+
+TS_left = Sensor_basic_touchsensor(1)
+TS_right = Sensor_basic_touchsensor(1)
+# ----------------------------------------------------------------------------------------------------
 class Sensor:
     def color_aggregation(self,list):
         value_sensor.clear()
         if 1 in list:
-            value_sensor.append(ColorSensor1.color())
+            value_sensor.append(CS1.color())
         if 2 in list:
-            value_sensor.append(ColorSensor2.color())
+            value_sensor.append(CS2.color())
         if 3 in list:
-            value_sensor.append(ColorSensor3.color())
+            value_sensor.append(CS3.color())
         if 4 in list:
-            value_sensor.append(ColorSensor4.color())
+            value_sensor.append(CS4.color())
         return tuple(value_sensor)
     
     def color_all(self):
-        return ColorSensor1.color(), ColorSensor2.color(), ColorSensor3.color(), ColorSensor4.color()
+        return CS1.color(), CS2.color(), CS3.color(), CS4.color()
     
     def refrection_aggregation(self,list):
         value_sensor.clear()
         if 1 in list:
-            value_sensor.append(ColorSensor1.refrection())
+            value_sensor.append(CS1.refrection())
         if 2 in list:
-            value_sensor.append(ColorSensor2.refrection())
+            value_sensor.append(CS2.refrection())
         if 3 in list:
-            value_sensor.append(ColorSensor3.refrection())
+            value_sensor.append(CS3.refrection())
         if 4 in list:
-            value_sensor.append(ColorSensor4.refrection())
+            value_sensor.append(CS4.refrection())
         return tuple(value_sensor)
     
     def refrection_all(self):
-        return ColorSensor1.refrection(), ColorSensor2.refrection(), ColorSensor3.refrection(), ColorSensor4.refrection()
+        return CS1.refrection(), CS2.refrection(), CS3.refrection(), CS4.refrection()
     
     def touch(self):
         return TS_left.pressed(), TS_right.pressed()
