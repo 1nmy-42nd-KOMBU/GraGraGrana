@@ -45,7 +45,7 @@ class Sensors_touch:
         self.port = port
     
     def pressed(self):
-        pass
+        return touch_sensor_left.value() if self.port == 4 else touch_sensor_right.value()
 
 botton = Button() # bottons of the brick
 sound = Sound()
