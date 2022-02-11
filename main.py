@@ -16,18 +16,18 @@ muxC2port = LegoPort("in4:i2c81:mux2")  # TouchSensor
 muxC3port = LegoPort("in4:i2c82:mux3")    # (driver_name="ms-ev3-smux")
 
 # setting the 1st port on SensorMUX to analogue mode, to be used for touchsensor
-muxC1port.mode = "analog"
 muxC2port.mode = "analog"
+muxC3port.mode = "analog"
 sleep(1) # need to wait for analog mode to be set
 
 # loading the devices for each port
-muxC1port.set_device="lego-ev3-touch"
-muxC2port.set_device="lego-ev3-touch"
-muxC3port.set_device="lego-ev3-color"
+muxC1port.set_device = "lego-ev3-color"
+muxC2port.set_device = "lego-ev3-touch"
+muxC3port.set_device = "lego-ev3-touch"
 
-touch_sensor_left = TouchSensor("in4:i2c80:mux1")
-touch_sensor_right = TouchSensor("in4:i2c81:mux2")
-colorsensor4 = ColorSensor("in4:i2c82:mux3")
+colorsensor4 = ColorSensor("in4:i2c80:mux1")
+touch_sensor_left = TouchSensor("in4:i2c81:mux2")
+touch_sensor_right = TouchSensor("in4:i2c82:mux3")
 sleep(1) # need to wait for sensors to be loaded. 0.5 seconds is not enough.
 
 class Sensors_color:
@@ -35,7 +35,9 @@ class Sensors_color:
         self.port = port
     
     def color(self):
-        pass
+        if self.port == 4:
+            colorsensor4.mode = "COL-COLOR"
+            pass
     
     def refrect(self):
         pass
@@ -45,7 +47,7 @@ class Sensors_touch:
         self.port = port
     
     def pressed(self):
-        return touch_sensor_left.value() if self.port == 4 else touch_sensor_right.value()
+        return touch_sensor_left.value() if self.port == 5 else touch_sensor_right.value()
 
 botton = Button() # bottons of the brick
 sound = Sound()
