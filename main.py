@@ -37,7 +37,7 @@ touch_sensor_left = TouchSensor("in4:i2c81:mux2")
 touch_sensor_right = TouchSensor("in4:i2c82:mux3")
 sleep(sleep_time) # need to wait for sensors to be loaded. 0.5 seconds is not enough.
 
-colorsensor4.mode = "COL-REFLECT"
+colorsensor4.mode = "COL-REFLECT" #
 # ----------------------------------------------------------------------------------------------------
 
 colorsensor1 = ColorSensor(INPUT_1)
@@ -61,8 +61,8 @@ class Sensors_color:
             sleep(sleep_time)
             return colorsensor4.value()
         elif self.port == 3:
+            pass
 
-    
     def refrect(self):
         pass
 
