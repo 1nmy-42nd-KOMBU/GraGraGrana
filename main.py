@@ -4,6 +4,8 @@ from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C,
 from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4, Sensor
 from ev3dev2.sensor.lego import TouchSensor, ColorSensor, UltrasonicSensor
 from ev3dev2.port import LegoPort
+from ev3dev2.button import Button
+from ev3dev2.sound import Sound
 
 # from ev3dev.brickpi import *
 from ev3dev.ev3 import *
@@ -46,8 +48,10 @@ colorsensor3 = ColorSensor(INPUT_3)
 
 motor_left = LargeMotor(OUTPUT_A)
 motor_right = LargeMotor(OUTPUT_B)
+tank = MoveTank(OUTPUT_A, OUTPUT_B)
+# ----------------------------------------------------------------------------------------------------
 
-botton = Button() # bottons of the brick
+button = Button() # bottons of the brick
 sound = Sound()
 
 class Sensors_color:
@@ -55,22 +59,57 @@ class Sensors_color:
         self.port = port
     
     def color(self):
-        if self.port == 4:
+        if self.port == 1:
+            return colorsensor1.color
+        elif self.port == 2:
+            return colorsensor2.color
+        elif self.port == 3:
+            return colorsensor3.color
+        elif self.port == 4:
             sound.speak("Load color sensor")
             colorsensor4.mode = "COL-COLOR"
             sleep(sleep_time)
             return colorsensor4.value()
-        elif self.port == 3:
-            pass
+            colorsensor4.mode = "COL-REFLECT"
+            sleep(sleep_time)
 
     def refrect(self):
-        pass
+        if self.port == 1:
+            return colorsensor1.reflected_light_intensity
+        elif self.port == 2:
+            return colorsensor2.reflected_light_intensity
+        elif self.port == 3:
+            return colorsensor3.reflected_light_intensity
+        elif self.port == 4:
+            return colorsensor4.reflected_light_intensity
+
+CS1 = Sensors_color(1)
+CS2 = Sensors_color(2)
+CS3 = Sensors_color(3)
+CS4 = Sensors_color(4)
 
 class Sensors_touch:
     def __init__(self,port):
         self.port = port
     
     def pressed(self):
-        return touch_sensor_left.value() if self.port == 5 else touch_sensor_right.value()
+        if self.port == 5:
+            return True if touch_sensor_left.value() == 257 else False
+        else:
+            return True if touch_sensor_right.value() == 257 else False
 
-botton.wait_for_pressed(['enter']) # wait for "enter" botton to be pressed
+TS_left = Sensors_touch(5)
+TS_right = Sensors_touch(6)
+# ----------------------------------------------------------------------------------------------------
+
+class Motor:
+    pass
+
+class Turn:
+    pass
+
+while not button.enter(): #wait while all buttons arent pressed
+    button.wait_for_bump("left") # start button
+
+    while True:
+        pass
