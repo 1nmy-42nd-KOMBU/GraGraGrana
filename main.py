@@ -48,7 +48,8 @@ colorsensor3 = ColorSensor(INPUT_3)
 
 motor_left = LargeMotor(OUTPUT_A)
 motor_right = LargeMotor(OUTPUT_B)
-tank = MoveTank(OUTPUT_A, OUTPUT_B)
+movetank = MoveTank(OUTPUT_A, OUTPUT_B)
+movesteering = MoveSteering(OUTPUT_A, OUTPUT_B)
 # ----------------------------------------------------------------------------------------------------
 
 button = Button() # bottons of the brick
@@ -102,13 +103,54 @@ TS_left = Sensors_touch(5)
 TS_right = Sensors_touch(6)
 # ----------------------------------------------------------------------------------------------------
 
-class Motor:
-    pass
+class PID_control:
+    Kp = 1.5
+    Ki = 0.5
+    Kd = 1.3
+    individual_difference = 0 #cs2-cs3
+    errors = [0,0,0,0,0]
+
+    def on_pid(self,base_power):
+        error = CS2.refrect - CS3.refrect()
+        PID_control.errors.append(error)
+        del PID_control.errors[-1]
+
+        u = (PID_control.Kp * error) + (PID_control.Ki * sum(errors)) + (PID_control.Kd * (error - errors[-1]))
+        movetank.on(base_power + u,base_power - u)
+    
+    def on_pid_second(self,base_power,second,stop_type = True):
+        limit = time.time() + second
+        while limit > time.time():
+            error = CS2.refrect() - CS3.refrect()
+            PID_control.errors.append(error)
+            del PID_control.errors[-1]
+
+            u = (PID_control.Kp * error) + (PID_control.Ki * sum(errors)) + (PID_control.Kd * (error - errors[-1]))
+            movetank.on(base_power + u,base_power -u)
+        movetank.off(stop_type)
+    
+    def on_pid_degree(self,base_power,degree,stop_type = True):
+        initial_degree_left = motor_left.position
+        initial_degree_right = motor_right.position
+        while degree > (abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position)) / 2:
+            error = CS2.refrect() - CS3.refrect()
+            PID_control.errors.append(error)
+            del PID_control.errors[-1]
+
+            u = (PID_control.Kp * error) + (PID_control.Ki * sum(errors)) + (PID_control.Kd * (error - errors[-1]))
+            movetank.on(base_power + u,base_power -u)
+        movetank.off(stop_type)
+
+pidtank = PID_control()
 
 class Turn:
     pass
+# values----------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------
 
 while not button.enter(): #wait while all buttons arent pressed
+    
     button.wait_for_bump("left") # start button
 
     while True:
