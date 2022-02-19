@@ -103,7 +103,7 @@ TS_left = Sensors_touch(5)
 TS_right = Sensors_touch(6)
 # ----------------------------------------------------------------------------------------------------
 
-class PID_control:
+class Motor:
     Kp = 1.5
     Ki = 0.5
     Kd = 1.3
@@ -112,39 +112,49 @@ class PID_control:
 
     def on_pid(self,base_power):
         error = CS2.refrect - CS3.refrect()
-        PID_control.errors.append(error)
-        del PID_control.errors[-1]
+        Motor.errors.append(error)
+        del Motor.errors[-1]
 
-        u = (PID_control.Kp * error) + (PID_control.Ki * sum(errors)) + (PID_control.Kd * (error - errors[-1]))
+        u = (Motor.Kp * error) + (Motor.Ki * sum(errors)) + (Motor.Kd * (error - errors[-1]))
         movetank.on(base_power + u,base_power - u)
     
     def on_pid_second(self,base_power,second,stop_type = True):
         limit = time.time() + second
         while limit > time.time():
             error = CS2.refrect() - CS3.refrect()
-            PID_control.errors.append(error)
-            del PID_control.errors[-1]
+            Motor.errors.append(error)
+            del Motor.errors[-1]
 
-            u = (PID_control.Kp * error) + (PID_control.Ki * sum(errors)) + (PID_control.Kd * (error - errors[-1]))
+            u = (Motor.Kp * error) + (Motor.Ki * sum(errors)) + (Motor.Kd * (error - errors[-1]))
             movetank.on(base_power + u,base_power -u)
         movetank.off(stop_type)
     
     def on_pid_degree(self,base_power,degree,stop_type = True):
         initial_degree_left = motor_left.position
         initial_degree_right = motor_right.position
-        while degree > (abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position)) / 2:
+        while degree > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2:
             error = CS2.refrect() - CS3.refrect()
-            PID_control.errors.append(error)
-            del PID_control.errors[-1]
+            Motor.errors.append(error)
+            del Motor.errors[-1]
 
-            u = (PID_control.Kp * error) + (PID_control.Ki * sum(errors)) + (PID_control.Kd * (error - errors[-1]))
+            u = (Motor.Kp * error) + (Motor.Ki * sum(errors)) + (Motor.Kd * (error - errors[-1]))
             movetank.on(base_power + u,base_power -u)
         movetank.off(stop_type)
 
-pidtank = PID_control()
+    def black_quarter(self,direction = "left"):
+        pass
+    
+    def green(self,direction = "left"):
+        pass
+    
+    def avoid(self):
+        pass
+    
+    def save(self):
+        pass
 
-class Turn:
-    pass
+mytank = Motor()
+
 # values----------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------
