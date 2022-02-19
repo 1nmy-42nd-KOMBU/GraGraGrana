@@ -137,7 +137,7 @@ class Motor:
             Motor.errors.append(error)
             del Motor.errors[-1]
 
-            u = (Motor.Kp * error) + (Motor.Ki * sum(errors)) + (Motor.Kd * (error - errors[-1]))
+            u = (Motor.Kp * error) + (Motor.Ki * sum(Motor.errors)) + (Motor.Kd * (error - errors[-1]))
             movetank.on(base_power + u,base_power -u)
         movetank.off(stop_type)
 
