@@ -145,13 +145,16 @@ class Motor:
         movetank.on(left_speed,right_speed)
 
     def on_for_degrees(self,left_speed,right_speed,degrees,stop_type = True):
-        pass #on_for_degrees(left_speed, right_speed, degrees, brake=True, block=True)
+        movetank.on_for_degrees(left_speed,right_speed,degrees,stop_type)
+            #on_for_degrees(left_speed, right_speed, degrees, brake=True, block=True)
 
     def on_for_rotations(self,left_speed,right_speed,rotations,stop_type = True):
-        pass #on_for_rotations(left_speed, right_speed, rotations, brake=True, block=True)
+        movetank.on_for_rotations(left_speed,right_speed,rotations,stop_type)
+            #on_for_rotations(left_speed, right_speed, rotations, brake=True, block=True)
 
     def on_for_seconds(self,left_speed,right_speed,seconds,stop_type = True):
-        pass #on_for_seconds(left_speed, right_speed, seconds, brake=True, block=True)
+        movetank.on_for_seconds(left_speed,right_speed,seconds,stop_type)
+            #on_for_seconds(left_speed, right_speed, seconds, brake=True, block=True)
 
     def black_quarter(self,direction = "left"):
         pass
