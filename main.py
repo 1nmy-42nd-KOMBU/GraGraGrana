@@ -40,7 +40,7 @@ touch_sensor_right = TouchSensor("in4:i2c82:mux3")
 sleep(sleep_time) # need to wait for sensors to be loaded. 0.5 seconds is not enough.
 
 colorsensor4.mode = "COL-REFLECT" #
-# ----------------------------------------------------------------------------------------------------
+# instance--------------------------------------------------------------------------------------------
 
 colorsensor1 = ColorSensor(INPUT_1)
 colorsensor2 = ColorSensor(INPUT_2)
@@ -50,7 +50,7 @@ motor_left = LargeMotor(OUTPUT_A)
 motor_right = LargeMotor(OUTPUT_B)
 movetank = MoveTank(OUTPUT_A, OUTPUT_B)
 movesteering = MoveSteering(OUTPUT_A, OUTPUT_B)
-# ----------------------------------------------------------------------------------------------------
+# Sensors---------------------------------------------------------------------------------------------
 
 button = Button() # bottons of the brick
 sound = Sound()
@@ -101,7 +101,7 @@ class Sensors_touch:
 
 TS_left = Sensors_touch(5)
 TS_right = Sensors_touch(6)
-# ----------------------------------------------------------------------------------------------------
+# Motors----------------------------------------------------------------------------------------------
 
 class Motor:
     Kp = 1.5
@@ -118,28 +118,40 @@ class Motor:
         u = (Motor.Kp * error) + (Motor.Ki * sum(Motor.errors)) + (Motor.Kd * (error - Motor.errors[-1]))
         movetank.on(base_power + u,base_power - u)
     
-    def on_pid_second(self,base_power,second,stop_type = True):
+    def on_pid_for_seconds(self,base_power,second,stop_type = True):
         limit = time.time() + second
         while limit > time.time():
-            error = CS2.refrect() - CS3.refrect()
-            Motor.errors.append(error)
-            del Motor.errors[-1]
-
-            u = (Motor.Kp * error) + (Motor.Ki * sum(Motor.errors)) + (Motor.Kd * (error - Motor.errors[-1]))
-            movetank.on(base_power + u,base_power -u)
+            self.on_pid()
         movetank.off(stop_type)
     
-    def on_pid_degree(self,base_power,degree,stop_type = True):
+    def on_pid_for_degrees(self,base_power,degree,stop_type = True):
         initial_degree_left = motor_left.position
         initial_degree_right = motor_right.position
         while degree > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2:
-            error = CS2.refrect() - CS3.refrect()
-            Motor.errors.append(error)
-            del Motor.errors[-1]
-
-            u = (Motor.Kp * error) + (Motor.Ki * sum(Motor.errors)) + (Motor.Kd * (error - Motor.errors[-1]))
-            movetank.on(base_power + u,base_power -u)
+            self.on_pid()
         movetank.off(stop_type)
+    
+    def on_pid_for_rotations(self,base_power,rotations,stop_type = True):
+        initial_degree_left = motor_left.position
+        initial_degree_right = motor_right.position
+        while rotations > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2 / 306:
+            self.on_pid()
+        movetank.off(stop_type)
+    
+    def stop(stop_type = True):
+        movetank.off(stop_type)
+
+    def on(self,left_speed,right_speed):
+        movetank.on(left_speed,right_speed)
+
+    def on_for_degrees(self,left_speed,right_speed,degrees,stop_type = True):
+        pass #on_for_degrees(left_speed, right_speed, degrees, brake=True, block=True)
+
+    def on_for_rotations(self,left_speed,right_speed,rotations,stop_type = True):
+        pass #on_for_rotations(left_speed, right_speed, rotations, brake=True, block=True)
+
+    def on_for_seconds(self,left_speed,right_speed,seconds,stop_type = True):
+        pass #on_for_seconds(left_speed, right_speed, seconds, brake=True, block=True)
 
     def black_quarter(self,direction = "left"):
         pass
@@ -153,7 +165,7 @@ class Motor:
     def save(self):
         pass
 
-mytank = Motor()
+tank = Motor()
 
 # values----------------------------------------------------------------------------------------------
 
