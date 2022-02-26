@@ -110,6 +110,9 @@ class Motor:
     individual_difference = 0 #cs2-cs3
     errors = [0,0,0,0,0]
 
+    angle_90 = None
+    angle_180 = None
+
     def on_pid(self,base_power):
         error = CS2.refrect - CS3.refrect()
         Motor.errors.append(error)
@@ -156,9 +159,34 @@ class Motor:
         movetank.on_for_seconds(left_speed,right_speed,seconds,stop_type)
             #on_for_seconds(left_speed, right_speed, seconds, brake=True, block=True)
 
-    def black_quarter(self,direction = "left"):
-        pass
-    
+    def black_quarter(self):
+        if CS1.refrect() < black_highset_refrect and CS4.refrect() < black_highset_refrect: # turn
+            self.on_pid_for_degrees(None,None,False)
+        elif CS1.refrect() < CS4.refrect():
+            self.on_for_degrees(30 + 10,30,None)
+            while CS1.color() != 1 and CS4.color() != 1:
+                self.on(-30,30)
+            if CS1.refrect() < black_highset_refrect:
+                while not CS2.color() == 1:
+                    self.on(-30,30)
+                while not CS2.color == 6:
+                    self.on(-30,30)
+            else:
+                while not CS2.color() == 1 and CS3.color() == 1:
+                    self.on(30,-30)
+        else: # return
+            self.on_for_degrees(30,30 + 10,None)
+            while CS4.color() != 1 and CS4.color() != 1:
+                self.on(30,-30)
+            if CS4.refrect() < black_highset_refrect:
+                while not CS3.color() == 1:
+                    self.on(30,-30)
+                while not CS3.color == 6:
+                    self.on(30,-30)
+            else:
+                while not CS2.color() == 1 and CS3.color() == 1:
+                    self.on(30,-30)
+
     def green(self,direction = "left"):
         pass
     
@@ -171,7 +199,8 @@ class Motor:
 tank = Motor()
 
 # values----------------------------------------------------------------------------------------------
-
+black_highset_refrect = None
+white_lowset_refrect = None
 # ----------------------------------------------------------------------------------------------------
 
 while not button.enter(): #wait while all buttons arent pressed
