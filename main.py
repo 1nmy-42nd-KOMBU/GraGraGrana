@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from click import password_option
 from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, SpeedPercent, MoveTank, MoveSteering
 from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4, Sensor
 from ev3dev2.sensor.lego import TouchSensor, ColorSensor, UltrasonicSensor
@@ -50,6 +51,11 @@ motor_left = LargeMotor(OUTPUT_A)
 motor_right = LargeMotor(OUTPUT_B)
 movetank = MoveTank(OUTPUT_A, OUTPUT_B)
 movesteering = MoveSteering(OUTPUT_A, OUTPUT_B)
+# values----------------------------------------------------------------------------------------------
+
+black_highset_refrect = None
+white_lowset_refrect = None
+whites = [2,4,6]
 # Sensors---------------------------------------------------------------------------------------------
 
 button = Button() # bottons of the brick
@@ -113,6 +119,9 @@ class Motor:
     angle_90 = None
     angle_180 = None
 
+    def position(self):
+        return movetank.position
+
     def on_pid(self,base_power):
         error = CS2.refrect - CS3.refrect()
         Motor.errors.append(error)
@@ -124,21 +133,21 @@ class Motor:
     def on_pid_for_seconds(self,base_power,second,stop_type = True):
         limit = time.time() + second
         while limit > time.time():
-            self.on_pid()
+            self.on_pid(base_power)
         movetank.off(stop_type)
     
     def on_pid_for_degrees(self,base_power,degree,stop_type = True):
         initial_degree_left = motor_left.position
         initial_degree_right = motor_right.position
         while degree > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2:
-            self.on_pid()
+            self.on_pid(base_power)
         movetank.off(stop_type)
     
     def on_pid_for_rotations(self,base_power,rotations,stop_type = True):
         initial_degree_left = motor_left.position
         initial_degree_right = motor_right.position
-        while rotations > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2 / 306:
-            self.on_pid()
+        while rotations > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2 / 360:
+            self.on_pid(base_power)
         movetank.off(stop_type)
     
     def stop(stop_type = True):
@@ -191,12 +200,34 @@ class Motor:
             else:
                 while not CS2.color() == 1:
                     self.on(-30,30)
-                while not CS2.color() == 1 and CS3.color() == 1:
+                while not CS2.color() in whites and CS3.color() in whites:
                     self.on(-30,30)
+        self.stop()
 
-    def green(self,direction = "left"):
-        pass
-    
+    def green(self):
+        first_position = self.position()
+        direction = "left" if CS2.color() == 3 else "right"
+        while abs(self.position() - first_position) < None or (not CS2.color() == 3 and CS3.color() == 3):
+            self.on(30,30)
+        if CS2.color() == 3 and CS3.color() == 3:
+            while CS2.color() in (1,3):
+                self.on(30,-30)
+            while not CS3 == 1:
+                self.on(30,-30)
+            while not CS2.color() in whites and CS3.color() in whites:
+                self.on(30,-30)
+        elif direction == "left":
+            while not CS2 == 1:
+                self.on(-30,30)
+            while not CS2.color() in whites and CS3.color() in whites:
+                self.on(-30,30)
+        else:
+            while not CS3 == 1:
+                self.on(30,-30)
+            while not CS2.color() in whites and CS3.color() in whites:
+                self.on(30,-30)
+        self.stop()
+
     def avoid(self):
         pass
     
@@ -204,10 +235,6 @@ class Motor:
         pass
 
 tank = Motor()
-
-# values----------------------------------------------------------------------------------------------
-black_highset_refrect = None
-white_lowset_refrect = None
 # ----------------------------------------------------------------------------------------------------
 
 while not button.enter(): #wait while all buttons arent pressed
