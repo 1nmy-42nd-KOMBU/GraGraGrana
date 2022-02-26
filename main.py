@@ -160,9 +160,11 @@ class Motor:
             #on_for_seconds(left_speed, right_speed, seconds, brake=True, block=True)
 
     def black_quarter(self):
-        if CS1.refrect() < black_highset_refrect and CS4.refrect() < black_highset_refrect: # turn
+        if CS1.refrect() < black_highset_refrect and CS4.refrect() < black_highset_refrect:
+            # go away
             self.on_pid_for_degrees(None,None,False)
         elif CS1.refrect() < CS4.refrect():
+            # left
             self.on_for_degrees(30 + 10,30,None)
             while CS1.color() != 1 and CS4.color() != 1:
                 self.on(-30,30)
@@ -172,9 +174,12 @@ class Motor:
                 while not CS2.color == 6:
                     self.on(-30,30)
             else:
-                while not CS2.color() == 1 and CS3.color() == 1:
+                while not CS3.color() == 1:
                     self.on(30,-30)
-        else: # return
+                while not CS3.color() == 1 and CS3.color() == 1:
+                    self.on(30,-30)
+        else:
+            # right
             self.on_for_degrees(30,30 + 10,None)
             while CS4.color() != 1 and CS4.color() != 1:
                 self.on(30,-30)
@@ -184,8 +189,10 @@ class Motor:
                 while not CS3.color == 6:
                     self.on(30,-30)
             else:
+                while not CS2.color() == 1:
+                    self.on(-30,30)
                 while not CS2.color() == 1 and CS3.color() == 1:
-                    self.on(30,-30)
+                    self.on(-30,30)
 
     def green(self,direction = "left"):
         pass
