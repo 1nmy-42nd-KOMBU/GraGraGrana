@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from click import password_option
 from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, SpeedPercent, MoveTank, MoveSteering
 from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4, Sensor
 from ev3dev2.sensor.lego import TouchSensor, ColorSensor, UltrasonicSensor
