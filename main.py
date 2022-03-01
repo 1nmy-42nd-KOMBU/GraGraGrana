@@ -203,9 +203,8 @@ class Motor:
                     self.on(-30,30)
         self.stop()
 
-    def green(self):
+    def green(self,direction):
         first_position = self.position()
-        direction = "left" if CS2.color() == 3 else "right"
         while abs(self.position() - first_position) < None or (not CS2.color() == 3 and CS3.color() == 3):
             self.on(30,30)
         if CS2.color() == 3 and CS3.color() == 3:
@@ -244,12 +243,22 @@ while not button.enter(): #wait while all buttons arent pressed
     button.wait_for_bump("left") # start button
 
     while True:
-        # silber
-        if (2 <= sum(i > silber_lowset_refrect for i in (CS1.refrect(),CS2.refrect(),CS3.refrect(),CS4.refrect())) and 
-                avoider):
+        # silber----------------------------------------------------------------------------------------------
+        if 2 <= sum(i > silber_lowset_refrect for i in (CS1.refrect(),CS2.refrect(),CS3.refrect(),CS4.refrect())) and avoider:
             avoider = False
             tank.avoid()
-        #black
+        # black-----------------------------------------------------------------------------------------------
         if last_refrect[0] - CS1.refrect() > None or last_refrect[1] - CS4.refrect() > None:
-            pass
+            tank.black_quarter()
         last_refrect = CS1.refrect(),CS4.refrect()
+        # Green-----------------------------------------------------------------------------------------------
+        if (CS1.color() in whites and CS2.color() == 3) or (CS4.color() in whites and CS3.color() == 3):
+            tank.green("left" if CS2.color() == 3 else "right")
+        # Red-------------------------------------------------------------------------------------------------
+        if 2 <= sum(i == 5 for i in (CS1.color(),CS2.color(),CS3.color(),CS4.color())):
+            break
+        # Touch-----------------------------------------------------------------------------------------------
+        if TS_left.pressed() + TS_right.pressed() != 256 * 2:
+            tank.avoid()
+        # PID-Control-----------------------------------------------------------------------------------------
+        tank.on_pid(40)
