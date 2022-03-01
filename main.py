@@ -54,7 +54,7 @@ movesteering = MoveSteering(OUTPUT_A, OUTPUT_B)
 # values----------------------------------------------------------------------------------------------
 
 black_highset_refrect = None
-white_lowset_refrect = None
+silber_lowset_refrect = None
 whites = [2,4,6]
 # Sensors---------------------------------------------------------------------------------------------
 
@@ -237,9 +237,20 @@ class Motor:
 tank = Motor()
 # ----------------------------------------------------------------------------------------------------
 
+avoider = True
+last_refrect = 0,0
+
 while not button.enter(): #wait while all buttons arent pressed
     
     button.wait_for_bump("left") # start button
 
     while True:
-        pass
+        # silber
+        if (2 <= sum(i > silber_lowset_refrect for i in (CS1.refrect(),CS2.refrect(),CS3.refrect(),CS4.refrect())) and 
+                avoider):
+            avoider = False
+            tank.avoid()
+        #black
+        if last_refrect[0] - CS1.refrect() > None or last_refrect[1] - CS4.refrect() > None:
+            pass
+        last_refrect = CS1.refrect(),CS4.refrect()
