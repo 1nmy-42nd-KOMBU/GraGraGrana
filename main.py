@@ -55,6 +55,8 @@ movesteering = MoveSteering(OUTPUT_A, OUTPUT_B)
 black_highset_refrect = None
 silber_lowset_refrect = None
 whites = [2,4,6]
+avoider = True
+last_refrect = 0,0
 # Sensors---------------------------------------------------------------------------------------------
 
 button = Button() # bottons of the brick
@@ -122,7 +124,7 @@ class Motor:
         return movetank.position
 
     def on_pid(self,base_power):
-        error = CS2.refrect - CS3.refrect()
+        error = CS2.refrect - CS3.refrect() - Motor.individual_difference
         Motor.errors.append(error)
         del Motor.errors[-1]
 
@@ -234,9 +236,6 @@ class Motor:
 
 tank = Motor()
 # ----------------------------------------------------------------------------------------------------
-
-avoider = True
-last_refrect = 0,0
 
 while not button.enter(): #wait while all buttons arent pressed
     
