@@ -168,6 +168,24 @@ class Motor:
     def on_for_seconds(self,left_speed,right_speed,seconds,stop_type = True):
         movetank.on_for_seconds(left_speed,right_speed,seconds,stop_type)
             #on_for_seconds(left_speed, right_speed, seconds, brake=True, block=True)
+    
+    def turn_left(self,base_power):
+        movetank.on_for_degrees(-1 * base_power,base_power,None)
+
+    def turn_right(self,base_power):
+        movetank.on_for_degrees(base_power,-1 * base_power,None)
+    
+    def on_steering(speed,steering):
+        movesteering.on(steering,speed)
+    
+    def on_for_degrees_steering(speed,steering,degrees,stop_type = True):
+        movesteering.on_for_degrees(steering,speed,degrees,stop_type)
+    
+    def on_for_rotations_steering(speed,steering,rotations,stop_type = True):
+        movesteering.on_for_rotations(steering,speed,rotations,stop_type)
+    
+    def on_for_seconds_steering(speed,steering,seconds,stop_type = True):
+        movesteering.on_for_seconds(steering,speed,seconds,stop_type)
 
     def black_quarter(self):
         if CS1.refrect() < black_highset_refrect and CS4.refrect() < black_highset_refrect:
@@ -229,8 +247,18 @@ class Motor:
         self.stop()
 
     def avoid(self):
-        pass
-    
+        self.turn_right()
+        first_position = self.position()
+        while abs(first_position - self.position()) > None or TS_left.pressed() + TS_right.pressed() != 256 * 2:
+            self.on(30,30)
+        if TS_left.pressed() + TS_right.pressed() != 256 * 2: # left
+            self.on_for_degrees(-30,-30,None * 2)
+            self.turn_left(30)
+            self.on_for_degrees(30,30 - None,None)
+        else: # right
+            self.turn_left(30)
+            self.on_for_degrees(30 - None,30,None)
+
     def save(self):
         pass
 
