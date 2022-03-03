@@ -1,5 +1,5 @@
 # Goal
-To get first place at OKAYAMA Block Tournament of RCJ2023
+To get first place at the Block Tournament of RCJ2023
 
 # Issues at the last event
 About Hardware
