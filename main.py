@@ -109,8 +109,17 @@ class Sensors_touch:
 TS_left = Sensors_touch(5)
 TS_right = Sensors_touch(6)
 # Motors----------------------------------------------------------------------------------------------
-
 class Motor:
+    def __init__(self,port):
+        self.port = port
+    
+    def position(self):
+        return motor_l.position() if self.port == "left" else motor_r.position()
+
+motor_l = Motor("left")
+motor_r = Motor("right")
+
+class Motors:
     Kp = 1.5
     Ki = 0.5
     Kd = 1.3
@@ -120,15 +129,12 @@ class Motor:
     angle_90 = None
     angle_180 = None
 
-    def position(self):
-        return movetank.position
-
     def on_pid(self,base_power):
-        error = CS2.refrect - CS3.refrect() - Motor.individual_difference
-        Motor.errors.append(error)
-        del Motor.errors[-1]
+        error = CS2.refrect - CS3.refrect() - Motors.individual_difference
+        Motors.errors.append(error)
+        del Motors.errors[-1]
 
-        u = (Motor.Kp * error) + (Motor.Ki * sum(Motor.errors)) + (Motor.Kd * (error - Motor.errors[-1]))
+        u = (Motors.Kp * error) + (Motors.Ki * sum(Motors.errors)) + (Motors.Kd * (error - Motors.errors[-1]))
         movetank.on(base_power + u,base_power - u)
     
     def on_pid_for_seconds(self,base_power,second,stop_type = True):
@@ -138,16 +144,16 @@ class Motor:
         movetank.off(stop_type)
     
     def on_pid_for_degrees(self,base_power,degree,stop_type = True):
-        initial_degree_left = motor_left.position
-        initial_degree_right = motor_right.position
-        while degree > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2:
+        initial_degree_left = motor_l.position()
+        initial_degree_right = motor_r.position()
+        while degree > ((abs(initial_degree_left - motor_l.position()) + abs(initial_degree_right - motor_r.position()))) / 2:
             self.on_pid(base_power)
         movetank.off(stop_type)
     
     def on_pid_for_rotations(self,base_power,rotations,stop_type = True):
-        initial_degree_left = motor_left.position
-        initial_degree_right = motor_right.position
-        while rotations > ((abs(initial_degree_left - motor_left.position) + abs(initial_degree_right - motor_right.position))) / 2 / 360:
+        initial_degree_left = motor_l.position()
+        initial_degree_right = motor_r.position()
+        while rotations > ((abs(initial_degree_left - motor_l.position()) + abs(initial_degree_right - motor_r.position()))) / 2 / 360:
             self.on_pid(base_power)
         movetank.off(stop_type)
     
@@ -262,7 +268,7 @@ class Motor:
     def save(self):
         pass
 
-tank = Motor()
+tank = Motors()
 # ----------------------------------------------------------------------------------------------------
 
 while not button.enter(): #wait while all buttons arent pressed
