@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, SpeedPercent, MoveTank, MoveSteering
-from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4, Sensor
-from ev3dev2.sensor.lego import TouchSensor, ColorSensor, UltrasonicSensor
+from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4
+from ev3dev2.sensor.lego import TouchSensor, ColorSensor, UltrasonicSensor, Sensor
 from ev3dev2.port import LegoPort
 from ev3dev2.button import Button
 from ev3dev2.sound import Sound
@@ -230,8 +230,8 @@ class Motors:
         self.stop()
 
     def green(self,direction):
-        first_position = self.position()
-        while abs(self.position() - first_position) < None or (not CS2.color() == 3 and CS3.color() == 3):
+        first_position = motor_l.position()
+        while abs(motor_l.position() - first_position) < None and (not CS2.color() == 3 and CS3.color() == 3):
             self.on(30,30)
         if CS2.color() == 3 and CS3.color() == 3:
             while CS2.color() in (1,3):
@@ -254,16 +254,15 @@ class Motors:
 
     def avoid(self):
         self.turn_right()
-        first_position = self.position()
-        while abs(first_position - self.position()) > None or TS_left.pressed() + TS_right.pressed() != 256 * 2:
+        first_position = motor_l.position()
+        while abs(first_position - motor_l.position()) > None and TS_left.pressed() + TS_right.pressed() == 256 * 2:
             self.on(30,30)
-        if TS_left.pressed() + TS_right.pressed() != 256 * 2: # left
-            self.on_for_degrees(-30,-30,None * 2)
-            self.turn_left(30)
-            self.on_for_degrees(30,30 - None,None)
-        else: # right
-            self.turn_left(30)
-            self.on_for_degrees(30 - None,30,None)
+        turn_direction = -1 if TS_left.pressed() + TS_right.pressed() != 256 * 2 else 1
+
+        self.on_for_degrees(-30,-30,None)
+        if turn_direction == -1:
+            self.turn_right()
+            self.turn_right()
 
     def save(self):
         pass
