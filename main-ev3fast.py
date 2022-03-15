@@ -8,8 +8,11 @@
 # from ev3dev2.sound import Sound
 
 # from ev3dev.brickpi import *
-from ev3dev.ev3 import *
+# from ev3dev.ev3 import *
 from ev3dev.auto import *
+
+import ev3dev.ev3 as ev3
+import ev3fast
 
 from time import sleep, time
 import sys
@@ -18,9 +21,9 @@ sleep_time = 1
 
 # Mux-wise--------------------------------------------------------------------------------------------
 # mux sensor port
-muxC1port = LegoPort("in4:i2c80:mux1")  # TouchSensor
-muxC2port = LegoPort("in4:i2c81:mux2")  # TouchSensor
-muxC3port = LegoPort("in4:i2c82:mux3")    # (driver_name="ms-ev3-smux")
+muxC1port = ev3.LegoPort("in4:i2c80:mux1")  # TouchSensor
+muxC2port = ev3.LegoPort("in4:i2c81:mux2")  # TouchSensor
+muxC3port = ev3.LegoPort("in4:i2c82:mux3")    # (driver_name="ms-ev3-smux")
 
 # setting the 1st port on SensorMUX to analogue mode, to be used for touchsensor
 muxC2port.mode = "analog"
@@ -32,22 +35,22 @@ muxC1port.set_device = "lego-ev3-color"
 muxC2port.set_device = "lego-ev3-touch"
 muxC3port.set_device = "lego-ev3-touch"
 
-colorsensor4 = ColorSensor("in4:i2c80:mux1")
-touch_sensor_left = TouchSensor("in4:i2c81:mux2")
-touch_sensor_right = TouchSensor("in4:i2c82:mux3")
+colorsensor4 = ev3.ColorSensor("in4:i2c80:mux1")
+touch_sensor_left = ev3.TouchSensor("in4:i2c81:mux2")
+touch_sensor_right = ev3.TouchSensor("in4:i2c82:mux3")
 sleep(sleep_time) # need to wait for sensors to be loaded. 0.5 seconds is not enough.
 
 colorsensor4.mode = "COL-REFLECT" #
 # instance--------------------------------------------------------------------------------------------
 
-colorsensor1 = ColorSensor(INPUT_1)
-colorsensor2 = ColorSensor(INPUT_2)
-colorsensor3 = ColorSensor(INPUT_3)
+colorsensor1 = ev3fast.ColorSensor(INPUT_1)
+colorsensor2 = ev3fast.ColorSensor(INPUT_2)
+colorsensor3 = ev3fast.ColorSensor(INPUT_3)
 
-motor_left = LargeMotor(OUTPUT_A)
-motor_right = LargeMotor(OUTPUT_B)
-movetank = MoveTank(OUTPUT_A, OUTPUT_B)
-movesteering = MoveSteering(OUTPUT_A, OUTPUT_B)
+motor_left = ev3fast.LargeMotor(OUTPUT_A)
+motor_right = ev3fast.LargeMotor(OUTPUT_B)
+movetank = ev3fast.MoveTank(OUTPUT_A, OUTPUT_B)
+movesteering = ev3fast.MoveSteering(OUTPUT_A, OUTPUT_B)
 # values----------------------------------------------------------------------------------------------
 
 black_highset_refrect = None
