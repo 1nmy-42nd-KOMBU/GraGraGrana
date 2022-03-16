@@ -130,7 +130,7 @@ class Motors:
     def on_pid(self,base_power):
         error = CS2.refrect - CS3.refrect() - Motors.individual_difference
         Motors.errors.append(error)
-        del Motors.errors[-1]
+        del Motors.errors[0]
 
         u = (Motors.Kp * error) + (Motors.Ki * sum(Motors.errors)) + (Motors.Kd * (error - Motors.errors[-1]))
         movetank.on(base_power + u,base_power - u)
