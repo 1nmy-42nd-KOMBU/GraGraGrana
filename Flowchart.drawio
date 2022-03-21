@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-03-20T11:31:26.603Z" agent="5.0 (X11; CrOS x86_64 14469.41.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.57 Safari/537.36" version="17.1.3" etag="8RCRFe2ET-gd3iUP3S8H" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2022-03-21T11:20:24.573Z" agent="5.0 (X11; CrOS x86_64 14469.41.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.57 Safari/537.36" version="17.1.3" etag="GBz9Ig9h3qIdyUnob33f" type="github" pages="3">
   <diagram id="kHnq3ZgaMYbbgMV1_VQy" name="概要">
     <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2336" pageHeight="1654" math="0" shadow="0">
       <root>
@@ -202,8 +202,14 @@
       <root>
         <mxCell id="veqoH-x-ZnqVkIVaN_2g-0" />
         <mxCell id="veqoH-x-ZnqVkIVaN_2g-1" parent="veqoH-x-ZnqVkIVaN_2g-0" />
-        <mxCell id="veqoH-x-ZnqVkIVaN_2g-2" value="&lt;font style=&quot;font-size: 29px&quot;&gt;無限&lt;/font&gt;" style="shape=loopLimit;whiteSpace=wrap;html=1;" vertex="1" parent="veqoH-x-ZnqVkIVaN_2g-1">
-          <mxGeometry x="40" y="40" width="400" height="80" as="geometry" />
+        <mxCell id="veqoH-x-ZnqVkIVaN_2g-2" value="&lt;font data-font-src=&quot;https://fonts.googleapis.com/css?family=Dancing+Script&quot; style=&quot;font-size: 38px&quot; face=&quot;Dancing Script&quot;&gt;Forever&lt;/font&gt;" style="shape=loopLimit;whiteSpace=wrap;html=1;" vertex="1" parent="veqoH-x-ZnqVkIVaN_2g-1">
+          <mxGeometry x="40" y="130" width="400" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="veqoH-x-ZnqVkIVaN_2g-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Dancing Script;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DDancing%2BScript;fontSize=38;" edge="1" parent="veqoH-x-ZnqVkIVaN_2g-1" source="veqoH-x-ZnqVkIVaN_2g-4" target="veqoH-x-ZnqVkIVaN_2g-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="veqoH-x-ZnqVkIVaN_2g-4" value="&lt;div&gt;&lt;span style=&quot;font-size: 19px ; font-family: &amp;#34;zen kurenaido&amp;#34;&quot;&gt;ボタンが押されるまで待つ&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Dancing Script;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DDancing%2BScript;fontSize=38;spacing=2;verticalAlign=top;align=center;" vertex="1" parent="veqoH-x-ZnqVkIVaN_2g-1">
+          <mxGeometry x="120" y="20" width="240" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
