@@ -1,10 +1,10 @@
-<mxfile host="app.diagrams.net" modified="2022-03-25T08:29:29.079Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36" etag="prHHa_wKgWKNUU3tsiZj" version="17.2.1" type="github" pages="8">
+<mxfile host="app.diagrams.net" modified="2022-03-25T08:45:00.497Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36" etag="NC2gAMhnn5LnDVBr_aCb" version="17.2.1" type="github" pages="8">
   <diagram id="jcYgBPrr2LkxAo5qrb-7" name="Introduction">
     <mxGraphModel dx="1094" dy="615" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="95c3biCn2HsyvcuyQn4m-2" value="&lt;font style=&quot;font-size: 23px&quot;&gt;この機体は４個のカラーセンサーを機体前方に並べて配置し、&lt;br&gt;最前部にタッチセンサを搭載したものとする&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;" vertex="1" parent="1">
+        <mxCell id="95c3biCn2HsyvcuyQn4m-2" value="&lt;font style=&quot;font-size: 23px&quot;&gt;この機体は４個のカラーセンサーを機体前方に並べて配置し、&lt;br&gt;最前部にタッチセンサを搭載したものとする。&lt;br&gt;&lt;br&gt;4個のカラーセンサーを機体を上から見たときの&lt;br&gt;左からS1, S2, S3, S4とする。&lt;br&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;" vertex="1" parent="1">
           <mxGeometry x="40" y="80" width="760" height="240" as="geometry" />
         </mxCell>
       </root>
@@ -254,7 +254,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="ne3bsxSb2EaP9LqaniPR" name="avidance">
-    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="lzjFIzp38_JWi-WorDkD-0" />
         <mxCell id="lzjFIzp38_JWi-WorDkD-1" parent="lzjFIzp38_JWi-WorDkD-0" />
@@ -411,7 +411,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="RTInS8mF9SbC43dsUjzd" name="turning on green points">
-    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="KjK_Z0LQEkvtYtEkB7Ns-0" />
         <mxCell id="KjK_Z0LQEkvtYtEkB7Ns-1" parent="KjK_Z0LQEkvtYtEkB7Ns-0" />
@@ -583,7 +583,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="xBJ19_LYAkxX0kHtwtxM" name="U-turn">
-    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="V-KWmL8jKkvyRReVfWaN-0" />
         <mxCell id="V-KWmL8jKkvyRReVfWaN-1" parent="V-KWmL8jKkvyRReVfWaN-0" />
@@ -677,52 +677,58 @@
     </mxGraphModel>
   </diagram>
   <diagram id="lMm5pm1XfXDjZ5qkSd7O" name="turning on black lines">
-    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="569" dy="320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="xGVqSPhiYNFNLZYlCHCF-0" />
         <mxCell id="xGVqSPhiYNFNLZYlCHCF-1" parent="xGVqSPhiYNFNLZYlCHCF-0" />
         <mxCell id="8NYoMPWY2efsycch9M1z-0" value="考えたくない笑" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
-          <mxGeometry x="270" y="150" width="370" height="220" as="geometry" />
+          <mxGeometry x="520" y="680" width="370" height="220" as="geometry" />
         </mxCell>
         <mxCell id="wDk_Z4jxX2SzmsQem460-0" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=90;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
-          <mxGeometry x="590" y="180" width="340" height="20" as="geometry" />
+          <mxGeometry x="590" y="320" width="340" height="20" as="geometry" />
         </mxCell>
         <mxCell id="wDk_Z4jxX2SzmsQem460-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
-          <mxGeometry x="750" y="20" width="130" height="20" as="geometry" />
+          <mxGeometry x="750" y="160" width="130" height="20" as="geometry" />
         </mxCell>
         <mxCell id="exISAn5BrA8wLUOiKW5e-0" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" parent="xGVqSPhiYNFNLZYlCHCF-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="760.04" y="70.00000000000003" as="sourcePoint" />
-            <mxPoint x="820.04" y="30.00000000000003" as="targetPoint" />
+            <mxPoint x="760.04" y="210.00000000000003" as="sourcePoint" />
+            <mxPoint x="820.04" y="170.00000000000003" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="760.04" y="80.00000000000003" />
-              <mxPoint x="760.04" y="30" />
+              <mxPoint x="760.04" y="220.00000000000003" />
+              <mxPoint x="760.04" y="170" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="exISAn5BrA8wLUOiKW5e-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
-          <mxGeometry x="750" y="150" width="130" height="20" as="geometry" />
+          <mxGeometry x="750" y="290" width="130" height="20" as="geometry" />
         </mxCell>
         <mxCell id="7U588vM_lCUwetl-4lDF-0" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" parent="xGVqSPhiYNFNLZYlCHCF-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="759.5699999999999" y="198" as="sourcePoint" />
-            <mxPoint x="759.6499999999999" y="118" as="targetPoint" />
+            <mxPoint x="759.5699999999999" y="338" as="sourcePoint" />
+            <mxPoint x="759.6499999999999" y="258" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="7U588vM_lCUwetl-4lDF-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
-          <mxGeometry x="680" y="270" width="160" height="20" as="geometry" />
+          <mxGeometry x="680" y="410" width="160" height="20" as="geometry" />
         </mxCell>
         <mxCell id="7U588vM_lCUwetl-4lDF-2" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" parent="xGVqSPhiYNFNLZYlCHCF-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="760.5699999999999" y="317" as="sourcePoint" />
-            <mxPoint x="760.6499999999999" y="237" as="targetPoint" />
+            <mxPoint x="760.5699999999999" y="457" as="sourcePoint" />
+            <mxPoint x="760.6499999999999" y="377" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="E5I9QKGbKQ5vm_0MJ2Hv-0" value="右に曲がるときはこれと逆のことをしよう‼" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+          <mxGeometry x="635" y="20" width="250" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="FmWg6TsoyAbPA3AQ62n6-0" value="&lt;font face=&quot;zen kurenaido&quot;&gt;&lt;span style=&quot;font-size: 35px&quot;&gt;左折&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+          <mxGeometry x="200" y="80" width="240" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="wUWnUfjTP7J5wnyrM17s" name="rescue">
-    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="WSdwGYwpFgIGEqCA-XN1-0" />
         <mxCell id="WSdwGYwpFgIGEqCA-XN1-1" parent="WSdwGYwpFgIGEqCA-XN1-0" />
@@ -733,7 +739,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="2BxDfbjTlP9mwf68yT67" name="following line">
-    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="GIRLFfFuhePqSx1VrsRv-0" />
         <mxCell id="GIRLFfFuhePqSx1VrsRv-1" value="object" parent="GIRLFfFuhePqSx1VrsRv-0" />
@@ -756,7 +762,7 @@
           <mxGeometry x="750" y="121" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="s54wSIu8takdsvm1887A-3" value="&lt;div style=&quot;background-color: rgb(30 , 30 , 30) ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; font-size: 14px ; line-height: 19px&quot;&gt;&lt;div&gt;&lt;div style=&quot;font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; line-height: 19px&quot;&gt;&lt;div&gt;&lt;div style=&quot;font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; line-height: 19px&quot;&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;&lt;span style=&quot;color: #4fc1ff&quot;&gt;CS2&lt;/span&gt; =&amp;nbsp;&lt;font color=&quot;#4ec9b0&quot;&gt;C&lt;/font&gt;&lt;span style=&quot;color: rgb(78 , 201 , 176)&quot;&gt;olor&lt;/span&gt;&lt;span style=&quot;color: rgb(78 , 201 , 176)&quot;&gt;Sensor&lt;/span&gt;(&lt;/span&gt;&lt;font color=&quot;#b5cea8&quot;&gt;INPUT_2&lt;/font&gt;&lt;font color=&quot;#d4d4d4&quot;&gt;)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(79 , 193 , 255)&quot;&gt;CS3&lt;/span&gt;&lt;font color=&quot;#d4d4d4&quot;&gt; = &lt;/font&gt;&lt;font color=&quot;#4ec9b0&quot;&gt;C&lt;/font&gt;&lt;span style=&quot;color: rgb(78 , 201 , 176)&quot;&gt;olor&lt;/span&gt;&lt;span style=&quot;color: rgb(78 , 201 , 176)&quot;&gt;Sensor&lt;/span&gt;&lt;font color=&quot;#d4d4d4&quot;&gt;(&lt;/font&gt;&lt;font color=&quot;#b5cea8&quot;&gt;INPUT_3&lt;/font&gt;&lt;font color=&quot;#d4d4d4&quot;&gt;)&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;&lt;div style=&quot;font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; line-height: 19px&quot;&gt;&lt;span style=&quot;color: #9cdcfe&quot;&gt;tank&lt;/span&gt; = MoveTank(OUTPUT_A, OUTPUT_B)&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;&lt;span style=&quot;color: #9cdcfe&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;    &lt;span style=&quot;color: #9cdcfe&quot;&gt;Kp&lt;/span&gt; = &lt;span style=&quot;color: #b5cea8&quot;&gt;1.5&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;    &lt;span style=&quot;color: #9cdcfe&quot;&gt;Ki&lt;/span&gt; = &lt;span style=&quot;color: #b5cea8&quot;&gt;0.5&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;    &lt;span style=&quot;color: #9cdcfe&quot;&gt;Kd&lt;/span&gt; = &lt;span style=&quot;color: #b5cea8&quot;&gt;1.3&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;    &lt;span style=&quot;color: #9cdcfe&quot;&gt;individual_difference&lt;/span&gt; = &lt;span style=&quot;color: #b5cea8&quot;&gt;0&lt;/span&gt; &lt;span style=&quot;color: #6a9955&quot;&gt;#cs2-cs3&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;    &lt;span style=&quot;color: #9cdcfe&quot;&gt;errors&lt;/span&gt; = [&lt;span style=&quot;color: #b5cea8&quot;&gt;0&lt;/span&gt;,&lt;span style=&quot;color: #b5cea8&quot;&gt;0&lt;/span&gt;,&lt;span style=&quot;color: #b5cea8&quot;&gt;0&lt;/span&gt;,&lt;span style=&quot;color: #b5cea8&quot;&gt;0&lt;/span&gt;,&lt;span style=&quot;color: #b5cea8&quot;&gt;0&lt;/span&gt;]&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;    &lt;span style=&quot;color: #569cd6&quot;&gt;def&lt;/span&gt; &lt;span style=&quot;color: #dcdcaa&quot;&gt;on_pid&lt;/span&gt;(&lt;span style=&quot;color: #9cdcfe&quot;&gt;self&lt;/span&gt;,&lt;span style=&quot;color: #9cdcfe&quot;&gt;base_power&lt;/span&gt;):&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;&lt;span style=&quot;color: #9cdcfe&quot;&gt;　　　　error&lt;/span&gt; = &lt;span style=&quot;color: #4fc1ff&quot;&gt;CS2&lt;/span&gt;.&lt;span style=&quot;color: #dcdcaa&quot;&gt;refrect&lt;/span&gt;&amp;nbsp;- &lt;span style=&quot;color: #4fc1ff&quot;&gt;CS3&lt;/span&gt;.&lt;span style=&quot;color: #dcdcaa&quot;&gt;refrect&lt;/span&gt;&amp;nbsp;- &lt;span style=&quot;color: #9cdcfe&quot;&gt;individual_difference&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;&lt;span style=&quot;color: #4ec9b0&quot;&gt;　　　　&lt;/span&gt;&lt;span style=&quot;color: #9cdcfe&quot;&gt;errors&lt;/span&gt;.&lt;span style=&quot;color: #dcdcaa&quot;&gt;append&lt;/span&gt;(&lt;span style=&quot;color: #9cdcfe&quot;&gt;error&lt;/span&gt;)&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;        &lt;span style=&quot;color: #c586c0&quot;&gt;　　　　del&lt;/span&gt; &lt;span style=&quot;color: #9cdcfe&quot;&gt;errors&lt;/span&gt;[&lt;span style=&quot;color: #b5cea8&quot;&gt;0&lt;/span&gt;]&lt;/div&gt;&lt;br&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;        &lt;span style=&quot;color: #9cdcfe&quot;&gt;　　　　u&lt;/span&gt; = (&lt;span style=&quot;color: #9cdcfe&quot;&gt;Kp&lt;/span&gt; * &lt;span style=&quot;color: #9cdcfe&quot;&gt;error&lt;/span&gt;) + (&lt;span style=&quot;color: #9cdcfe&quot;&gt;Ki&lt;/span&gt; * &lt;span style=&quot;color: #dcdcaa&quot;&gt;sum&lt;/span&gt;(&lt;span style=&quot;color: #9cdcfe&quot;&gt;errors&lt;/span&gt;)) + (&lt;span style=&quot;color: #9cdcfe&quot;&gt;Kd&lt;/span&gt; * (&lt;span style=&quot;color: #9cdcfe&quot;&gt;error&lt;/span&gt; - &lt;span style=&quot;color: #9cdcfe&quot;&gt;errors&lt;/span&gt;[-&lt;span style=&quot;color: #b5cea8&quot;&gt;1&lt;/span&gt;]))&lt;/div&gt;&lt;div style=&quot;color: rgb(212 , 212 , 212)&quot;&gt;        &lt;span style=&quot;color: #9cdcfe&quot;&gt;　　　　tank&lt;/span&gt;.on(&lt;span style=&quot;color: #9cdcfe&quot;&gt;base_power&lt;/span&gt; + &lt;span style=&quot;color: #9cdcfe&quot;&gt;u&lt;/span&gt;,&lt;span style=&quot;color: #9cdcfe&quot;&gt;base_power&lt;/span&gt; - &lt;span style=&quot;color: #9cdcfe&quot;&gt;u&lt;/span&gt;)&lt;/div&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=20;" parent="GIRLFfFuhePqSx1VrsRv-1" vertex="1">
-          <mxGeometry x="20" y="190" width="600" height="320" as="geometry" />
+          <mxGeometry x="30" y="190" width="580" height="320" as="geometry" />
         </mxCell>
         <mxCell id="7rq2z7VtxF0YiHsbR3fL-1" value="&lt;font color=&quot;#000000&quot;&gt;PID制御ってフローチャートで&lt;br&gt;説明するのが難しいんだよね&lt;br&gt;数学的な考え方だから&lt;br&gt;とりま黒線に沿って走ると思ってもろて&lt;br&gt;https://www.tsone.co.jp/tech-blog/archives/889&lt;br&gt;https://stemship.com/arduino-jissen-pid/&lt;br&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=20;fontColor=#4EC9B0;" parent="GIRLFfFuhePqSx1VrsRv-1" vertex="1">
           <mxGeometry x="120" y="560" width="430" height="180" as="geometry" />
