@@ -1,6 +1,17 @@
-<mxfile host="app.diagrams.net" modified="2022-03-22T15:25:40.297Z" agent="5.0 (X11; CrOS x86_64 14469.41.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.57 Safari/537.36" etag="Ngmm5px8KKCOn9mwEULM" version="17.1.4" type="github" pages="7">
+<mxfile host="app.diagrams.net" modified="2022-03-25T08:29:29.079Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36" etag="prHHa_wKgWKNUU3tsiZj" version="17.2.1" type="github" pages="8">
+  <diagram id="jcYgBPrr2LkxAo5qrb-7" name="Introduction">
+    <mxGraphModel dx="1094" dy="615" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="95c3biCn2HsyvcuyQn4m-2" value="&lt;font style=&quot;font-size: 23px&quot;&gt;この機体は４個のカラーセンサーを機体前方に並べて配置し、&lt;br&gt;最前部にタッチセンサを搭載したものとする&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="760" height="240" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
   <diagram id="ClkvROt4qy4VRxGnbu0m" name="main">
-    <mxGraphModel dx="1736" dy="972" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="2031" dy="1143" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="veqoH-x-ZnqVkIVaN_2g-0" />
         <mxCell id="veqoH-x-ZnqVkIVaN_2g-1" parent="veqoH-x-ZnqVkIVaN_2g-0" />
@@ -243,7 +254,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="ne3bsxSb2EaP9LqaniPR" name="avidance">
-    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="lzjFIzp38_JWi-WorDkD-0" />
         <mxCell id="lzjFIzp38_JWi-WorDkD-1" parent="lzjFIzp38_JWi-WorDkD-0" />
@@ -372,35 +383,35 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="5Ttiy7OdWjMoygEAC1fM-0" value="&lt;font face=&quot;Zen Kurenaido&quot; data-font-src=&quot;https://fonts.googleapis.com/css?family=Zen+Kurenaido&quot;&gt;a&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="lzjFIzp38_JWi-WorDkD-1">
+        <mxCell id="5Ttiy7OdWjMoygEAC1fM-0" value="&lt;font face=&quot;Zen Kurenaido&quot; data-font-src=&quot;https://fonts.googleapis.com/css?family=Zen+Kurenaido&quot;&gt;a&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="lzjFIzp38_JWi-WorDkD-1" vertex="1">
           <mxGeometry x="670" y="335" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="5Ttiy7OdWjMoygEAC1fM-2" value="wall" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="lzjFIzp38_JWi-WorDkD-1">
+        <mxCell id="5Ttiy7OdWjMoygEAC1fM-2" value="wall" style="rounded=0;whiteSpace=wrap;html=1;" parent="lzjFIzp38_JWi-WorDkD-1" vertex="1">
           <mxGeometry x="780" y="190" width="30" height="285" as="geometry" />
         </mxCell>
-        <mxCell id="5Ttiy7OdWjMoygEAC1fM-3" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=5;" edge="1" parent="lzjFIzp38_JWi-WorDkD-1">
+        <mxCell id="5Ttiy7OdWjMoygEAC1fM-3" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=5;" parent="lzjFIzp38_JWi-WorDkD-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="738" y="359.67" as="sourcePoint" />
             <mxPoint x="778" y="359.67" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5Ttiy7OdWjMoygEAC1fM-4" value="&lt;font face=&quot;Zen Kurenaido&quot; data-font-src=&quot;https://fonts.googleapis.com/css?family=Zen+Kurenaido&quot;&gt;b&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="lzjFIzp38_JWi-WorDkD-1">
+        <mxCell id="5Ttiy7OdWjMoygEAC1fM-4" value="&lt;font face=&quot;Zen Kurenaido&quot; data-font-src=&quot;https://fonts.googleapis.com/css?family=Zen+Kurenaido&quot;&gt;b&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="lzjFIzp38_JWi-WorDkD-1" vertex="1">
           <mxGeometry x="736" y="335" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="5Ttiy7OdWjMoygEAC1fM-5" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=5;" edge="1" parent="lzjFIzp38_JWi-WorDkD-1">
+        <mxCell id="5Ttiy7OdWjMoygEAC1fM-5" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=5;" parent="lzjFIzp38_JWi-WorDkD-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="777" y="385.00000000000006" as="sourcePoint" />
             <mxPoint x="642" y="385" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5Ttiy7OdWjMoygEAC1fM-6" value="&lt;font face=&quot;Zen Kurenaido&quot; data-font-src=&quot;https://fonts.googleapis.com/css?family=Zen+Kurenaido&quot;&gt;a+b&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="lzjFIzp38_JWi-WorDkD-1">
+        <mxCell id="5Ttiy7OdWjMoygEAC1fM-6" value="&lt;font face=&quot;Zen Kurenaido&quot; data-font-src=&quot;https://fonts.googleapis.com/css?family=Zen+Kurenaido&quot;&gt;a+b&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="lzjFIzp38_JWi-WorDkD-1" vertex="1">
           <mxGeometry x="690" y="385" width="30" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="RTInS8mF9SbC43dsUjzd" name="turning on green points">
-    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="KjK_Z0LQEkvtYtEkB7Ns-0" />
         <mxCell id="KjK_Z0LQEkvtYtEkB7Ns-1" parent="KjK_Z0LQEkvtYtEkB7Ns-0" />
@@ -572,7 +583,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="xBJ19_LYAkxX0kHtwtxM" name="U-turn">
-    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="V-KWmL8jKkvyRReVfWaN-0" />
         <mxCell id="V-KWmL8jKkvyRReVfWaN-1" parent="V-KWmL8jKkvyRReVfWaN-0" />
@@ -666,20 +677,20 @@
     </mxGraphModel>
   </diagram>
   <diagram id="lMm5pm1XfXDjZ5qkSd7O" name="turning on black lines">
-    <mxGraphModel dx="914" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="xGVqSPhiYNFNLZYlCHCF-0" />
         <mxCell id="xGVqSPhiYNFNLZYlCHCF-1" parent="xGVqSPhiYNFNLZYlCHCF-0" />
         <mxCell id="8NYoMPWY2efsycch9M1z-0" value="考えたくない笑" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
           <mxGeometry x="270" y="150" width="370" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="wDk_Z4jxX2SzmsQem460-0" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=90;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="wDk_Z4jxX2SzmsQem460-0" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=90;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
           <mxGeometry x="590" y="180" width="340" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="wDk_Z4jxX2SzmsQem460-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="wDk_Z4jxX2SzmsQem460-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
           <mxGeometry x="750" y="20" width="130" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="exISAn5BrA8wLUOiKW5e-0" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" edge="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="exISAn5BrA8wLUOiKW5e-0" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" parent="xGVqSPhiYNFNLZYlCHCF-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="760.04" y="70.00000000000003" as="sourcePoint" />
             <mxPoint x="820.04" y="30.00000000000003" as="targetPoint" />
@@ -689,19 +700,19 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="exISAn5BrA8wLUOiKW5e-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="exISAn5BrA8wLUOiKW5e-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
           <mxGeometry x="750" y="150" width="130" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="7U588vM_lCUwetl-4lDF-0" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" edge="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="7U588vM_lCUwetl-4lDF-0" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" parent="xGVqSPhiYNFNLZYlCHCF-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="759.5699999999999" y="198" as="sourcePoint" />
             <mxPoint x="759.6499999999999" y="118" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="7U588vM_lCUwetl-4lDF-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="7U588vM_lCUwetl-4lDF-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=-180;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
           <mxGeometry x="680" y="270" width="160" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="7U588vM_lCUwetl-4lDF-2" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" edge="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="7U588vM_lCUwetl-4lDF-2" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#99CCFF;strokeWidth=6;" parent="xGVqSPhiYNFNLZYlCHCF-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="760.5699999999999" y="317" as="sourcePoint" />
             <mxPoint x="760.6499999999999" y="237" as="targetPoint" />
@@ -711,7 +722,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="wUWnUfjTP7J5wnyrM17s" name="rescue">
-    <mxGraphModel dx="914" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="WSdwGYwpFgIGEqCA-XN1-0" />
         <mxCell id="WSdwGYwpFgIGEqCA-XN1-1" parent="WSdwGYwpFgIGEqCA-XN1-0" />
@@ -722,10 +733,10 @@
     </mxGraphModel>
   </diagram>
   <diagram id="2BxDfbjTlP9mwf68yT67" name="following line">
-    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="GIRLFfFuhePqSx1VrsRv-0" />
-        <mxCell id="GIRLFfFuhePqSx1VrsRv-1" parent="GIRLFfFuhePqSx1VrsRv-0" />
+        <mxCell id="GIRLFfFuhePqSx1VrsRv-1" value="object" parent="GIRLFfFuhePqSx1VrsRv-0" />
         <mxCell id="7rq2z7VtxF0YiHsbR3fL-0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=20;fontColor=#4EC9B0;strokeColor=#000000;strokeWidth=1;" parent="GIRLFfFuhePqSx1VrsRv-1" source="dXdyJbzDdr5dPdfQ4ld6-0" target="s54wSIu8takdsvm1887A-3" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
