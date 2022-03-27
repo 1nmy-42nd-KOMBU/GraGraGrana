@@ -128,7 +128,7 @@ class Motors:
     angle_180 = None
 
     def on_pid(self,base_power):
-        error = CS2.refrect - CS3.refrect() - Motors.individual_difference
+        error = CS2.refrect() - CS3.refrect() - Motors.individual_difference
         Motors.errors.append(error)
         del Motors.errors[0]
 
