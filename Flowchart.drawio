@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-03-25T15:07:26.642Z" agent="5.0 (X11; CrOS x86_64 14469.41.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.57 Safari/537.36" etag="xElkh-KyLp1LRRBK_dJR" version="17.2.3" type="github" pages="8">
+<mxfile host="app.diagrams.net" modified="2022-04-24T02:51:26.815Z" agent="5.0 (X11; CrOS x86_64 14526.89.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.133 Safari/537.36" etag="uP6iUucxp3226fF34JHs" version="17.4.0" type="github" pages="9">
   <diagram id="jcYgBPrr2LkxAo5qrb-7" name="Introduction">
     <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -11,7 +11,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="ClkvROt4qy4VRxGnbu0m" name="main">
-    <mxGraphModel dx="2031" dy="1143" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="veqoH-x-ZnqVkIVaN_2g-0" />
         <mxCell id="veqoH-x-ZnqVkIVaN_2g-1" parent="veqoH-x-ZnqVkIVaN_2g-0" />
@@ -254,7 +254,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="ne3bsxSb2EaP9LqaniPR" name="avidance">
-    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="lzjFIzp38_JWi-WorDkD-0" />
         <mxCell id="lzjFIzp38_JWi-WorDkD-1" parent="lzjFIzp38_JWi-WorDkD-0" />
@@ -411,7 +411,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="RTInS8mF9SbC43dsUjzd" name="turning on green points">
-    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="KjK_Z0LQEkvtYtEkB7Ns-0" />
         <mxCell id="KjK_Z0LQEkvtYtEkB7Ns-1" parent="KjK_Z0LQEkvtYtEkB7Ns-0" />
@@ -583,7 +583,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="xBJ19_LYAkxX0kHtwtxM" name="U-turn">
-    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="V-KWmL8jKkvyRReVfWaN-0" />
         <mxCell id="V-KWmL8jKkvyRReVfWaN-1" parent="V-KWmL8jKkvyRReVfWaN-0" />
@@ -677,7 +677,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="lMm5pm1XfXDjZ5qkSd7O" name="turning on black lines">
-    <mxGraphModel dx="569" dy="320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="xGVqSPhiYNFNLZYlCHCF-0" />
         <mxCell id="xGVqSPhiYNFNLZYlCHCF-1" parent="xGVqSPhiYNFNLZYlCHCF-0" />
@@ -718,17 +718,17 @@
             <mxPoint x="760.6499999999999" y="377" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="E5I9QKGbKQ5vm_0MJ2Hv-0" value="右に曲がるときはこれと逆のことをしよう‼" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="E5I9QKGbKQ5vm_0MJ2Hv-0" value="右に曲がるときはこれと逆のことをしよう‼" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
           <mxGeometry x="635" y="20" width="250" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="FmWg6TsoyAbPA3AQ62n6-0" value="&lt;font face=&quot;zen kurenaido&quot;&gt;&lt;span style=&quot;font-size: 35px&quot;&gt;左折&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;" vertex="1" parent="xGVqSPhiYNFNLZYlCHCF-1">
+        <mxCell id="FmWg6TsoyAbPA3AQ62n6-0" value="&lt;font face=&quot;zen kurenaido&quot;&gt;&lt;span style=&quot;font-size: 35px&quot;&gt;左折&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;" parent="xGVqSPhiYNFNLZYlCHCF-1" vertex="1">
           <mxGeometry x="200" y="80" width="240" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="wUWnUfjTP7J5wnyrM17s" name="rescue">
-    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
+    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1600" math="0" shadow="0">
       <root>
         <mxCell id="WSdwGYwpFgIGEqCA-XN1-0" />
         <mxCell id="WSdwGYwpFgIGEqCA-XN1-1" parent="WSdwGYwpFgIGEqCA-XN1-0" />
@@ -766,6 +766,26 @@
         </mxCell>
         <mxCell id="7rq2z7VtxF0YiHsbR3fL-1" value="&lt;font color=&quot;#000000&quot;&gt;PID制御ってフローチャートで&lt;br&gt;説明するのが難しいんだよね&lt;br&gt;数学的な考え方だから&lt;br&gt;とりま黒線に沿って走ると思ってもろて&lt;br&gt;https://www.tsone.co.jp/tech-blog/archives/889&lt;br&gt;https://stemship.com/arduino-jissen-pid/&lt;br&gt;&lt;br&gt;https://docs.google.com/document/d/1WHO3kPrO3Ydp-jhcyBGhG4NeBUxky-zNR5Su0yWwcog/edit?usp=sharing&lt;br&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=20;fontColor=#4EC9B0;" parent="GIRLFfFuhePqSx1VrsRv-1" vertex="1">
           <mxGeometry x="120" y="560" width="510" height="260" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="xf55bDdv2sHwjKXSog7-" name="ページ9">
+    <mxGraphModel dx="868" dy="486" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LLAd2QtvFK2DNgHoKz6U-1" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.arc;startAngle=0.7468173254495136;endAngle=0.9685835209054994;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#000000;strokeWidth=21;fillColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="300" y="70" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LLAd2QtvFK2DNgHoKz6U-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;fillColor=#000000;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="270" y="170" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LLAd2QtvFK2DNgHoKz6U-3" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#000000;strokeWidth=1;fillColor=#FFFFFF;verticalAlign=bottom;" vertex="1" parent="1">
+          <mxGeometry x="260" y="141" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LLAd2QtvFK2DNgHoKz6U-4" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=Zen Kurenaido;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DZen%2BKurenaido;fontSize=30;strokeColor=#000000;strokeWidth=1;fillColor=#FFFFFF;verticalAlign=bottom;" vertex="1" parent="1">
+          <mxGeometry x="310" y="141" width="30" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
