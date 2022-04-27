@@ -2,7 +2,9 @@
 from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
 from pybricks.parameters import Port, Direction, Color, Button
 from pybricks.robotics import DriveBase
-from pybricks.tools import wait
+from pybricks.tools import wait, StopWatch
+
+watch = StopWatch()
 
 color1 = ColorSensor(Poet.S1)
 color2 = ColorSensor(Poet.S2)
@@ -11,6 +13,10 @@ color4 = ColorSensor(Poet.S4)
 
 left_motor = Motor(Port.A)
 right_motor = Motor(Port.B)
+
+class Sensors:
+    def __init__(self):
+        pass
 
 class Tank:
     Kp = 1.2
@@ -27,14 +33,16 @@ class Tank:
         left_motor.run(base_speed + u)
         right_motor.run(base_speed - u)
     
-    # def drive_pid_for_seconds(self, base_speed):
-    #     pass
+    def drive_pid_for_seconds(self, base_speed, time):
+        time_run = watch.time() 
+        while watch.time() <= time_run:
+            self.drive_pid
     
-    # def drive_pid_for_degrees(self, base_speed):
-    #     pass
+    def drive_pid_for_degrees(self, base_speed):
+        pass
     
-    # def drive_pid_for_rotations(self, base_speed):
-    #     pass
+    def drive_pid_for_rotations(self, base_speed):
+        pass
     
     def drive(self, left_speed, right_speed):
         left_motor.run(left_speed)
@@ -64,11 +72,14 @@ class Tank:
     def avoid(self):
         pass
 
+tank = Tank()
+
 base_speed = 40
 
 while 1:
-    if 
     # PID-control
-    Tank.drive_pid(base_speed)
+    tank.drive_pid(base_speed)
     
     # touch
+    if base_speed - left_motor.speed() > 40 or base_speed - left_motor.speed() < -40:
+        pass
