@@ -29,7 +29,7 @@ class ColorValue:
             saturation = (max(rgb) - min(rgb)) / max(rgb) * 100
 
             # Value
-            value_brightness = max(rgb_)
+            value_brightness = (max(rgb_) / 255) * 100
 
             return hue, saturation, value_brightness
 
