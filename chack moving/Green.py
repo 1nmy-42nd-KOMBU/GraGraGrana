@@ -43,5 +43,9 @@ color = ColorValue()
 
 rgb_ = col.rgb()
 
-ev3.screen.clear()
-ev3.screen.print(str(rgb_) + "_" + str(color.hsv(rgb_)))
+hsv_ = color.hsv(rgb_)
+
+if 90 < hsv_[0] < 150 and 40 < hsv_[1] and 40 < hsv_[2]:
+    ev3.speaker.say("green")
+else:
+    ev3.speaker.say("others")
