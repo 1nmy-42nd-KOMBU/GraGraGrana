@@ -167,14 +167,11 @@ class Motors:
         '''PID制御で指定された回転数移動する'''
         self.on_pid_for_degrees(base_power,rotations*360,stop_type)
         movetank.off(stop_type)
-<<<<<<< HEAD
 
     def stop(self, stop_type = True):
         '''停止する'''
-=======
-    
-    def stop(stop_type = True):
->>>>>>> parent of efffe00 (add outlook on steering)
+
+    def stop(self,stop_type = True):
         movetank.off(stop_type)
 
     def on(self,left_speed,right_speed):
