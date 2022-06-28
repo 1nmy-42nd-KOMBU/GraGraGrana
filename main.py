@@ -8,8 +8,6 @@
 # from ev3dev2.sound import Sound
 
 # from ev3dev.brickpi import *
-from distutils.log import error
-from tkinter.messagebox import NO
 from ev3dev.ev3 import *
 from ev3dev.auto import *
 
@@ -18,7 +16,7 @@ import sys
 
 sleep_time = 1
 
-# Mux-wise--------------------------------------------------------------------------------------------
+# Mux-wise---------------------------------------------------------------------
 # mux sensor port
 muxC1port = LegoPort("in4:i2c80:mux1")  # TouchSensor
 muxC2port = LegoPort("in4:i2c81:mux2")  # TouchSensor
@@ -170,6 +168,7 @@ class Motors:
 
     def stop(self, stop_type = True):
         '''停止する'''
+        movetank.off(stop_type)
 
     def on(self,left_speed,right_speed):
         '''動き続ける'''
