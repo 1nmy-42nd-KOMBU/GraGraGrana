@@ -171,9 +171,6 @@ class Motors:
     def stop(self, stop_type = True):
         '''停止する'''
 
-    def stop(self,stop_type = True):
-        movetank.off(stop_type)
-
     def on(self,left_speed,right_speed):
         '''動き続ける'''
         movetank.on(left_speed,right_speed)
