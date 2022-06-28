@@ -329,11 +329,4 @@ while not button.enter(): #wait while all buttons arent pressed
             # Touch-------------------------------------------------------------------------
             if TS_left.pressed() + TS_right.pressed() != 256 * 2:
                 tank.avoid()
-<<<<<<< HEAD
-            # PID-Control-------------------------------------------------------------------
-            tank.on_pid(40)
-            
-=======
-            # PID-Control-----------------------------------------------------------------------------------------
-            tank.on_pid(40)
->>>>>>> parent of efffe00 (add outlook on steering)
+
