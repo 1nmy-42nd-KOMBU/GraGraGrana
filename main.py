@@ -167,9 +167,14 @@ class Motors:
         '''PID制御で指定された回転数移動する'''
         self.on_pid_for_degrees(base_power,rotations*360,stop_type)
         movetank.off(stop_type)
+<<<<<<< HEAD
 
     def stop(self, stop_type = True):
         '''停止する'''
+=======
+    
+    def stop(stop_type = True):
+>>>>>>> parent of efffe00 (add outlook on steering)
         movetank.off(stop_type)
 
     def on(self,left_speed,right_speed):
@@ -324,6 +329,11 @@ while not button.enter(): #wait while all buttons arent pressed
             # Touch-------------------------------------------------------------------------
             if TS_left.pressed() + TS_right.pressed() != 256 * 2:
                 tank.avoid()
+<<<<<<< HEAD
             # PID-Control-------------------------------------------------------------------
             tank.on_pid(40)
             
+=======
+            # PID-Control-----------------------------------------------------------------------------------------
+            tank.on_pid(40)
+>>>>>>> parent of efffe00 (add outlook on steering)
