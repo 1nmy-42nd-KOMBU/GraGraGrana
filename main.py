@@ -204,7 +204,7 @@ class Motors:
     def on_for_degrees_steering(self,speed,steering,degrees,stop_type = True):
         '''ステアリングで指定された角度移動する'''
         movesteering.on_for_degrees(steering,speed,degrees,stop_type)
-    
+
     def on_for_rotations_steering(self,speed,steering,rotations,stop_type = True):
         '''ステアリングで指定された回転数移動する'''
         movesteering.on_for_rotations(steering,speed,rotations,stop_type)
