@@ -17,31 +17,47 @@ class Sensors:
         pass
 
 class Tank:
-    Kp = 1.2
-    Ki = 0.5
-    Kd = 1.0
+    Kp = 0.8
+    Ki = 0.1
+    Kd = 0.5
     individual_difference = 0 #cs2-cs3
-    errors = [0,0,0,0,0]
+    last_error = 0
 
+    @micropython.viper
     def drive_pid(self, base_speed):
-        error = color2.refrection() - color3.refrection() - Tank.individual_difference
-        Tank.errors.append(error)
-        del Tank.errors[0]
-        u = Tank.Kp * error + Tank.Ki * sum(Tank.errors) + Tank.Kd * (error - Tank.errors[-1])
+        leftRGB = colorLeft.rgb()
+        rightRGB = colorRight.rgb()
+        if leftRGB[0] is None:
+            leftRGB[0] = 0
+        if leftRGB[1] is None:
+            leftRGB[1] = 0
+        if leftRGB[2] is None:
+            leftRGB[2] = 0
+        if rightRGB[0] is None:
+            rightRGB[0] = 0
+        if rightRGB[1] is None:
+            rightRGB[1] = 0
+        if rightRGB[2] is None:
+            rightRGB[2] = 0
+
+        error = leftRGB[1] - rightRGB[1] - Tank.individual_difference
+        u = Tank.Kp * error + Tank.Ki * (Tank.last_error + error) + Tank.Kd * (error - Tank.last_error)
         left_motor.run(base_speed + u)
         right_motor.run(base_speed - u)
-    
+        Tank.last_error = error
+
     def drive_pid_for_seconds(self, base_speed, time):
         time_run = watch.time() 
+        pid = self.drive_pid()
         while watch.time() <= time_run:
-            self.drive_pid
-    
+            pid()
+
     def drive_pid_for_degrees(self, base_speed):
         pass
-    
+
     def drive_pid_for_rotations(self, base_speed):
         pass
-    
+
     def drive(self, left_speed, right_speed):
         left_motor.run(left_speed)
         right_motor.run(right_speed)
@@ -55,29 +71,70 @@ class Tank:
     def drive_for_degrees(self, left_speed, right_speed, degrees):
         left_angle = left_motor.angle()
         right_angle = right_motor.angle()
+        left_run = left_motor.run(left_speed)
+        right_run = right_motor.run(right_speed)
         while not abs(left_angle - left_motor.angle()) > degrees or abs(right_angle - right_motor.angle()) > degrees:
-            left_motor.run(left_speed)
-            right_motor.run(right_speed)
+            left_run()
+            right_run()
     
     def drive_for_rotations(self, left_speed, right_speed, rotations):
         degrees = rotations * 360
         left_angle = left_motor.angle()
         right_angle = right_motor.angle()
+        left_run = left_motor.run(left_speed)
+        right_run = right_motor.run(right_speed)
         while not abs(left_angle - left_motor.angle()) > degrees or abs(right_angle - right_motor.angle()) > degrees:
-            left_motor.run(left_speed)
-            right_motor.run(right_speed)
-    
-    def avoid(self):
-        pass
+            left_run()
+            right_run()
+
+    # # left------------------------------------------------------------------------------
+    # rgb = leftRGB[0] * (255 / 100), leftRGB[1] * (255 / 100), leftRGB[2] * (255 / 100)
+    # maxRBG = max(rgb)
+    # minRGB = min(rgb)
+
+    # # Hue
+    # if maxRGB == rgb[0]: # Red 
+    #     left_hue = 60 * ((rgb[1] - rgb[2]) / (maxRGB - minRGB))
+    # elif maxRBG == rgb[1]: # Green
+    #     left_hue = 60 * ((rgb[2] - rgb[0]) / (maxRGB - minRGB)) + 120
+    # else: # Blue
+    #     left_hue = 60 * ((rgb[0] - rgb[1]) / (maxRGB - minRGB)) + 240
+
+    # if left_hue < 0:
+    #     left_hue += 360
+
+    # # Saturation
+    # left_saturation = (maxRGB - minRGB) / maxRGB * 100
+
+    # # Value
+    # left_value_brightness = max(leftRGB)
+
+    # # right--------------------------------------------------------------------------------
+    # rgb = rightRGB[0] * (255 / 100), rightRGB[1] * (255 / 100), rightRGB[2] * (255 / 100)
+    # maxRBG = max(rgb)
+    # minRGB = min(rgb)
+
+    # # Hue
+    # if maxRGB == rgb[0]: # Red 
+    #     right_hue = 60 * ((rgb[1] - rgb[2]) / (maxRGB - minRGB))
+    # elif maxRBG == rgb[1]: # Green
+    #     right_hue = 60 * ((rgb[2] - rgb[0]) / (maxRGB - minRGB)) + 120
+    # else: # Blue
+    #     right_hue = 60 * ((rgb[0] - rgb[1]) / (maxRGB - minRGB)) + 240
+
+    # if right_hue < 0:
+    #     right_hue += 360
+
+    # # Saturation
+    # right_saturation = (maxRGB - minRGB) / maxRGB * 100
+
+    # # Value
+    # right_value_brightness = max(rightRGB)
 
 tank = Tank()
 
-base_speed = 40
+pid_40 = tank.drive_pid(40)
 
 while 1:
     # PID-control
-    tank.drive_pid(base_speed)
-    
-    # touch
-    if base_speed - left_motor.speed() > 40 or base_speed - left_motor.speed() < -40:
-        pass
+    pid_40()
