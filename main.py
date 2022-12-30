@@ -7,14 +7,25 @@ from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 
-
-# This program requires LEGO EV3 MicroPython v2.0 or higher.
-# Click "Open user guide" on the EV3 extension tab for more information.
-
-
-# Create your objects here.
 ev3 = EV3Brick()
 
+colorLeft = ColorSensor(Port.S3)
+colorRight = ColorSensor(Port.S4)
 
-# Write your program here.
-ev3.speaker.beep()
+motorLeft = Motor(Port.A)
+motorRight = Motor(Port.D)
+
+Kp = 0.8
+Ki = 0.08
+Kd = 0.2
+last_error = 0
+error = 0
+basic_speed = 30
+
+while 1:
+    rgb_left = colorLeft.rgb()
+    print(str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
+
+    rgb_right = colorRight.rgb()
+    print(str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
+  
