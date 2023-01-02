@@ -1,11 +1,9 @@
 #!/usr/bin/env pybricks-micropython
 from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
-                                 InfraredSensor, UltrasonicSensor, GyroSensor)
+from pybricks.ev3devices import Motor, ColorSensor
 from pybricks.parameters import Port, Stop, Direction, Button, Color
 from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
-from pybricks.media.ev3dev import SoundFile, ImageFile
 
 ev3 = EV3Brick()
 timer = StopWatch()
@@ -43,6 +41,57 @@ def changeRGBtoHSV(rgb):
 @micropython.native
 def powertodegs(power):
     return 1050 * power /100
+
+def onGreenMarker(direction):
+    if direction == "l":
+        start_angle_deg = motorRight.angle()
+        isRightGreen = False
+
+        runleft = motorLeft.run(powertodegs(basic_speed)) # caching object references
+        runRight = motorRight.run(powertodegs(basic_speed))
+
+        while abs(motorRight.angle() - start_angle_deg) <= 50:
+            if isGreen('r'):
+                isRightGreen = True
+            runleft()
+            runRight()
+        motorLeft.hold()
+        motorRight.hold()
+
+        if isRightGreen:
+            u_turn()
+        else:
+            print('turn left')
+    else: # "r" --------------------------------------------------------------------------
+        start_angle_deg = motorLeft.angle()
+        isLeftGreen = False
+
+        runleft = motorLeft.run(powertodegs(basic_speed)) # caching object references
+        runRight = motorRight.run(powertodegs(basic_speed))
+
+        while abs(motorLeft.angle() - start_angle_deg) <= 50:
+            if isGreen('r'):
+                isLeftGreen = True
+            runleft()
+            runRight()
+        motorLeft.hold()
+        motorRight.hold()
+
+        if isLeftGreen:
+            u_turn()
+        else:
+            print('turn right')
+
+def isGreen(direction):
+    if direction == "l":
+        rgb = colorLeft.rgb()
+    else:
+        rgb = colorRight.rgb()
+    hsv = changeRGBtoHSV(rgb)
+    return (120 < hsv[0] < 160 and hsv[1] > 60 and hsv[2] > 20)
+
+def u_turn():
+    pass
 
 def main():
     Kp = 1.5
