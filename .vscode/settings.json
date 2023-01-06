@@ -1,3 +1,10 @@
+// Place your settings in this file to overwrite default and user settings.
 {
-    "jupyter.jupyterServerType": "local"
+	"files.eol": "\n",
+	"debug.openDebug": "neverOpen",
+	"python.linting.enabled": false,
+	// "python.languageServer": "None",
+	"githubPullRequests.ignoredPullRequestBranches": [
+		"master"
+	]
 }

@@ -1,18 +1,5 @@
-.gitpod.yml
-blog/
-Last Event/
-Note/
-olders a little/
-PID-Control/
-Reference/
-Tables/
-following line/
-Rules of last year/
+__pycache__/
+*.pyc
+.venv/
 
-Flowchart.drawio
-Note.ipynb
-poster
-Tables.xlsx
-Tester.ipynb
-Tester.py
-備忘録.ipynb
+Olds/
