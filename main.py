@@ -40,7 +40,7 @@ def changeRGBtoHSV(rgb):
 
 @micropython.native
 def powertodegs(power):
-    return 1050 * power /100
+    return 950 * power /100
 
 def onGreenMarker(direction):
     if direction == "l":
@@ -95,8 +95,8 @@ def u_turn():
 
 def main():
     Kp = 2.2
-    Ki = 0.2
-    Kd = 0.8
+    Ki = 0.1
+    Kd = 1.0
     last_error = 0
     error = 0
     basic_speed = 30
@@ -140,5 +140,6 @@ ev3.speaker.beep()
 # wait until any button is pressed
 while not any(ev3.buttons.pressed()):
     wait(10)
-
+while any(ev3.buttons.pressed()):
+    wait(10)
 main()
