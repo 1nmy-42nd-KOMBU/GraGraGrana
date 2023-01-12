@@ -1,4 +1,4 @@
-\#!/usr/bin/env pybricks-micropython
+#!/usr/bin/env pybricks-micropython
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import Motor, ColorSensor
 from pybricks.parameters import Port, Stop, Direction, Button, Color
@@ -40,7 +40,7 @@ def changeRGBtoHSV(rgb):
 
 @micropython.native
 def powertodegs(power):
-    return 950 * power /100
+    return 1050 * power /100
 
 def onGreenMarker(direction):
     if direction == "l":
@@ -94,52 +94,37 @@ def u_turn():
     pass
 
 def main():
-    Kp = 2.2
-    Ki = 0.1
-    Kd = 1.0
+    Kp = 1.5
+    Ki = 0.2
+    Kd = 0.4
     last_error = 0
     error = 0
     basic_speed = 30
     count = 0
     print("start")
+    start_time = timer.time()
+    while timer.time() <= start_time + 10000:
+        rgb_left = colorLeft.rgb()
+        rgb_right = colorRight.rgb()
+        error = rgb_left[1] - rgb_right[1]
+        u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error)
+        motorLeft.run(powertodegs(basic_speed + u))
+        motorRight.run(powertodegs(basic_speed - u))
+        hsv_left = changeRGBtoHSV(rgb_left)
+        if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
+            print("Left sensor is over green")
+        # print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
+        # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
+        # wait(100)
 
-    while 1:
-        start_time = timer.time()
-        # wait until any button is pressed or 10 sec pass
-        while timer.time() <= start_time + 10000 and not any(ev3.buttons.pressed()):
-            rgb_left = colorLeft.rgb()
-            rgb_right = colorRight.rgb()
-            error = rgb_left[1] - rgb_right[1]
-            u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error)
-            motorLeft.run(powertodegs(basic_speed + u))
-            motorRight.run(powertodegs(basic_speed - u))
-            hsv_left = changeRGBtoHSV(rgb_left)
-            if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
-                print("Left sensor is over green")
-            # print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
-            # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
-            # wait(100)
+        hsv_right = changeRGBtoHSV(rgb_right)
+        if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
+            print("Right sensor is over green")
+        # print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
+        # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
+        # wait(100)
+        count += 1
 
-            hsv_right = changeRGBtoHSV(rgb_right)
-            if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
-                print("Right sensor is over green")
-            # print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
-            # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
-            # wait(100)
-            count += 1
-            wait(20)
-        
-        print(str(10/count*1000))
-        # wait until any button is pressed "again"
-        while not any(ev3.buttons.pressed()):
-            wait(10)
+    print(str(10/count*1000))
 
-# Get ready!!
-ev3.speaker.beep()
-
-# wait until any button is pressed
-while not any(ev3.buttons.pressed()):
-    wait(10)
-while any(ev3.buttons.pressed()):
-    wait(10)
 main()
