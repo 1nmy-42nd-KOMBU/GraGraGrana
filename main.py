@@ -17,10 +17,11 @@ motorRight = Motor(Port.D)
 
 class Tank:
     """
-    モーター関連のクラス
-    Mindstormsのタンクとステアリングの機能+アルファ
-    このクラスは実行速度を一切考慮していないので注意
-    回転方向の指定はパワーですることを想定している
+    ・モーター関連のクラス
+    ・Mindstormsのタンクとステアリングの機能+アルファ
+    ・このクラスは実行速度を一切考慮していないので注意
+    ・回転方向の指定はパワーですることを想定している
+    ・ステアリングにはwait機能を付けていない
     """
     def drive(self, left_speed, right_speed):
         motorLeft.run(powertodegs(left_speed))
@@ -60,7 +61,42 @@ class Tank:
         else:
             motorLeft.run_angle(powertodegs(left_speed), degrees, self.stop_option(stop_type), wait=False)
             motorRight.run_angle(powertodegs(right_speed), degrees, self.stop_option(stop_type), wait=False)
-        
+    
+    def steering(self,speed,steering):
+        if -100 > speed or 100 > speed:
+            raise ValueError
+        if -100 <= steering < 0:
+            motorLeft.run(powertodegs((speed / 50) * steering + speed))
+            motorRight.run(powertodegs(speed))
+        elif 0 <= steering <= 100:
+            motorLeft.run(powertodegs(speed))
+            motorRight.run(powertodegs(-1 * (speed / 50) * steering + speed))
+        else:
+            raise ValueError
+
+    def steering_for_seconds(self,speed,steering,seconds,stop_type = "hold"):
+        if seconds <= 0:
+            raise ValueError
+        time_run = timer.time() + seconds
+        while timer.time() <= time_run:
+            self.steering(speed,steering)
+        self.stop(stop_type)
+
+    def steeing_for_degrees(self,power,steering,degrees,stop_type = "hold"):
+        if degrees < 0:
+            degrees *= -1
+            steering *= -1
+        left_angle = motorLeft.angle()
+        right_angle = motorRight.angle()
+        self.steering(power,steering)
+        while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
+            wait(1)
+        self.stop(stop_type)
+
+    def steering_for_rotations(self,power,steering,rotations,stop_type = "hold"):
+        self.steeing_for_degrees(power,steering,rotations * 360)
+        self.stop(stop_type)
+
     def stop_option(self,stop_type):
         if stop_type == "stop":
             return Stop.COAST
