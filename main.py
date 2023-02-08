@@ -13,7 +13,75 @@ colorRight = ColorSensor(Port.S4)
 
 motorLeft = Motor(Port.A)
 motorRight = Motor(Port.D)
+# ============================================================
 
+class Tank:
+    """
+    モーター関連のクラス
+    Mindstormsのタンクとステアリングの機能+アルファ
+    このクラスは実行速度を一切考慮していないので注意
+    回転方向の指定はパワーですることを想定している
+    """
+    def drive(self, left_speed, right_speed):
+        motorLeft.run(powertodegs(left_speed))
+        motorRight.run(powertodegs(right_speed))
+
+    def drive_for_seconds(self, left_speed, right_speed, time, stop_type = "hold", wait=True):
+        motorLeft.run_time(powertodegs(left_speed), time, stop_type, False)
+        motorRight.run_time(powertodegs(right_speed), time, stop_type, False)
+        if wait:
+            wait(time)
+        
+        self.stop(stop_type)
+
+    def drive_for_degrees(self, left_speed, right_speed, degrees, stop_type = "hold", wait=True):
+        if wait:
+            left_angle = motorLeft.angle()
+            right_angle = motorRight.angle()
+            motorLeft.run(powertodegs(left_speed))
+            motorRight.run(powertodegs(right_speed))
+            while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
+                wait(1)
+            self.stop(stop_type)
+        else:
+            motorLeft.run_angle(powertodegs(left_speed), degrees, self.stop_option(stop_type), wait=False)
+            motorRight.run_angle(powertodegs(right_speed), degrees, self.stop_option(stop_type), wait=False)
+
+    def drive_for_rotations(self, left_speed, right_speed, rotations, stop_type = "hold", wait=True):
+        degrees = rotations * 360
+        if wait:
+            left_angle = motorLeft.angle()
+            right_angle = motorRight.angle()
+            motorLeft.run(powertodegs(left_speed))
+            motorRight.run(powertodegs(right_speed))
+            while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
+                wait(1)
+            self.stop(stop_type)
+        else:
+            motorLeft.run_angle(powertodegs(left_speed), degrees, self.stop_option(stop_type), wait=False)
+            motorRight.run_angle(powertodegs(right_speed), degrees, self.stop_option(stop_type), wait=False)
+        
+    def stop_option(self,stop_type):
+        if stop_type == "stop":
+            return Stop.COAST
+        elif stop_type == "brake":
+            return Stop.BRAKE
+        else:
+            return Stop.HOLD
+
+    def stop(self, stop_type):
+        if stop_type == "stop":
+            motorLeft.stop()
+            motorRight.stop()
+        elif stop_type == "brake":
+            motorLeft.brake()
+            motorRight.brake()
+        else:
+            motorLeft.hold()
+            motorRight.hold()
+
+tank = Tank()
+# ------------------------------------------------------------
 @micropython.native
 def changeRGBtoHSV(rgb):
     rgb0_255 = rgb[0] * 255 / 100, rgb[1] * 255 / 100, rgb[2] * 255 / 200
@@ -41,7 +109,7 @@ def changeRGBtoHSV(rgb):
 @micropython.native
 def powertodegs(power):
     return 950 * power /100
-
+# ------------------------------------------------------------
 def onGreenMarker(direction):
     if direction == "l":
         start_angle_deg = motorRight.angle()
@@ -66,14 +134,12 @@ def onGreenMarker(direction):
         start_angle_deg = motorLeft.angle()
         isLeftGreen = False
 
-        runleft = motorLeft.run(powertodegs(basic_speed)) # caching object references
-        runRight = motorRight.run(powertodegs(basic_speed))
+        motorLeft.run(powertodegs(basic_speed)) # caching object references
+        motorRight.run(powertodegs(basic_speed))
 
         while abs(motorLeft.angle() - start_angle_deg) <= 50:
             if isGreen('r'):
                 isLeftGreen = True
-            runleft()
-            runRight()
         motorLeft.hold()
         motorRight.hold()
 
@@ -92,7 +158,7 @@ def isGreen(direction):
 
 def u_turn():
     pass
-
+# ============================================================
 def main():
     Kp = 2.2
     Ki = 0.1
@@ -106,7 +172,7 @@ def main():
     while 1:
         start_time = timer.time()
         # wait until any button is pressed or 10 sec pass
-        while timer.time() <= start_time + 10000 and not any(ev3.buttons.pressed()):
+        while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb()
             rgb_right = colorRight.rgb()
             error = rgb_left[1] - rgb_right[1]
@@ -128,6 +194,9 @@ def main():
             # wait(100)
             count += 1
             wait(20)
+        
+        while any(ev3.buttons.pressed()):
+            wait(10)
         
         print(str(10/count*1000))
         # wait until any button is pressed "again"
