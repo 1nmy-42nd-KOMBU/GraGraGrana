@@ -23,7 +23,6 @@ class Tank:
     ・Mindstormsのタンクとステアリングの機能+アルファ
     ・このクラスは実行速度を一切考慮していないので注意
     ・回転方向の指定はパワーですることを想定している
-    ・ステアリングにはwait機能を付けていない
     """
     def drive(self, left_speed, right_speed):
         motorLeft.run(powertodegs(left_speed))
@@ -37,33 +36,18 @@ class Tank:
         
         self.stop(stop_type)
 
-    def drive_for_degrees(self, left_speed, right_speed, degrees, stop_type = "hold", wait=True):
-        if wait:
-            left_angle = motorLeft.angle()
-            right_angle = motorRight.angle()
-            motorLeft.run(powertodegs(left_speed))
-            motorRight.run(powertodegs(right_speed))
-            while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
-                wait(1)
-            self.stop(stop_type)
-        else:
-            motorLeft.run_angle(powertodegs(left_speed), degrees, self.stop_option(stop_type), wait=False)
-            motorRight.run_angle(powertodegs(right_speed), degrees, self.stop_option(stop_type), wait=False)
+    def drive_for_degrees(self, left_speed, right_speed, degrees, stop_type = "hold"):
+        left_angle = motorLeft.angle()
+        right_angle = motorRight.angle()
+        motorLeft.run(powertodegs(left_speed))
+        motorRight.run(powertodegs(right_speed))
+        while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
+            wait(1)
+        self.stop(stop_type)
 
-    def drive_for_rotations(self, left_speed, right_speed, rotations, stop_type = "hold", wait=True):
-        degrees = rotations * 360
-        if wait:
-            left_angle = motorLeft.angle()
-            right_angle = motorRight.angle()
-            motorLeft.run(powertodegs(left_speed))
-            motorRight.run(powertodegs(right_speed))
-            while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
-                wait(1)
-            self.stop(stop_type)
-        else:
-            motorLeft.run_angle(powertodegs(left_speed), degrees, self.stop_option(stop_type), wait=False)
-            motorRight.run_angle(powertodegs(right_speed), degrees, self.stop_option(stop_type), wait=False)
-    
+    def drive_for_rotations(self, left_speed, right_speed, rotations, stop_type = "hold"):
+        self.drive_for_degrees(left_speed,right_speed,rotations* 360,stop_type)
+
     def steering(self,speed,steering):
         if -100 > speed or 100 > speed:
             raise ValueError
@@ -96,8 +80,7 @@ class Tank:
         self.stop(stop_type)
 
     def steering_for_rotations(self,power,steering,rotations,stop_type = "hold"):
-        self.steeing_for_degrees(power,steering,rotations * 360)
-        self.stop(stop_type)
+        self.steeing_for_degrees(power,steering,rotations * 360,stop_type)
 
     def stop_option(self,stop_type):
         if stop_type == "stop":
@@ -178,8 +161,8 @@ def onGreenMarker(direction):
         start_angle_deg = motorLeft.angle()
         isLeftGreen = False
 
-        motorLeft.run(powertodegs(basic_speed))
-        motorRight.run(powertodegs(basic_speed))
+        motorLeft.run(powertodegs(30))
+        motorRight.run(powertodegs(30))
 
         while abs(motorLeft.angle() - start_angle_deg) <= 50:
             if isGreen('r'):
@@ -209,7 +192,14 @@ def isGreen(direction):
     return (120 < hsv[0] < 160 and hsv[1] > 60 and hsv[2] > 20)
 
 def u_turn():
-    pass
+    tank.drive_for_degrees(30,30,230) # go down 230 deg
+    tank.drive_for_degrees(30,-30,240) # spin turn "right" 240 deg reqired to be optimized
+    tank.drive(30,-30)
+    while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
+        wait(1)
+    tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
+    motorLeft.hold()
+    motorRight.hold()
 # ============================================================
 def main():
     Kp = 2.2
