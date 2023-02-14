@@ -8,13 +8,21 @@ from pybricks.robotics import DriveBase
 ev3 = EV3Brick()
 timer = StopWatch()
 
-colorLeft = ColorSensor(Port.S3)
-colorRight = ColorSensor(Port.S4)
+try:
+    colorLeft = ColorSensor(Port.S3)
+    colorRight = ColorSensor(Port.S4)
 
-motorLeft = Motor(Port.A)
-motorRight = Motor(Port.D)
+    motorLeft = Motor(Port.A)
+    motorRight = Motor(Port.D)
+except OSError as oserror:
+    while True:
+        ev3.speaker.say("os error")
+        wait(1000)
+else:
+    ev3.speaker.say("all sensors and motors have found")
 
 highest_refrection_of_Black = 15
+
 # ============================================================
 
 class Tank:
@@ -213,7 +221,7 @@ def main():
 
     while 1:
         start_time = timer.time()
-        # wait until any button is pressed or 10 sec pass
+        # wait until any button is pressed
         while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb()
             rgb_right = colorRight.rgb()
