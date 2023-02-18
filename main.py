@@ -50,7 +50,7 @@ class Tank:
         motorLeft.run(powertodegs(left_speed))
         motorRight.run(powertodegs(right_speed))
         while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
-            wait(1)
+            pass
         self.stop(stop_type)
 
     def drive_for_rotations(self, left_speed, right_speed, rotations, stop_type = "hold"):
@@ -84,7 +84,7 @@ class Tank:
         right_angle = motorRight.angle()
         self.steering(power,steering)
         while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
-            wait(1)
+            pass
         self.stop(stop_type)
 
     def steering_for_rotations(self,power,steering,rotations,stop_type = "hold"):
@@ -161,7 +161,7 @@ def onGreenMarker(direction):
             tank.drive_for_degrees(-30,30,180) # spin turn "left" 180 deg
             tank.drive(-30,30)
             while colorLeft.rgb()[1] > highest_refrection_of_Black: # spin turn "left" until left color sensor finds black or green
-                wait(1)
+                pass
             tank.drive_for_degrees(-30,30,110) # spin turn "left" 110 deg to be over line
             motorLeft.brake()
             motorRight.brake()
@@ -186,7 +186,7 @@ def onGreenMarker(direction):
             tank.drive_for_degrees(30,-30,180) # spin turn "right" 180 deg
             tank.drive(30,-30)
             while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
-                wait(1)
+                pass
             tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
             motorLeft.brake()
             motorRight.brake()
@@ -204,7 +204,7 @@ def u_turn():
     tank.drive_for_degrees(30,-30,240) # spin turn "right" 240 deg reqired to be optimized
     tank.drive(30,-30)
     while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
-        wait(1)
+        pass
     tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
     motorLeft.brake()
     motorRight.brake()
