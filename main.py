@@ -150,8 +150,8 @@ def onGreenMarker(direction):
         while abs(motorRight.angle() - start_angle_deg) <= 50:
             if isGreen('r'):
                 isRightGreen = True
-        motorLeft.hold()
-        motorRight.hold()
+        motorLeft.brake()
+        motorRight.brake()
 
         if isRightGreen:
             u_turn()
@@ -163,8 +163,8 @@ def onGreenMarker(direction):
             while colorLeft.rgb()[1] > highest_refrection_of_Black: # spin turn "left" until left color sensor finds black or green
                 wait(1)
             tank.drive_for_degrees(-30,30,110) # spin turn "left" 110 deg to be over line
-            motorLeft.hold()
-            motorRight.hold()
+            motorLeft.brake()
+            motorRight.brake()
     else: # "r" --------------------------------------------------------------------------
         start_angle_deg = motorLeft.angle()
         isLeftGreen = False
@@ -175,8 +175,8 @@ def onGreenMarker(direction):
         while abs(motorLeft.angle() - start_angle_deg) <= 50:
             if isGreen('r'):
                 isLeftGreen = True
-        motorLeft.hold()
-        motorRight.hold()
+        motorLeft.brake()
+        motorRight.brake()
 
         if isLeftGreen:
             u_turn()
@@ -188,8 +188,8 @@ def onGreenMarker(direction):
             while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
                 wait(1)
             tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
-            motorLeft.hold()
-            motorRight.hold()
+            motorLeft.brake()
+            motorRight.brake()
 
 def isGreen(direction):
     if direction == "l":
@@ -206,8 +206,8 @@ def u_turn():
     while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
         wait(1)
     tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
-    motorLeft.hold()
-    motorRight.hold()
+    motorLeft.brake()
+    motorRight.brake()
 # ============================================================
 def main():
     Kp = 2.2
