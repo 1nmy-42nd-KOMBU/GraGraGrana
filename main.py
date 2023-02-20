@@ -210,18 +210,26 @@ def u_turn():
     motorRight.brake()
 # ============================================================
 def main():
-    Kp = 2.2
-    Ki = 0.1
-    Kd = 0.8
-    last_error = 0
-    error = 0
-    basic_speed = 25
-    count = 0
-    print("start")
-
     while 1:
+        # init values
+        Kp = 2.2
+        Ki = 0.1
+        Kd = 0.8
+        last_error = 0
+        error = 0
+        basic_speed = 25
+        count = 0
         start_time = timer.time()
+        print("start")
+        # Get ready!!
+        ev3.speaker.beep()
+
         # wait until any button is pressed
+        while not any(ev3.buttons.pressed()):
+            pass
+        while any(ev3.buttons.pressed()):
+            pass
+
         while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb()
             rgb_right = colorRight.rgb()
@@ -256,12 +264,4 @@ def main():
         while not any(ev3.buttons.pressed()):
             wait(10)
 
-# Get ready!!
-ev3.speaker.beep()
-
-# wait until any button is pressed
-while not any(ev3.buttons.pressed()):
-    wait(10)
-while any(ev3.buttons.pressed()):
-    wait(10)
 main()
