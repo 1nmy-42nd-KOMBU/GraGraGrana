@@ -218,7 +218,6 @@ def main():
         last_error = 0
         error = 0
         basic_speed = 25
-        count = 0
         start_time = timer.time()
         print("start")
         # Get ready!!
@@ -229,6 +228,8 @@ def main():
             pass
         while any(ev3.buttons.pressed()):
             pass
+        
+        # ここでESPとPicoにスタート信号を送る
 
         while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb()
@@ -250,18 +251,11 @@ def main():
             # print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
             # wait(100)
-            count += 1
             wait(20)
         
         motorLeft.brake()
         motorRight.brake()
-        
-        while any(ev3.buttons.pressed()):
-            wait(10)
-        
-        print(str(10/count*1000))
-        # wait until any button is pressed "again"
-        while not any(ev3.buttons.pressed()):
-            wait(10)
+
+        # ここでESPとPicoにストップ&リセット信号を送る
 
 main()
