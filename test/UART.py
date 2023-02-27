@@ -3,9 +3,9 @@ from pybricks.iodevices import UARTDevice
 from pybricks.parameters import Port
 from pybricks.tools import wait
 
-arduino = UARTDevice(Port.S1, 38400,100)
+arduino = UARTDevice(Port.S1, 115200,100)
 arduino.clear()
-wait(100)
+wait(1000)
 print("start")
 
 for i in range(1000):
@@ -17,4 +17,4 @@ for i in range(1000):
     whatread = arduino.read()
     if whatread[0] != 10:
         print(whatread[0])
-    wait(5)
+    wait(3)
