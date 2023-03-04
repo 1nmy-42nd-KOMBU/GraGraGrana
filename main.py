@@ -8,20 +8,43 @@ from pybricks.robotics import DriveBase
 ev3 = EV3Brick()
 timer = StopWatch()
 
+# カラーセンサを接続
 try:
     colorLeft = ColorSensor(Port.S3)
     colorRight = ColorSensor(Port.S4)
+except OSError as oserror:
+    while True:
+        ev3.speaker.say("color")
+        wait(1000)
 
+# モーターを接続
+try:
     motorLeft = Motor(Port.A)
     motorRight = Motor(Port.D)
 except OSError as oserror:
     while True:
-        ev3.speaker.say("os error")
+        ev3.speaker.say("motor")
+        wait(1000)
+
+try:
+    pico = UARTDevice(Port.S2, 19200,100)
+except OSError as oserror:
+    while True:
+        ev3.speaker.say("pico")
         wait(1000)
 else:
-    ev3.speaker.say("all sensors and motors have found")
+    pico.clear()
 
-highest_refrection_of_Black = 15
+try:
+    esp = UARTDevice(Port.S1, 115200,100)
+except OSError as oserror:
+    while True:
+        ev3.speaker.say("esp32")
+        wait(1000)
+else:
+    esp.clear()
+
+highest_refrection_of_Black = const(15)
 
 # ============================================================
 
@@ -37,6 +60,7 @@ class Tank:
         motorRight.run(powertodegs(right_speed))
 
     def drive_for_seconds(self, left_speed, right_speed, time, stop_type = "hold", wait=True):
+        """こいつにだけwait機能があるほかは非同期処理を習得したら考える"""
         motorLeft.run_time(powertodegs(left_speed), time, stop_type, False)
         motorRight.run_time(powertodegs(right_speed), time, stop_type, False)
         if wait:
@@ -110,9 +134,19 @@ class Tank:
             motorRight.hold()
 
 tank = Tank()
+
+@micropython.native
+def powertodegs(power):
+    """Convert power(%) to deg/s"""
+    return 950 * power /100
+
 # ------------------------------------------------------------
 @micropython.native
 def changeRGBtoHSV(rgb):
+    """
+    Convert RGB to HSV
+    Hue, saturation and brightness values are returned in tuple form
+    """
     rgb0_255 = rgb[0] * 255 / 100, rgb[1] * 255 / 100, rgb[2] * 255 / 200
     maxRGB, minRGB = max(rgb0_255), min(rgb0_255)
     diff = maxRGB - minRGB
@@ -124,7 +158,7 @@ def changeRGBtoHSV(rgb):
     elif maxRGB == rgb0_255[2] : hue = 60 * ((rgb0_255[0]-rgb0_255[1])/diff) + 240
     if hue < 0 : hue += 360
 
-    # Sqturation
+    # Saturation
     if maxRGB != 0:
         saturation = diff / maxRGB * 100
     else:
@@ -135,9 +169,6 @@ def changeRGBtoHSV(rgb):
 
     return hue,saturation,value
 
-@micropython.native
-def powertodegs(power):
-    return 950 * power /100
 # ------------------------------------------------------------
 def onGreenMarker(direction):
     if direction == "l":
@@ -251,6 +282,9 @@ def main():
             # print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
             # wait(100)
+
+            # ESP32との通信を確認
+            # if arduino.waiting() < 1:
             wait(20)
         
         motorLeft.brake()
