@@ -26,23 +26,23 @@ except OSError as oserror:
         ev3.speaker.say("motor")
         wait(1000)
 
-try:
-    pico = UARTDevice(Port.S2, 19200,100)
-except OSError as oserror:
-    while True:
-        ev3.speaker.say("pico")
-        wait(1000)
-else:
-    pico.clear()
+# try:
+#     pico = UARTDevice(Port.S2, 19200,100)
+# except OSError as oserror:
+#     while True:
+#         ev3.speaker.say("pico")
+#         wait(1000)
+# else:
+#     pico.clear()
 
-try:
-    esp = UARTDevice(Port.S1, 115200,100)
-except OSError as oserror:
-    while True:
-        ev3.speaker.say("esp32")
-        wait(1000)
-else:
-    esp.clear()
+# try:
+#     esp = UARTDevice(Port.S1, 115200,100)
+# except OSError as oserror:
+#     while True:
+#         ev3.speaker.say("esp32")
+#         wait(1000)
+# else:
+#     esp.clear()
 
 highest_refrection_of_Black = const(15)
 
@@ -267,29 +267,30 @@ def main():
             rgb_right = colorRight.rgb()
             error = rgb_left[1] - rgb_right[1]
             u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error)
-            motorLeft.run(powertodegs(basic_speed + u))
-            motorRight.run(powertodegs(basic_speed - u))
+            # motorLeft.run(powertodegs(basic_speed + u))
+            # motorRight.run(powertodegs(basic_speed - u))
             hsv_left = changeRGBtoHSV(rgb_left)
             if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
                 print("Left sensor is over green")
-            # print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
-            # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
-            # wait(100)
+            print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
+            print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
+            wait(100)
 
             hsv_right = changeRGBtoHSV(rgb_right)
             if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
                 print("Right sensor is over green")
-            # print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
-            # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
-            # wait(100)
+            print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
+            print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
+            wait(100)
 
-            # ESP32との通信を確認
-            # if arduino.waiting() < 1:
             wait(20)
         
         motorLeft.brake()
         motorRight.brake()
 
         # ここでESPとPicoにストップ&リセット信号を送る
+        
+        while any(ev3.buttons.pressed()):
+            pass
 
 main()
