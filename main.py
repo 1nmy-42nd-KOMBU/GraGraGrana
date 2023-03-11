@@ -4,14 +4,19 @@ from pybricks.ev3devices import Motor, ColorSensor
 from pybricks.parameters import Port, Stop, Direction, Button, Color
 from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
+from pybricks.iodevices import UARTDevice
 
+# 設定コーナー====================================================
 ev3 = EV3Brick()
 timer = StopWatch()
 
+# センサーとモーターをEV3と接続していくぅ↑---------------------------
+# 失敗した時はその内容を吐露しながら停止するよ
+
 # カラーセンサを接続
 try:
-    colorLeft = ColorSensor(Port.S3)
-    colorRight = ColorSensor(Port.S4)
+    colorLeft = ColorSensor(Port.S4)
+    colorRight = ColorSensor(Port.S3)
 except OSError as oserror:
     while True:
         ev3.speaker.say("color")
@@ -26,6 +31,7 @@ except OSError as oserror:
         ev3.speaker.say("motor")
         wait(1000)
 
+# Raspberry Pi Picoを接続
 # try:
 #     pico = UARTDevice(Port.S2, 19200,100)
 # except OSError as oserror:
@@ -35,18 +41,19 @@ except OSError as oserror:
 # else:
 #     pico.clear()
 
-# try:
-#     esp = UARTDevice(Port.S1, 115200,100)
-# except OSError as oserror:
-#     while True:
-#         ev3.speaker.say("esp32")
-#         wait(1000)
-# else:
-#     esp.clear()
-
+# ESP32を接続
+try:
+    esp = UARTDevice(Port.S1, 115200,100)
+except OSError as oserror:
+    while True:
+        ev3.speaker.say("ESP32")
+        wait(1000)
+else:
+    esp.clear()
+# ----------------------------------------------------------------
 highest_refrection_of_Black = const(15)
 
-# ============================================================
+# ================================================================
 
 class Tank:
     """
@@ -248,7 +255,7 @@ def main():
         Kd = 0.8
         last_error = 0
         error = 0
-        basic_speed = 25
+        basic_speed = 30
         start_time = timer.time()
         print("start")
         # Get ready!!
@@ -265,25 +272,40 @@ def main():
         while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb()
             rgb_right = colorRight.rgb()
-            error = rgb_left[1] - rgb_right[1]
+            error = rgb_right[1] - rgb_left[1]
             u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error)
-            # motorLeft.run(powertodegs(basic_speed + u))
-            # motorRight.run(powertodegs(basic_speed - u))
+            motorLeft.run(powertodegs(basic_speed + u))
+            motorRight.run(powertodegs(basic_speed - u))
             hsv_left = changeRGBtoHSV(rgb_left)
             if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
                 print("Left sensor is over green")
-            print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
-            print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
-            wait(100)
+            #print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
+            # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
+            # wait(100)
 
             hsv_right = changeRGBtoHSV(rgb_right)
             if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
                 print("Right sensor is over green")
-            print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
-            print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
-            wait(100)
+            #print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
+            # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
+            # wait(100)
+            
+            esp.write((10).to_bytes(1,'big'))
+            error_count = 0
+            while esp.waiting() < 1:
+                if error_count > 10: # 10回以上失敗してたら一時停止
+                    motorLeft.brake()
+                    motorRight.brake()
+                    ev3.speaker.say("ESP UART")
+                wait(10)
+                print("error")
+                esp.write((10).to_bytes(1,'big'))
+                error_count += 1
+            whatread = esp.read()
+            if whatread[0] != 10:
+                print(whatread[0])
 
-            wait(20)
+            wait(20-error_count) # UARTも鑑みつつ20ms待つ
         
         motorLeft.brake()
         motorRight.brake()
