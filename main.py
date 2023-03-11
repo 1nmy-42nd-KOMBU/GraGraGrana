@@ -290,9 +290,10 @@ def main():
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
             # wait(100)
             
+            # UART with ESP32
             esp.write((10).to_bytes(1,'big'))
             error_count = 0
-            while esp.waiting() < 1:
+            while esp.waiting() < 4:
                 if error_count > 10: # 10回以上失敗してたら一時停止
                     motorLeft.brake()
                     motorRight.brake()
@@ -301,16 +302,19 @@ def main():
                 print("error")
                 esp.write((10).to_bytes(1,'big'))
                 error_count += 1
-            whatread = esp.read()
-            if whatread[0] != 10:
-                print(whatread[0])
+            whatread = esp.read(4)
+            #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
 
-            wait(20-error_count) # UARTも鑑みつつ20ms待つ
+            # UARTも鑑みつつ13ms待つ
+            if error_count == 0:
+                wait(15)
+            elif error_count == 1:
+                wait(5)
         
         motorLeft.brake()
         motorRight.brake()
 
-        # ここでESPとPicoにストップ&リセット信号を送る
+        # ここでESPとPicoにストップ&リセット信号を送る(予定)
         
         while any(ev3.buttons.pressed()):
             pass
