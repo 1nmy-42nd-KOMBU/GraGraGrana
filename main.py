@@ -396,6 +396,8 @@ def lost_line():
     """
     中央のラインセンサが黒を見失ったとき
     -ラインからずれた
+    -キャップ
+    の2つが考えられるよね
     """
     pass
 
@@ -431,13 +433,13 @@ def main():
         last_error = 0
         error = 0
         basic_speed = 30
+        hill_statue = 0
         start_time = timer.time()
         print("start")
         # Get ready!!
         ev3.speaker.beep()
-        hill_statue = 0
 
-        # wait until any button is pressed
+        # ボタンが押されるのを待つ
         while not any(ev3.buttons.pressed()):
             pass
         while any(ev3.buttons.pressed()):
@@ -446,13 +448,15 @@ def main():
         # ここでESPとPicoにスタート信号を送る
 
         while not any(ev3.buttons.pressed()):
-            rgb_left = colorLeft.rgb()
-            rgb_right = colorRight.rgb()
-            error = rgb_left[1] - rgb_right[1]
-            u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error)
-            motorLeft.run(powertodegs(basic_speed + u))
+            rgb_left = colorLeft.rgb() # 左のRGBをゲットだぜ
+            rgb_right = colorRight.rgb() # 右のRGｂをゲットだぜ
+            error = rgb_left[1] - rgb_right[1] # 偏差をゲットだぜ
+            u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error) # 操作量をゲットだぜ
+            motorLeft.run(powertodegs(basic_speed + u)) # 動かす
             motorRight.run(powertodegs(basic_speed - u))
-            hsv_left = changeRGBtoHSV(rgb_left)
+            
+            # 左の緑判定
+            hsv_left = changeRGBtoHSV(rgb_left) # HSVの値をゲット
             if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
                 print("Left sensor is over green")
                 onGreenMarker("l")
@@ -460,7 +464,8 @@ def main():
             # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
             # wait(100)
 
-            hsv_right = changeRGBtoHSV(rgb_right)
+            # 右の緑判定
+            hsv_right = changeRGBtoHSV(rgb_right) # HSVの値をゲット
             if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
                 print("Right sensor is over green")
                 onGreenMarker("r")
@@ -468,32 +473,38 @@ def main():
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
             # wait(100)
             
-            # UART with ESP32
-            esp.write((10).to_bytes(1,'big'))
+            # ESP32との通信
+            esp.write((10).to_bytes(1,'big')) # ESP32に値のリクエスト(10)を送る
             error_count = 0
-            while esp.waiting() < 4:
+            while esp.waiting() < 4: # 受信バッファに4Byteたまるまで待つ
                 if error_count > 10: # 10回以上失敗してたら一時停止
                     motorLeft.brake()
                     motorRight.brake()
                     ev3.speaker.say("ESP UART")
-                wait(10)
+                wait(10) # 待てる最大の時間は10ms
                 print("error")
-                esp.write((10).to_bytes(1,'big'))
+                esp.write((10).to_bytes(1,'big')) # リクエストの再送
                 error_count += 1
+            # 4Byte読み取る
+            # whatread[n]の形で使うときは型がunsigned(正の数)になる
             whatread = esp.read(4)
             #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
 
-            # # 直角系
-            # if whatread[0] != 0:
-            #     if whatread[0] == 1:
-            #         # 左折コーナー
-            #         black("l")
-            #     elif whatread[0] == 2:
-            #         # 右折コーナー
-            #         black("r")
-            #     elif whatread[0] == 3:
-            #         black("both")
+            # 直角系
+            if whatread[0] != 0:
+                if whatread[0] == 1:
+                    # 左折コーナー
+                    black("l")
+                    continue # ループの最初に戻る(通信の内容を更新)
+                elif whatread[0] == 2:
+                    # 右折コーナー
+                    black("r")
+                    continue
+                elif whatread[0] == 3:
+                    black("both")
+                    continue
 
+            # レスキューキット
             if whatread[2] == 2:
                 arm.rescuekit()
                 continue # ループの最初に戻る(通信の内容を更新)
@@ -523,6 +534,7 @@ def main():
 
         # ここでESPとPicoにストップ&リセット信号を送る(予定)
         
+        # ボタンが離されるのを待つ
         while any(ev3.buttons.pressed()):
             pass
 
