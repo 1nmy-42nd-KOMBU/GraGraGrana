@@ -24,8 +24,8 @@ except OSError as oserror:
 
 # モーターを接続
 try:
-    motorLeft = Motor(Port.A)
-    motorRight = Motor(Port.D)
+    motorLeft = Motor(Port.D)
+    motorRight = Motor(Port.A)
 except OSError as oserror:
     while True:
         ev3.speaker.say("motor")
@@ -52,7 +52,7 @@ else:
     esp.clear()
 # ----------------------------------------------------------------
 highest_refrection_of_Black = const(15)
-
+basic_speed = 30
 # ================================================================
 
 class Tank:
@@ -66,7 +66,7 @@ class Tank:
         motorLeft.run(powertodegs(left_speed))
         motorRight.run(powertodegs(right_speed))
 
-    def drive_for_seconds(self, left_speed, right_speed, time, stop_type = "hold", wait=True):
+    def drive_for_seconds(self, left_speed, right_speed, time, stop_type = "brake", wait=True):
         """こいつにだけwait機能があるほかは非同期処理を習得したら考える"""
         motorLeft.run_time(powertodegs(left_speed), time, stop_type, False)
         motorRight.run_time(powertodegs(right_speed), time, stop_type, False)
@@ -75,16 +75,16 @@ class Tank:
         
         self.stop(stop_type)
 
-    def drive_for_degrees(self, left_speed, right_speed, degrees, stop_type = "hold"):
+    def drive_for_degrees(self, left_speed, right_speed, degrees, stop_type = "brake"):
         left_angle = motorLeft.angle()
         right_angle = motorRight.angle()
         motorLeft.run(powertodegs(left_speed))
         motorRight.run(powertodegs(right_speed))
-        while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
+        while abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= degrees:
             pass
         self.stop(stop_type)
 
-    def drive_for_rotations(self, left_speed, right_speed, rotations, stop_type = "hold"):
+    def drive_for_rotations(self, left_speed, right_speed, rotations, stop_type = "brake"):
         self.drive_for_degrees(left_speed,right_speed,rotations* 360,stop_type)
 
     def steering(self,speed,steering):
@@ -99,7 +99,7 @@ class Tank:
         else:
             raise ValueError
 
-    def steering_for_seconds(self,speed,steering,seconds,stop_type = "hold"):
+    def steering_for_seconds(self,speed,steering,seconds,stop_type = "brake"):
         if seconds <= 0:
             raise ValueError
         time_run = timer.time() + seconds
@@ -107,7 +107,7 @@ class Tank:
             self.steering(speed,steering)
         self.stop(stop_type)
 
-    def steeing_for_degrees(self,power,steering,degrees,stop_type = "hold"):
+    def steeing_for_degrees(self,power,steering,degrees,stop_type = "brake"):
         if degrees < 0:
             degrees *= -1
             steering *= -1
@@ -118,7 +118,7 @@ class Tank:
             pass
         self.stop(stop_type)
 
-    def steering_for_rotations(self,power,steering,rotations,stop_type = "hold"):
+    def steering_for_rotations(self,power,steering,rotations,stop_type = "brake"):
         self.steeing_for_degrees(power,steering,rotations * 360,stop_type)
 
     def stop_option(self,stop_type):
@@ -195,12 +195,15 @@ def onGreenMarker(direction):
             u_turn()
         else:
             print('turn left')
-            tank.drive_for_degrees(30,30,230) # go down 230 deg
-            tank.drive_for_degrees(-30,30,180) # spin turn "left" 180 deg
+            tank.drive_for_degrees(30,30,180) # go down 180 deg
+            tank.drive_for_degrees(-30,30,160) # spin turn "left" 160 deg
             tank.drive(-30,30)
             while colorLeft.rgb()[1] > highest_refrection_of_Black: # spin turn "left" until left color sensor finds black or green
                 pass
             tank.drive_for_degrees(-30,30,110) # spin turn "left" 110 deg to be over line
+            motorLeft.brake()
+            motorRight.brake()
+            tank.drive_for_degrees(30,30,50)
             motorLeft.brake()
             motorRight.brake()
     else: # "r" --------------------------------------------------------------------------
@@ -220,12 +223,15 @@ def onGreenMarker(direction):
             u_turn()
         else:
             print('turn right')
-            tank.drive_for_degrees(30,30,230) # go down 230 deg
+            tank.drive_for_degrees(30,30,180) # go down 180 deg
             tank.drive_for_degrees(30,-30,180) # spin turn "right" 180 deg
             tank.drive(30,-30)
             while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
                 pass
             tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
+            motorLeft.brake()
+            motorRight.brake()
+            tank.drive_for_degrees(30,30,50)
             motorLeft.brake()
             motorRight.brake()
 
@@ -238,8 +244,12 @@ def isGreen(direction):
     return (120 < hsv[0] < 160 and hsv[1] > 60 and hsv[2] > 20)
 
 def u_turn():
-    tank.drive_for_degrees(30,30,230) # go down 230 deg
+    tank.drive_for_degrees(30,30,160) # go down 160 deg
     tank.drive_for_degrees(30,-30,240) # spin turn "right" 240 deg reqired to be optimized
+    tank.drive(30,-30)
+    while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
+        pass
+    tank.drive_for_degrees(30,-30,200) # spin turn "right" 110 deg to be over line
     tank.drive(30,-30)
     while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
         pass
@@ -260,6 +270,7 @@ def main():
         print("start")
         # Get ready!!
         ev3.speaker.beep()
+        hill_statue = 0
 
         # wait until any button is pressed
         while not any(ev3.buttons.pressed()):
@@ -272,13 +283,14 @@ def main():
         while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb()
             rgb_right = colorRight.rgb()
-            error = rgb_right[1] - rgb_left[1]
+            error = rgb_left[1] - rgb_right[1]
             u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error)
             motorLeft.run(powertodegs(basic_speed + u))
             motorRight.run(powertodegs(basic_speed - u))
             hsv_left = changeRGBtoHSV(rgb_left)
             if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
                 print("Left sensor is over green")
+                onGreenMarker("l")
             #print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
             # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
             # wait(100)
@@ -286,6 +298,7 @@ def main():
             hsv_right = changeRGBtoHSV(rgb_right)
             if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
                 print("Right sensor is over green")
+                onGreenMarker("r")
             #print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
             # wait(100)
@@ -303,6 +316,24 @@ def main():
                 esp.write((10).to_bytes(1,'big'))
                 error_count += 1
             whatread = esp.read(4)
+
+            # 坂関係
+            if hill_statue == 0:
+                if whatread[3] == 0:
+                    pass
+                elif whatread[3] == 1:
+                    print("up")
+                    basic_speed = 40
+                    hill_statue = 1
+                elif whatread [3] == 2:
+                    print("down")
+                    basic_speed = 20
+                    hill_statue = 2
+            elif whatread[3] == 0:
+                print("return")
+                basic_speed = 30
+                hill_statue = 0
+
             #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
 
             # UARTも鑑みつつ13ms待つ
