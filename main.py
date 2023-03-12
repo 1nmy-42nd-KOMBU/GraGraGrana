@@ -22,13 +22,22 @@ except OSError as oserror:
         ev3.speaker.say("color")
         wait(1000)
 
-# モーターを接続
+# Lモーターを接続
 try:
     motorLeft = Motor(Port.D)
     motorRight = Motor(Port.A)
 except OSError as oserror:
     while True:
         ev3.speaker.say("motor")
+        wait(1000)
+
+# Mモーターを接続
+try:
+    arm_bucket = Motor(Port.B)
+    arm_rotate = Motor(Port.C)
+except OSError as oserror:
+    while True:
+        ev3.speaker.say("m motor")
         wait(1000)
 
 # Raspberry Pi Picoを接続
@@ -141,6 +150,33 @@ class Tank:
             motorRight.hold()
 
 tank = Tank()
+
+class Arm:
+    def open_arm(self):
+        arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True)
+    def close_arm(self):
+        arm_rotate.run_angle(powertodegs(-40),250,Stop.BRAKE,True)
+
+    def open_bucket(self):
+        arm_bucket.run_angle(powertodegs(-40),150,Stop.BRAKE,True)
+
+    def close_bucket(self):
+        arm_bucket.run_angle(powertodegs(40),150,Stop.BRAKE,True)
+
+    def rescuekit(self):
+        tank.drive_for_degrees(-1*basic_speed,-1*basic_speed,350)
+        arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True)
+        tank.drive_for_degrees(basic_speed,basic_speed,350)
+        arm_bucket.run_angle(powertodegs(40),50,Stop.COAST,True)
+        arm_bucket.run(powertodegs(40))
+        while abs(arm_bucket.speed()) >= 5:
+            pass
+        arm_bucket.brake()
+        arm_rotate.run_angle(powertodegs(-40),250,Stop.BRAKE,True)
+        arm_bucket.run_angle(powertodegs(-40),30,Stop.COAST,True)
+        arm_bucket.run_angle(powertodegs(40),200,Stop.BRAKE,True)
+
+arm = Arm()
 
 @micropython.native
 def powertodegs(power):
@@ -256,6 +292,23 @@ def u_turn():
     tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
     motorLeft.brake()
     motorRight.brake()
+
+def black(direction):
+    if direction == "l":
+        # 左折
+        left_angle = motorLeft.angle()
+        right_angle = motorRight.angle()
+        motorLeft.run(powertodegs(basic_speed))
+        motorRight.run(powertodegs(basic_speed))
+        while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50:
+            pass
+        tank.stop("brake")
+    elif direction == "r":
+        # 右折
+        pass
+    else:
+        # 無視
+        tank.drive_for_degrees(30,30,180,"stop")
 # ============================================================
 def main():
     while 1:
@@ -316,25 +369,35 @@ def main():
                 esp.write((10).to_bytes(1,'big'))
                 error_count += 1
             whatread = esp.read(4)
+            #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
+
+            # # 直角系
+            # if whatread[0] != 0:
+            #     if whatread[0] == 1:
+            #         # 左折コーナー
+            #         black("l")
+            #     elif whatread[0] == 2:
+            #         # 右折コーナー
+            #         black("r")
+            #     elif whatread[0] == 3:
+            #         black("both")
+
+            if whatread[2] == 2:
+                arm.rescuekit()
 
             # 坂関係
             if hill_statue == 0:
                 if whatread[3] == 0:
                     pass
                 elif whatread[3] == 1:
-                    print("up")
-                    basic_speed = 40
+                    basic_speed = 80
                     hill_statue = 1
                 elif whatread [3] == 2:
-                    print("down")
                     basic_speed = 20
                     hill_statue = 2
             elif whatread[3] == 0:
-                print("return")
                 basic_speed = 30
                 hill_statue = 0
-
-            #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
 
             # UARTも鑑みつつ13ms待つ
             if error_count == 0:
