@@ -6,7 +6,7 @@ from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.iodevices import UARTDevice
 
-# 設定コーナー====================================================
+# 設定コーナー ====================================================
 ev3 = EV3Brick()
 timer = StopWatch()
 
@@ -58,11 +58,11 @@ except OSError as oserror:
         ev3.speaker.say("ESP32")
         wait(1000)
 else:
-    esp.clear()
+    esp.clear() # 受信バッファをクリア
 # ----------------------------------------------------------------
 highest_refrection_of_Black = const(15)
 basic_speed = 30
-# ================================================================
+# 設定コーナー終わり ===============================================
 
 class Tank:
     """
@@ -72,11 +72,18 @@ class Tank:
     ・回転方向の指定はパワーですることを想定している
     """
     def drive(self, left_speed, right_speed):
+        """
+        機体を進める
+        ストップするまで止まらんで
+        """
         motorLeft.run(powertodegs(left_speed))
         motorRight.run(powertodegs(right_speed))
 
     def drive_for_seconds(self, left_speed, right_speed, time, stop_type = "brake", wait=True):
-        """こいつにだけwait機能があるほかは非同期処理を習得したら考える"""
+        """
+        指定されたスピード(%)と時間(ms)で進む
+        こいつにだけwait機能がある 他は非同期処理を習得したら考える
+        """
         motorLeft.run_time(powertodegs(left_speed), time, stop_type, False)
         motorRight.run_time(powertodegs(right_speed), time, stop_type, False)
         if wait:
@@ -97,6 +104,10 @@ class Tank:
         self.drive_for_degrees(left_speed,right_speed,rotations* 360,stop_type)
 
     def steering(self,speed,steering):
+        """
+        ステアリング機能
+        デバッグしてないYO
+        """
         if -100 > speed or 100 > speed:
             raise ValueError
         if -100 <= steering < 0:
@@ -131,6 +142,10 @@ class Tank:
         self.steeing_for_degrees(power,steering,rotations * 360,stop_type)
 
     def stop_option(self,stop_type):
+        """
+        単一モーターを標準関数でストップするときのオプションを返す
+        他の関数と同じ感覚でストップできるように
+        """
         if stop_type == "stop":
             return Stop.COAST
         elif stop_type == "brake":
@@ -139,6 +154,9 @@ class Tank:
             return Stop.HOLD
 
     def stop(self, stop_type):
+        """
+        
+        """
         if stop_type == "stop":
             motorLeft.stop()
             motorRight.stop()
@@ -152,44 +170,54 @@ class Tank:
 tank = Tank()
 
 class Arm:
+    """アーム関係の動作"""
     def open_arm(self):
-        arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True)
+        """アームを展開"""
+        arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True) 
     def close_arm(self):
+        """アームをしまう"""
         arm_rotate.run_angle(powertodegs(-40),250,Stop.BRAKE,True)
 
     def open_bucket(self):
+        """回るやつを開放状態にする"""
         arm_bucket.run_angle(powertodegs(-40),150,Stop.BRAKE,True)
 
     def close_bucket(self):
+        """回るやつを閉じる"""
         arm_bucket.run_angle(powertodegs(40),150,Stop.BRAKE,True)
 
     def rescuekit(self):
-        tank.drive_for_degrees(-1*basic_speed,-1*basic_speed,350)
-        arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True)
-        tank.drive_for_degrees(basic_speed,basic_speed,350)
-        arm_bucket.run_angle(powertodegs(40),50,Stop.COAST,True)
-        arm_bucket.run(powertodegs(40))
-        while abs(arm_bucket.speed()) >= 5:
+        """レスキューキット検知後の動作"""
+        tank.drive_for_degrees(-1*basic_speed,-1*basic_speed,350) # 一歩下がる
+        arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True) # アームを下ろす
+        tank.drive_for_degrees(basic_speed,basic_speed,350) # 前に進む
+        arm_bucket.run_angle(powertodegs(40),50,Stop.COAST,True) # バケットを少し回す(初速を付けるため)
+        arm_bucket.run(powertodegs(40)) # バケットを回す
+        while abs(arm_bucket.speed()) >= 5: # パワーが5以下(つまりこれ以上回せなくなる)になるまで回し続ける
             pass
-        arm_bucket.brake()
-        arm_rotate.run_angle(powertodegs(-40),250,Stop.BRAKE,True)
-        arm_bucket.run_angle(powertodegs(-40),30,Stop.COAST,True)
-        arm_bucket.run_angle(powertodegs(40),200,Stop.BRAKE,True)
+        arm_bucket.brake() # がっちり固定
+        arm_rotate.run_angle(powertodegs(-40),250,Stop.BRAKE,True) # アームを上げる
+        arm_bucket.run_angle(powertodegs(-40),30,Stop.COAST,True) # レスキューキット開放
+        arm_bucket.run_angle(powertodegs(40),200,Stop.BRAKE,True) # 元の位置に戻す
 
 arm = Arm()
 
+# ライントーレスのグッズ ==================================================
+# ただの計算だからネイティブコードエミッタで高速化してる
 @micropython.native
 def powertodegs(power):
-    """Convert power(%) to deg/s"""
+    """スピード(%)をdeg/sに変換する"""
     return 950 * power /100
 
-# ------------------------------------------------------------
 @micropython.native
 def changeRGBtoHSV(rgb):
     """
-    Convert RGB to HSV
-    Hue, saturation and brightness values are returned in tuple form
+    RGBをHSVに変換して返す(タプル型)
+    色相(H)は 0~360
+    彩度(S)は 0~100
+    明度(V)は 0~255 の範囲
     """
+    # RGBのしきい値を0~100から0~255に修正 Blueの値が異様に大きい問題があるので÷2して実際に見える色に寄せている
     rgb0_255 = rgb[0] * 255 / 100, rgb[1] * 255 / 100, rgb[2] * 255 / 200
     maxRGB, minRGB = max(rgb0_255), min(rgb0_255)
     diff = maxRGB - minRGB
@@ -212,37 +240,36 @@ def changeRGBtoHSV(rgb):
 
     return hue,saturation,value
 
-# ------------------------------------------------------------
+# ============================================================
 def onGreenMarker(direction):
-    if direction == "l":
+    if direction == "l": # 左のカラーセンサーが緑を見つけた
+        # 50°進みつつ右にも緑がないか確認 結果はisRightGreenに格納
         start_angle_deg = motorRight.angle()
         isRightGreen = False
-
         motorLeft.run(powertodegs(basic_speed))
         motorRight.run(powertodegs(basic_speed))
-
         while abs(motorRight.angle() - start_angle_deg) <= 50:
             if isGreen('r'):
                 isRightGreen = True
         motorLeft.brake()
         motorRight.brake()
 
-        if isRightGreen:
+        if isRightGreen: # 反対にもマーカーがあったらUターン
             u_turn()
         else:
+            # ほんまもんの左折
             print('turn left')
-            tank.drive_for_degrees(30,30,180) # go down 180 deg
-            tank.drive_for_degrees(-30,30,160) # spin turn "left" 160 deg
+            tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
+            tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
             tank.drive(-30,30)
-            while colorLeft.rgb()[1] > highest_refrection_of_Black: # spin turn "left" until left color sensor finds black or green
+            while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を左のセンサが見つけるまで回る
                 pass
-            tank.drive_for_degrees(-30,30,110) # spin turn "left" 110 deg to be over line
+            tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
             motorLeft.brake()
             motorRight.brake()
-            tank.drive_for_degrees(30,30,50)
-            motorLeft.brake()
-            motorRight.brake()
-    else: # "r" --------------------------------------------------------------------------
+            tank.drive_for_degrees(30,30,50) # 緑マーカーかぶりを回避したい
+    else: # # 左のカラーセンサーが緑を見つけた(消去法的にね) -------------------------------------------------------------------
+        # 50°進みつつ左にも緑がないか確認 結果はisRightGreenに格納
         start_angle_deg = motorLeft.angle()
         isLeftGreen = False
 
@@ -255,62 +282,147 @@ def onGreenMarker(direction):
         motorLeft.brake()
         motorRight.brake()
 
-        if isLeftGreen:
+        if isLeftGreen: # 反対にもマーカーがあったらUターン
             u_turn()
         else:
             print('turn right')
-            tank.drive_for_degrees(30,30,180) # go down 180 deg
-            tank.drive_for_degrees(30,-30,180) # spin turn "right" 180 deg
+            tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
+            tank.drive_for_degrees(30,-30,180,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
             tank.drive(30,-30)
-            while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
+            while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
                 pass
-            tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
-            motorLeft.brake()
+            tank.drive_for_degrees(30,-30,110) # 機体をラインに沿わせる
+            motorLeft.brake() # 回転方向の運動を止める
             motorRight.brake()
-            tank.drive_for_degrees(30,30,50)
-            motorLeft.brake()
-            motorRight.brake()
+            tank.drive_for_degrees(30,30,50) # 緑マーカーかぶりを回避したい
 
 def isGreen(direction):
+    """
+    onGreenMarkerの付属品
+    directionで渡された方向のカラーセンサが緑を見ているか判定
+    """
+    # RGBを取得して
     if direction == "l":
         rgb = colorLeft.rgb()
     else:
         rgb = colorRight.rgb()
+    # HSVに変換して
     hsv = changeRGBtoHSV(rgb)
+    # 緑かどうかの真偽値を返す
     return (120 < hsv[0] < 160 and hsv[1] > 60 and hsv[2] > 20)
 
 def u_turn():
     tank.drive_for_degrees(30,30,160) # go down 160 deg
-    tank.drive_for_degrees(30,-30,240) # spin turn "right" 240 deg reqired to be optimized
-    tank.drive(30,-30)
-    while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
-        pass
-    tank.drive_for_degrees(30,-30,200) # spin turn "right" 110 deg to be over line
-    tank.drive(30,-30)
-    while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
-        pass
-    tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
-    motorLeft.brake()
-    motorRight.brake()
+    # tank.drive_for_degrees(30,-30,240) # spin turn "right" 240 deg reqired to be optimized
+    # tank.drive(30,-30)
+    # while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
+    #     pass
+    # tank.drive_for_degrees(30,-30,200) # spin turn "right" 110 deg to be over line
+    # tank.drive(30,-30)
+    # while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
+    #     pass
+    # tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
+    # motorLeft.brake()
+    # motorRight.brake()
+
+    # 柱にぶつからん為にタイルの中心で回転しようとしたら回転軸がぶれて、センサがいい感じにラインの上に乗ってくんない
+    # もう考えたくないからジャイロで180°ぶん回すんじゃー
+
+# ============================================================
 
 def black(direction):
+    """左右のラインセンサが黒を感知したときの"""
     if direction == "l":
         # 左折
+        # 50°進みつつ右にも黒がないか確認する
+        isRightBlack = False
         left_angle = motorLeft.angle()
         right_angle = motorRight.angle()
         motorLeft.run(powertodegs(basic_speed))
         motorRight.run(powertodegs(basic_speed))
         while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50:
-            pass
-        tank.stop("brake")
+            line_statue = UARTwithESP32_LineMode(10)[0]
+            if line_statue == 2 or line_statue == 3:
+                isRightBlack = True
+        
+        if isRightBlack:
+            # 無印の十字路 無視して突き進むんや
+            tank.drive_for_degrees(30,30,180,"stop")
+        else:
+            # 本当の左折
+            tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
+            tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
+            tank.drive(-30,30)
+            while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を左のセンサが見つけるまで回る
+                pass
+            tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
+            motorLeft.brake()
+            motorRight.brake()
+            tank.drive_for_degrees(30,30,50,"stop") # ラインかぶりを回避したい
     elif direction == "r":
         # 右折
-        pass
-    else:
-        # 無視
+        # 50°進みつつ左にも黒がないか確認する
+        isLeftBlack = False
+        left_angle = motorLeft.angle()
+        right_angle = motorRight.angle()
+        motorLeft.run(powertodegs(basic_speed))
+        motorRight.run(powertodegs(basic_speed))
+        while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50:
+            line_statue = UARTwithESP32_LineMode(10)[0]
+            if line_statue == 1 or line_statue == 3:
+                isLeftBlack = True
+        
+        if isLeftBlack:
+            # 無印の十字路 無視して突き進むんや
+            tank.drive_for_degrees(30,30,180,"stop")
+        else:
+            # 本当の右折
+            tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
+            tank.drive_for_degrees(30,-30,180,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
+            tank.drive(30,-30)
+            while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+                pass
+            tank.drive_for_degrees(30,-30,110) # 機体をラインに沿わせる
+            motorLeft.brake() # 回転方向の運動を止める
+            motorRight.brake()
+            tank.drive_for_degrees(30,30,50) # ラインかぶりを回避したい
+    else: #多分"both"とかが来る
+        # 無印の十字路 無視して突き進むんや
         tank.drive_for_degrees(30,30,180,"stop")
+
+# ============================================================
+
+def lost_line():
+    """
+    中央のラインセンサが黒を見失ったとき
+    -ラインからずれた
+    """
+    pass
+
+# ============================================================
+
+def UARTwithESP32_LineMode(mode):
+    """"
+    ライントレースしてるときのUART
+    通常時のと障害物回避ので2つつかえる
+    """
+    esp.write((mode).to_bytes(1,'big'))
+    error_count = 0
+    while esp.waiting() < 4:
+        if error_count > 10: # 10回以上失敗してたら一時停止
+            motorLeft.brake()
+            motorRight.brake()
+            ev3.speaker.say("ESP UART")
+        wait(10)
+        print("error")
+        esp.write((10).to_bytes(1,'big'))
+        error_count += 1
+    whatread = esp.read(4)
+    return whatread
+
 # ============================================================
 def main():
+    """メインループ"""
     while 1:
         # init values
         Kp = 2.2
@@ -384,6 +496,7 @@ def main():
 
             if whatread[2] == 2:
                 arm.rescuekit()
+                continue # ループの最初に戻る(通信の内容を更新)
 
             # 坂関係
             if hill_statue == 0:
