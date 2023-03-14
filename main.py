@@ -41,14 +41,14 @@ except OSError as oserror:
         wait(1000)
 
 # Raspberry Pi Picoを接続
-# try:
-#     pico = UARTDevice(Port.S2, 19200,100)
-# except OSError as oserror:
-#     while True:
-#         ev3.speaker.say("pico")
-#         wait(1000)
-# else:
-#     pico.clear()
+try:
+    pico = UARTDevice(Port.S2, 19200,100)
+except OSError as oserror:
+    while True:
+        ev3.speaker.say("pico")
+        wait(1000)
+else:
+    pico.clear()
 
 # ESP32を接続
 try:
@@ -64,6 +64,7 @@ highest_refrection_of_Black = const(15)
 basic_speed = 30
 # 設定コーナー終わり ===============================================
 
+# 足回りのクラス ===================================================
 class Tank:
     """
     ・モーター関連のクラス
@@ -169,6 +170,7 @@ class Tank:
 
 tank = Tank()
 
+# アーム関連のクラス ====================================================
 class Arm:
     """アーム関係の動作"""
     def open_arm(self):
@@ -240,7 +242,7 @@ def changeRGBtoHSV(rgb):
 
     return hue,saturation,value
 
-# ============================================================
+# 緑マーカー ============================================================
 def onGreenMarker(direction):
     if direction == "l": # 左のカラーセンサーが緑を見つけた
         # 50°進みつつ右にも緑がないか確認 結果はisRightGreenに格納
@@ -328,7 +330,7 @@ def u_turn():
     # 柱にぶつからん為にタイルの中心で回転しようとしたら回転軸がぶれて、センサがいい感じにラインの上に乗ってくんない
     # もう考えたくないからジャイロで180°ぶん回すんじゃー
 
-# ============================================================
+# 黒線①============================================================
 
 def black(direction):
     """左右のラインセンサが黒を感知したときの"""
@@ -390,7 +392,7 @@ def black(direction):
         # 無印の十字路 無視して突き進むんや
         tank.drive_for_degrees(30,30,180,"stop")
 
-# ============================================================
+# ラインを見失った ============================================================
 
 def lost_line():
     """
@@ -423,6 +425,13 @@ def UARTwithESP32_LineMode(mode):
     return whatread
 
 # ============================================================
+
+def print_pico(num):
+    """Raspberry Pi Picoの7セグに3桁の数字を表示する"""
+    pico.write((10).to_bytes(1,'big')) # この後の数字を
+    pico.write((num).to_bytes(2,'big')) # 表示してほしい数字を送る
+
+# ============================================================
 def main():
     """メインループ"""
     while 1:
@@ -450,6 +459,8 @@ def main():
         while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb() # 左のRGBをゲットだぜ
             rgb_right = colorRight.rgb() # 右のRGｂをゲットだぜ
+
+            # PID制御
             error = rgb_left[1] - rgb_right[1] # 偏差をゲットだぜ
             u = Kp * error + Ki * (error + last_error) + Kd * (error - last_error) # 操作量をゲットだぜ
             motorLeft.run(powertodegs(basic_speed + u)) # 動かす
@@ -460,18 +471,18 @@ def main():
             if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
                 print("Left sensor is over green")
                 onGreenMarker("l")
+                continue # ループの最初に戻る(通信の内容を更新)
             #print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
             # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
-            # wait(100)
 
             # 右の緑判定
             hsv_right = changeRGBtoHSV(rgb_right) # HSVの値をゲット
             if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
                 print("Right sensor is over green")
                 onGreenMarker("r")
+                continue # ループの最初に戻る(通信の内容を更新)
             #print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
-            # wait(100)
             
             # ESP32との通信
             esp.write((10).to_bytes(1,'big')) # ESP32に値のリクエスト(10)を送る
@@ -504,11 +515,6 @@ def main():
                     black("both")
                     continue
 
-            # レスキューキット
-            if whatread[2] == 2:
-                arm.rescuekit()
-                continue # ループの最初に戻る(通信の内容を更新)
-
             # 坂関係
             if hill_statue == 0:
                 if whatread[3] == 0:
@@ -519,15 +525,21 @@ def main():
                 elif whatread [3] == 2:
                     basic_speed = 20
                     hill_statue = 2
+                
+                # レスキューキット 坂だと誤探知の可能性があるからここに置くンゴ -----
+                if whatread[2] == 2:
+                    arm.rescuekit()
+                    continue # ループの最初に戻る(通信の内容を更新)
+                # -----------------------------------------------------------
             elif whatread[3] == 0:
                 basic_speed = 30
                 hill_statue = 0
 
             # UARTも鑑みつつ13ms待つ
             if error_count == 0:
-                wait(15)
+                wait(13)
             elif error_count == 1:
-                wait(5)
+                wait(3)
         
         motorLeft.brake()
         motorRight.brake()
