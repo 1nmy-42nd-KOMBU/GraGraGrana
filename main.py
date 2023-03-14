@@ -428,8 +428,10 @@ def UARTwithESP32_LineMode(mode):
 
 def print_pico(num):
     """Raspberry Pi Picoの7セグに3桁の数字を表示する"""
-    pico.write((10).to_bytes(1,'big')) # この後の数字を
-    pico.write((num).to_bytes(2,'big')) # 表示してほしい数字を送る
+    number = (num).to_bytes(2,'big')
+    what_to_send =  bytearray([3,number[0],number[1]])
+    pico.write(what_to_send) # この後の数字を
+    print(what_to_send)
 
 # ============================================================
 def main():
