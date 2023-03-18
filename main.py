@@ -305,17 +305,20 @@ def isGreen(direction):
 
 def u_turn():
     tank.drive_for_degrees(30,30,160) # go down 160 deg
-    # tank.drive_for_degrees(30,-30,240) # spin turn "right" 240 deg reqired to be optimized
-    # tank.drive(30,-30)
-    # while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
-    #     pass
-    # tank.drive_for_degrees(30,-30,200) # spin turn "right" 110 deg to be over line
-    # tank.drive(30,-30)
-    # while colorRight.rgb()[1] > highest_refrection_of_Black: # spin turn "right" until left color sensor finds black or green
-    #     pass
-    # tank.drive_for_degrees(30,-30,110) # spin turn "right" 110 deg to be over line
-    # motorLeft.brake()
-    # motorRight.brake()
+    while esp.waiting() == 0:
+        esp.clear()
+        esp.write((180).to_bytes(1,'big'))
+        wait(100)
+    hoge = esp.read(1) # read 18
+
+    tank.drive(30,-30)
+    esp.clear()
+    while esp.waiting() == 0:
+        pass
+    motorLeft.brake()
+    motorRight.brake()
+    hoge = esp.read(1) # read 180
+    esp.write((180).to_bytes(1,'big'))
 
     # 柱にぶつからん為にタイルの中心で回転しようとしたら回転軸がぶれて、センサがいい感じにラインの上に乗ってくんない
     # もう考えたくないからジャイロで180°ぶん回すんじゃー
