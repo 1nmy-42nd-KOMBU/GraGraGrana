@@ -347,17 +347,23 @@ def black(direction):
             # 無印の十字路 無視して突き進むんや
             tank.drive_for_degrees(30,30,100,"stop")
         else:
-            # 本当の左折
-            print_pico(121)
             tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
-            tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
-            tank.drive(-30,30)
-            while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を左のセンサが見つけるまで回る
-                pass
-            tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
-            motorLeft.brake()
-            motorRight.brake()
-            tank.drive_for_degrees(30,30,50,"stop") # ラインかぶりを回避したい
+            esp.clear()
+            central_line_sensor = UARTwithESP32_LineMode(10)[2]
+            if central_line_sensor == 1 or colorLeft.rgb()[1] >= highest_refrection_of_Black or colorRight.rgb()[1] >= highest_refrection_of_Black:
+                # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ
+                pass # 無視!
+            else:
+                # 本当の左折
+                print_pico(121)
+                tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
+                tank.drive(-30,30)
+                while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を左のセンサが見つけるまで回る
+                    pass
+                tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
+                motorLeft.brake()
+                motorRight.brake()
+                tank.drive_for_degrees(30,30,50,"stop") # ラインかぶりを回避したい
     elif direction == "r":
         # 右のラインセンサが黒を感知
         # 50°進みつつ左にも黒がないか確認する
@@ -377,17 +383,23 @@ def black(direction):
             # 無印の十字路 無視して突き進むんや
             tank.drive_for_degrees(30,30,100,"stop")
         else:
-            # 本当の右折
-            print_pico(122)
             tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
-            tank.drive_for_degrees(30,-30,180,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
-            tank.drive(30,-30)
-            while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
-                pass
-            tank.drive_for_degrees(30,-30,110) # 機体をラインに沿わせる
-            motorLeft.brake() # 回転方向の運動を止める
-            motorRight.brake()
-            tank.drive_for_degrees(30,30,50) # ラインかぶりを回避したい
+            esp.clear()
+            central_line_sensor = UARTwithESP32_LineMode(10)[2]
+            if central_line_sensor == 1 or colorLeft.rgb()[1] >= highest_refrection_of_Black or colorRight.rgb()[1] >= highest_refrection_of_Black:
+                # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ
+                pass # 無視!
+            else:
+                # 本当の右折
+                print_pico(122)
+                tank.drive_for_degrees(30,-30,180,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
+                tank.drive(30,-30)
+                while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+                    pass
+                tank.drive_for_degrees(30,-30,110) # 機体をラインに沿わせる
+                motorLeft.brake() # 回転方向の運動を止める
+                motorRight.brake()
+                tank.drive_for_degrees(30,30,50) # ラインかぶりを回避したい
     else: #"both"が来る
         # 無印の十字路 無視して突き進むんや
         print_pico(123)
