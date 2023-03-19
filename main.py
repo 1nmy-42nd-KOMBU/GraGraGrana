@@ -155,9 +155,7 @@ class Tank:
             return Stop.HOLD
 
     def stop(self, stop_type):
-        """
-        
-        """
+        """ 止まる """
         if stop_type == "stop":
             motorLeft.stop()
             motorRight.stop()
@@ -243,7 +241,6 @@ def onGreenMarker(direction):
         motorRight.brake()
 
         if isRightGreen: # 反対にもマーカーがあったらUターン
-            print_pico(113)
             u_turn()
         else:
             # ほんまもんの左折
@@ -273,7 +270,6 @@ def onGreenMarker(direction):
         motorRight.brake()
 
         if isLeftGreen: # 反対にもマーカーがあったらUターン
-            print_pico(113)
             u_turn()
         else:
             print('turn right')
@@ -287,6 +283,7 @@ def onGreenMarker(direction):
             motorLeft.brake() # 回転方向の運動を止める
             motorRight.brake()
             tank.drive_for_degrees(30,30,50) # 緑マーカーかぶりを回避したい
+    print_pico(100)
 
 def isGreen(direction):
     """
@@ -301,35 +298,40 @@ def isGreen(direction):
     # HSVに変換して
     hsv = changeRGBtoHSV(rgb)
     # 緑かどうかの真偽値を返す
-    return (120 < hsv[0] < 160 and hsv[1] > 60 and hsv[2] > 20)
+    return (140 < hsv[0] < 180 and hsv[1] > 50 and hsv[2] > 20)
 
 def u_turn():
-    tank.drive_for_degrees(30,30,160) # go down 160 deg
+    # 柱にぶつからん為にタイルの中心で回転しようとしたら回転軸がぶれて、センサがいい感じにラインの上に乗ってくんない
+    # もう考えたくないからジャイロで180°ぶん回すんじゃー
+    print_pico(113)
+    #tank.drive_for_degrees(30,30,45) # 回転の中心の調整
+    esp.clear()
     while esp.waiting() == 0:
         esp.clear()
         esp.write((180).to_bytes(1,'big'))
         wait(100)
+        print("send error")
     hoge = esp.read(1) # read 18
 
-    tank.drive(30,-30)
+    tank.drive(38,-30)
     esp.clear()
     while esp.waiting() == 0:
-        pass
+        print("turning")
     motorLeft.brake()
     motorRight.brake()
     hoge = esp.read(1) # read 180
     esp.write((180).to_bytes(1,'big'))
-
-    # 柱にぶつからん為にタイルの中心で回転しようとしたら回転軸がぶれて、センサがいい感じにラインの上に乗ってくんない
-    # もう考えたくないからジャイロで180°ぶん回すんじゃー
+    tank.drive_for_degrees(30,30,100,"stop")
+    esp.clear()
 
 # 黒線①============================================================
 
 def black(direction):
-    """左右のラインセンサが黒を感知したときの"""
+    """左or右のラインセンサが黒を感知したときの"""
     if direction == "l":
-        # 左折
+        # 左のラインセンサが黒を感知
         # 50°進みつつ右にも黒がないか確認する
+        # この時点ではトの字、十字、左折が考えられる
         isRightBlack = False
         left_angle = motorLeft.angle()
         right_angle = motorRight.angle()
@@ -341,10 +343,12 @@ def black(direction):
                 isRightBlack = True
         
         if isRightBlack:
+            print_pico(123)
             # 無印の十字路 無視して突き進むんや
-            tank.drive_for_degrees(30,30,180,"stop")
+            tank.drive_for_degrees(30,30,100,"stop")
         else:
             # 本当の左折
+            print_pico(121)
             tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
             tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
             tank.drive(-30,30)
@@ -355,8 +359,9 @@ def black(direction):
             motorRight.brake()
             tank.drive_for_degrees(30,30,50,"stop") # ラインかぶりを回避したい
     elif direction == "r":
-        # 右折
+        # 右のラインセンサが黒を感知
         # 50°進みつつ左にも黒がないか確認する
+        # この時点ではトの字、十字、右折が考えられる
         isLeftBlack = False
         left_angle = motorLeft.angle()
         right_angle = motorRight.angle()
@@ -368,10 +373,12 @@ def black(direction):
                 isLeftBlack = True
         
         if isLeftBlack:
+            print_pico(123)
             # 無印の十字路 無視して突き進むんや
-            tank.drive_for_degrees(30,30,180,"stop")
+            tank.drive_for_degrees(30,30,100,"stop")
         else:
             # 本当の右折
+            print_pico(122)
             tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
             tank.drive_for_degrees(30,-30,180,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
             tank.drive(30,-30)
@@ -381,9 +388,11 @@ def black(direction):
             motorLeft.brake() # 回転方向の運動を止める
             motorRight.brake()
             tank.drive_for_degrees(30,30,50) # ラインかぶりを回避したい
-    else: #多分"both"とかが来る
+    else: #"both"が来る
         # 無印の十字路 無視して突き進むんや
-        tank.drive_for_degrees(30,30,180,"stop")
+        print_pico(123)
+        tank.drive_for_degrees(30,30,100,"stop")
+    print_pico(100)
 
 # ラインを見失った ============================================================
 
@@ -479,20 +488,18 @@ def main():
             
             # 左の緑判定
             hsv_left = changeRGBtoHSV(rgb_left) # HSVの値をゲット
-            if 120 < hsv_left[0] < 160 and hsv_left[1] > 60 and hsv_left[2] > 20:
+            if 140 < hsv_left[0] < 180 and hsv_left[1] > 50 and hsv_left[2] > 20:
                 print("Left sensor is over green")
                 onGreenMarker("l")
-                print_pico(100)
                 continue # ループの最初に戻る(通信の内容を更新)
             #print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
             #print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
 
             # 右の緑判定
             hsv_right = changeRGBtoHSV(rgb_right) # HSVの値をゲット
-            if 120 < hsv_right[0] < 160 and hsv_right[1] > 60 and hsv_right[2] > 20:
+            if 140 < hsv_right[0] < 180 and hsv_right[1] > 50 and hsv_right[2] > 20:
                 print("Right sensor is over green")
                 onGreenMarker("r")
-                print_pico(100)
                 continue # ループの最初に戻る(通信の内容を更新)
             #print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
@@ -504,7 +511,7 @@ def main():
                 if error_count > 10: # 10回以上失敗してたら一時停止
                     motorLeft.brake()
                     motorRight.brake()
-                    ev3.speaker.say("ESP UART")
+                    ev3.speaker.say("E S P U A R T")
                 wait(10) # 待てる最大の時間は10ms
                 print("error")
                 esp.write((10).to_bytes(1,'big')) # リクエストの再送
@@ -514,19 +521,18 @@ def main():
             whatread = esp.read(4)
             #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
 
-            # # 直角系
-            # if whatread[0] != 0:
-            #     if whatread[0] == 1:
-            #         # 左折コーナー
-            #         black("l")
-            #         continue # ループの最初に戻る(通信の内容を更新)
-            #     elif whatread[0] == 2:
-            #         # 右折コーナー
-            #         black("r")
-            #         continue
-            #     elif whatread[0] == 3:
-            #         black("both")
-            #         continue
+            # 直角系
+            if whatread[0] != 0:
+                if whatread[0] == 1:
+                    # 左折コーナー
+                    black("l")
+                elif whatread[0] == 2:
+                    # 右折コーナー
+                    black("r")
+                elif whatread[0] == 3:
+                    black("both")
+                esp.clear()
+                continue # ループの最初に戻る(通信の内容を更新)
 
             # 坂関係
             if hill_statue == 0:
@@ -540,7 +546,7 @@ def main():
                     hill_statue = 2
                 
                 # レスキューキット 坂だと誤探知の可能性があるからここに置くンゴ -----
-                if whatread[2] == 2:
+                if whatread[2] == 2 or whatread[2] == 3: # whatread[2]==3(つまりラインを見失いかつレスキューキットを発見)になることはないと思うけどそん時はレスキューキット優先、あとで進行停止しよう
                     print_pico(777)
                     rescuekit()
                     print_pico(100)
