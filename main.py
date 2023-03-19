@@ -332,6 +332,7 @@ def black(direction):
         # 左のラインセンサが黒を感知
         # 50°進みつつ右にも黒がないか確認する
         # この時点ではトの字、十字、左折が考えられる
+        print("l")
         isRightBlack = False
         left_angle = motorLeft.angle()
         right_angle = motorRight.angle()
@@ -347,20 +348,23 @@ def black(direction):
             # 無印の十字路 無視して突き進むんや
             tank.drive_for_degrees(30,30,100,"stop")
         else:
-            tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
+            tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
             esp.clear()
             central_line_sensor = UARTwithESP32_LineMode(10)[2]
-            if central_line_sensor == 1 or colorLeft.rgb()[1] >= highest_refrection_of_Black or colorRight.rgb()[1] >= highest_refrection_of_Black:
+            print(str(central_line_sensor)+" "+str(colorLeft.rgb()[1])+" "+str(colorRight.rgb()[1]))
+            if central_line_sensor == 0 or colorLeft.rgb()[1] <= highest_refrection_of_Black or colorRight.rgb()[1] <= highest_refrection_of_Black:
                 # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ
                 pass # 無視!
+                print("t")
             else:
                 # 本当の左折
+                print("l")
                 print_pico(121)
                 tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
                 tank.drive(-30,30)
                 while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を左のセンサが見つけるまで回る
                     pass
-                tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
+                tank.drive_for_degrees(-30,30,180) # 機体をラインに沿わせる
                 motorLeft.brake()
                 motorRight.brake()
                 tank.drive_for_degrees(30,30,50,"stop") # ラインかぶりを回避したい
@@ -383,10 +387,10 @@ def black(direction):
             # 無印の十字路 無視して突き進むんや
             tank.drive_for_degrees(30,30,100,"stop")
         else:
-            tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
+            tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
             esp.clear()
             central_line_sensor = UARTwithESP32_LineMode(10)[2]
-            if central_line_sensor == 1 or colorLeft.rgb()[1] >= highest_refrection_of_Black or colorRight.rgb()[1] >= highest_refrection_of_Black:
+            if central_line_sensor == 0 or colorLeft.rgb()[1] <= highest_refrection_of_Black or colorRight.rgb()[1] <= highest_refrection_of_Black:
                 # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ
                 pass # 無視!
             else:
@@ -396,7 +400,7 @@ def black(direction):
                 tank.drive(30,-30)
                 while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
                     pass
-                tank.drive_for_degrees(30,-30,110) # 機体をラインに沿わせる
+                tank.drive_for_degrees(30,-30,180) # 機体をラインに沿わせる
                 motorLeft.brake() # 回転方向の運動を止める
                 motorRight.brake()
                 tank.drive_for_degrees(30,30,50) # ラインかぶりを回避したい
