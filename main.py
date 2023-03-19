@@ -55,7 +55,7 @@ try:
     esp = UARTDevice(Port.S1, 115200,100)
 except OSError as oserror:
     while True:
-        ev3.speaker.say("ESP32")
+        ev3.speaker.say("E S P 32")
         wait(1000)
 else:
     esp.clear() # 受信バッファをクリア
@@ -353,7 +353,7 @@ def black(direction):
             central_line_sensor = UARTwithESP32_LineMode(10)[2]
             print(str(central_line_sensor)+" "+str(colorLeft.rgb()[1])+" "+str(colorRight.rgb()[1]))
             if central_line_sensor == 0 or colorLeft.rgb()[1] <= highest_refrection_of_Black or colorRight.rgb()[1] <= highest_refrection_of_Black:
-                # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ
+                # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ もはやPicoに表示する瞬間も与えない
                 pass # 無視!
                 print("t")
             else:
@@ -419,7 +419,83 @@ def lost_line():
     -キャップ
     の2つが考えられるよね
     """
-    pass
+    tank.stop("brake")
+    # その場の左右にラインがないかを確認
+    if colorLeft.rgb()[0] <= highest_refrection_of_Black:
+        # 脱線 右にずれている 左に回れ
+        print_pico(131)
+        recover_to_line("l")
+    elif colorRight.rgb()[0] <= highest_refrection_of_Black:
+        # 脱線 左にずれている 右に回れ
+        recover_to_line("r")
+        print_pico(132)
+    else:
+        tank.drive_for_degrees(30,30,50) # 外れてるならちゃんと外れてもらう
+        tank.drive_for_degrees(-30,30,100) # 左に回転
+        esp.clear()
+        line_sensors = UARTwithESP32_LineMode(10)
+        if line_sensors[2] == 0:
+            pass
+        elif line_sensors[0] == 1:
+            # 右にずれている 左に回れ
+            print_pico(131)
+            recover_to_line("l")
+        elif line_sensors[0] == 2:
+            # 左にずれいている 右に回れ
+            print_pico(132)
+            recover_to_line("r")
+        else:
+            tank.drive_for_degrees(30,-30,200) # 右に回転
+            esp.clear()
+            line_sensors = UARTwithESP32_LineMode(10)
+            if line_sensors[2] == 0:
+                pass
+            elif line_sensors[0] == 1:
+                # 右にずれている 左に回れ
+                print_pico(131)
+                recover_to_line("l")
+            elif line_sensors[0] == 2:
+                # 左にずれいている 右に回れ
+                print_pico(132)
+                recover_to_line("r")
+            else:
+                # ギャップ
+                print_pico(133)
+                tank.drive_for_degrees(-30,30,100) # 元の位置に回転
+                esp.clear()
+                tank.drive(30,30)
+                while 1:
+                    line_sensors = UARTwithESP32_LineMode(10)
+                    if line_sensors[0] == 1 or colorLeft.rgb()[1] <= highest_refrection_of_Black:
+                        # 右にずれている 左に回れ
+                        tank.drive_for_degrees(30,30,50)
+                        recover_to_line("l")
+                        break
+                    elif line_sensors[0] == 2 or colorRight.rgb()[1] <= highest_refrection_of_Black:
+                        # 左にずれいている 右に回れ
+                        tank.drive_for_degrees(30,30,50)
+                        recover_to_line("r")
+                        break
+                    elif line_sensors[2] == 1:
+                        # ちょうど真ん中のセンサに乗った
+                        break
+    esp.clear()
+    print_pico(100)
+
+def recover_to_line(direction):
+    esp.clear()
+    if direction == "l":
+        central_line_sensor = 0
+        tank.drive(-30,30)
+        while central_line_sensor != 1:
+            central_line_sensor = UARTwithESP32_LineMode(10)[2]
+        tank.stop("brake")
+    else: # == "r"
+        central_line_sensor = 0
+        tank.drive(30,-30)
+        while central_line_sensor != 1:
+            central_line_sensor = UARTwithESP32_LineMode(10)[2]
+        tank.stop("brake")
 
 # レスキューキット============================================================
 
@@ -450,7 +526,7 @@ def UARTwithESP32_LineMode(mode):
         if error_count > 10: # 10回以上失敗してたら一時停止
             motorLeft.brake()
             motorRight.brake()
-            ev3.speaker.say("ESP UART")
+            ev3.speaker.say("E S P U A R T")
         wait(10)
         print("error")
         esp.write((10).to_bytes(1,'big'))
@@ -549,6 +625,11 @@ def main():
                     black("both")
                 esp.clear()
                 continue # ループの最初に戻る(通信の内容を更新)
+            
+            # 中央のセンサが黒を読んでいない場合
+            if whatread[2] == 1:
+                lost_line()
+                continue
 
             # 坂関係
             if hill_statue == 0:
