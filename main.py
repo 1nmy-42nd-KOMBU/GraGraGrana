@@ -72,6 +72,12 @@ class Tank:
     ・このクラスは実行速度を一切考慮していないので注意
     ・回転方向の指定はパワーですることを想定している
     """
+    Kp = 2.2
+    Ki = 0.1
+    Kd = 0.8
+    last_error = 0
+    error = 0
+
     def drive(self, left_speed, right_speed):
         """
         機体を進める
@@ -165,7 +171,20 @@ class Tank:
         else:
             motorLeft.hold()
             motorRight.hold()
+    
+    def drive_pid_for_degrees(self,speed,degrees,stop_type):
+        left_angle = motorLeft.angle()
+        right_angle = motorRight.angle()
+        while abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= degrees:
+            rgb_left = colorLeft.rgb() # 左のRGBをゲットだぜ
+            rgb_right = colorRight.rgb() # 右のRGｂをゲットだぜ
 
+            # PID制御
+            Tank.error = rgb_left[1] - rgb_right[1] # 偏差をゲットだぜ
+            u = Tank.Kp * Tank.error + Tank.Ki * (Tank.error + Tank.last_error) + Tank.Kd * (Tank.error - Tank.last_error) # 操作量をゲットだぜ
+            motorLeft.run(powertodegs(speed + u)) # 動かす
+            motorRight.run(powertodegs(speed - u))
+        self.stop(stop_type)
 tank = Tank()
 
 # アーム関連のクラス ====================================================
@@ -346,7 +365,8 @@ def black(direction):
         if isRightBlack:
             print_pico(123)
             # 無印の十字路 無視して突き進むんや
-            tank.drive_for_degrees(30,30,100,"stop")
+            tank.drive_for_degrees(30,30,90,"stop")
+            tank.drive_pid_for_degrees(30,90,"stop")
         else:
             tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
             esp.clear()
@@ -385,7 +405,8 @@ def black(direction):
         if isLeftBlack:
             print_pico(123)
             # 無印の十字路 無視して突き進むんや
-            tank.drive_for_degrees(30,30,100,"stop")
+            tank.drive_for_degrees(30,30,90,"stop")
+            tank.drive_pid_for_degrees(30,90,"stop")
         else:
             tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
             esp.clear()
@@ -407,7 +428,8 @@ def black(direction):
     else: #"both"が来る
         # 無印の十字路 無視して突き進むんや
         print_pico(123)
-        tank.drive_for_degrees(30,30,100,"stop")
+        tank.drive_for_degrees(30,30,90,"stop")
+        tank.drive_pid_for_degrees(30,90,"stop")
     print_pico(100)
 
 # ラインを見失った ============================================================
@@ -419,49 +441,43 @@ def lost_line():
     -キャップ
     の2つが考えられるよね
     """
+    print("lost line")
     tank.stop("brake")
     # その場の左右にラインがないかを確認
     if colorLeft.rgb()[0] <= highest_refrection_of_Black:
         # 脱線 右にずれている 左に回れ
-        print_pico(131)
         recover_to_line("l")
     elif colorRight.rgb()[0] <= highest_refrection_of_Black:
         # 脱線 左にずれている 右に回れ
         recover_to_line("r")
-        print_pico(132)
     else:
         tank.drive_for_degrees(30,30,50) # 外れてるならちゃんと外れてもらう
-        tank.drive_for_degrees(-30,30,100) # 左に回転
+        tank.drive_for_degrees(-42,30,100) # 左に回転
         esp.clear()
         line_sensors = UARTwithESP32_LineMode(10)
         if line_sensors[2] == 0:
             pass
         elif line_sensors[0] == 1:
             # 右にずれている 左に回れ
-            print_pico(131)
             recover_to_line("l")
         elif line_sensors[0] == 2:
             # 左にずれいている 右に回れ
-            print_pico(132)
             recover_to_line("r")
         else:
-            tank.drive_for_degrees(30,-30,200) # 右に回転
+            tank.drive_for_degrees(42,-30,200) # 右に回転
             esp.clear()
             line_sensors = UARTwithESP32_LineMode(10)
             if line_sensors[2] == 0:
                 pass
             elif line_sensors[0] == 1:
                 # 右にずれている 左に回れ
-                print_pico(131)
                 recover_to_line("l")
             elif line_sensors[0] == 2:
                 # 左にずれいている 右に回れ
-                print_pico(132)
                 recover_to_line("r")
             else:
                 # ギャップ
-                print_pico(133)
-                tank.drive_for_degrees(-30,30,100) # 元の位置に回転
+                tank.drive_for_degrees(-35,30,110) # 元の位置に回転
                 esp.clear()
                 tank.drive(30,30)
                 while 1:
@@ -470,32 +486,41 @@ def lost_line():
                         # 右にずれている 左に回れ
                         tank.drive_for_degrees(30,30,50)
                         recover_to_line("l")
+                        print(str(line_sensors[0])+" "+str(colorLeft.rgb()[1]))
                         break
                     elif line_sensors[0] == 2 or colorRight.rgb()[1] <= highest_refrection_of_Black:
                         # 左にずれいている 右に回れ
                         tank.drive_for_degrees(30,30,50)
                         recover_to_line("r")
+                        print(str(line_sensors[0])+" "+str(colorRight.rgb()[1]))
                         break
-                    elif line_sensors[2] == 1:
+                    elif line_sensors[2] == 0:
+                        print("central"+str(line_sensors[2]))
                         # ちょうど真ん中のセンサに乗った
                         break
-    esp.clear()
-    print_pico(100)
+                    wait(10)
 
 def recover_to_line(direction):
     esp.clear()
+    wait(10)
     if direction == "l":
+        print("l")
         central_line_sensor = 0
         tank.drive(-30,30)
-        while central_line_sensor != 1:
-            central_line_sensor = UARTwithESP32_LineMode(10)[2]
-        tank.stop("brake")
+        while central_line_sensor != 0:
+            line_sensors = UARTwithESP32_LineMode(10)
+            central_line_sensor = line_sensors[2]
+            wait(10)
+        tank.drive_for_degrees(-30,30,50)
     else: # == "r"
+        print("r")
         central_line_sensor = 0
         tank.drive(30,-30)
-        while central_line_sensor != 1:
-            central_line_sensor = UARTwithESP32_LineMode(10)[2]
-        tank.stop("brake")
+        while central_line_sensor != 0:
+            UARTwithESP32_LineMode(10)
+            central_line_sensor = line_sensors[2]
+            wait(10)
+        tank.drive_for_degrees(30,-30,50)
 
 # レスキューキット============================================================
 
@@ -520,7 +545,7 @@ def UARTwithESP32_LineMode(mode):
     ライントレースしてるときのUART
     通常時のと障害物回避ので2つつかえる
     """
-    esp.write((mode).to_bytes(1,'big'))
+    esp.write(mode.to_bytes(1,'big'))
     error_count = 0
     while esp.waiting() < 4:
         if error_count > 10: # 10回以上失敗してたら一時停止
@@ -528,7 +553,7 @@ def UARTwithESP32_LineMode(mode):
             motorRight.brake()
             ev3.speaker.say("E S P U A R T")
         wait(10)
-        print("error")
+        print("error sub")
         esp.write((10).to_bytes(1,'big'))
         error_count += 1
     whatread = esp.read(4)
@@ -605,7 +630,7 @@ def main():
                     motorRight.brake()
                     ev3.speaker.say("E S P U A R T")
                 wait(10) # 待てる最大の時間は10ms
-                print("error")
+                print("error main")
                 esp.write((10).to_bytes(1,'big')) # リクエストの再送
                 error_count += 1
             # 4Byte読み取る
@@ -627,8 +652,12 @@ def main():
                 continue # ループの最初に戻る(通信の内容を更新)
             
             # 中央のセンサが黒を読んでいない場合
-            if whatread[2] == 1:
+            if whatread[2] == 1 and rgb_left[2] > highest_refrection_of_Black and rgb_right[2] > highest_refrection_of_Black:
+                print_pico(130)
                 lost_line()
+                print_pico(100)
+                wait(100)
+                esp.clear()
                 continue
 
             # 坂関係
