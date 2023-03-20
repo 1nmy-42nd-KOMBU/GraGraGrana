@@ -365,7 +365,7 @@ def black(direction):
         if isRightBlack:
             print_pico(123)
             # 無印の十字路 無視して突き進むんや
-            tank.drive_for_degrees(30,30,90,"stop")
+            tank.drive_for_degrees(30,30,120,"stop")
             tank.drive_pid_for_degrees(30,90,"stop")
         else:
             tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
@@ -405,7 +405,7 @@ def black(direction):
         if isLeftBlack:
             print_pico(123)
             # 無印の十字路 無視して突き進むんや
-            tank.drive_for_degrees(30,30,90,"stop")
+            tank.drive_for_degrees(30,30,120,"stop")
             tank.drive_pid_for_degrees(30,90,"stop")
         else:
             tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
@@ -428,7 +428,7 @@ def black(direction):
     else: #"both"が来る
         # 無印の十字路 無視して突き進むんや
         print_pico(123)
-        tank.drive_for_degrees(30,30,90,"stop")
+        tank.drive_for_degrees(30,30,120,"stop")
         tank.drive_pid_for_degrees(30,90,"stop")
     print_pico(100)
 
