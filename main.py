@@ -332,7 +332,7 @@ def u_turn():
         print("send error")
     hoge = esp.read(1) # read 18
 
-    tank.drive(38,-30)
+    tank.drive(30,-30)
     esp.clear()
     while esp.waiting() == 0:
         print("turning")
@@ -361,6 +361,7 @@ def black(direction):
             line_statue = UARTwithESP32_LineMode(10)[0]
             if line_statue == 2 or line_statue == 3:
                 isRightBlack = True
+            wait(10)
         
         if isRightBlack:
             print_pico(123)
@@ -368,10 +369,9 @@ def black(direction):
             tank.drive_for_degrees(30,30,120,"stop")
             tank.drive_pid_for_degrees(30,90,"stop")
         else:
-            tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
+            tank.drive_for_degrees(30,30,110) # 180°前に進んで機体を交差点の中心に持ってく
             esp.clear()
             central_line_sensor = UARTwithESP32_LineMode(10)[2]
-            print(str(central_line_sensor)+" "+str(colorLeft.rgb()[1])+" "+str(colorRight.rgb()[1]))
             if central_line_sensor == 0 or colorLeft.rgb()[1] <= highest_refrection_of_Black or colorRight.rgb()[1] <= highest_refrection_of_Black:
                 # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ もはやPicoに表示する瞬間も与えない
                 pass # 無視!
@@ -401,6 +401,7 @@ def black(direction):
             line_statue = UARTwithESP32_LineMode(10)[0]
             if line_statue == 1 or line_statue == 3:
                 isLeftBlack = True
+            wait(10)
         
         if isLeftBlack:
             print_pico(123)
@@ -417,7 +418,7 @@ def black(direction):
             else:
                 # 本当の右折
                 print_pico(122)
-                tank.drive_for_degrees(30,-30,180,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
+                tank.drive_for_degrees(30,-30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
                 tank.drive(30,-30)
                 while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
                     pass
@@ -665,7 +666,7 @@ def main():
                 if whatread[3] == 0:
                     pass
                 elif whatread[3] == 1:
-                    basic_speed = 80
+                    basic_speed = 50
                     hill_statue = 1
                 elif whatread [3] == 2:
                     basic_speed = 20
