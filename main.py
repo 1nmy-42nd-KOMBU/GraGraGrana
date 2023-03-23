@@ -904,6 +904,11 @@ def main():
                 elif whatread [3] == 2:
                     basic_speed = 20
                     hill_statue = 2
+                elif whatread [3] == 3: # 各速度がどえらいでかい時は一度止まろうよ
+                    tank.stop("brake")
+                    wait(2500)
+                    basic_speed = 20
+                    hill_statue = 2
                 
                 # レスキューキット 坂だと誤探知の可能性があるからここに置くンゴ -----
                 if whatread[2] == 2 or whatread[2] == 3: # whatread[2]==3(つまりラインを見失いかつレスキューキットを発見)になることはないと思うけどそん時はレスキューキット優先、あとで進行停止しよう
