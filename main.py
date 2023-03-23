@@ -207,7 +207,7 @@ class Tank:
         esp.clear()
 
     def turn_left(self,degree):
-        """degreeには180,270のどれか"""
+        """degreeには180,27のどれか"""
         esp.clear()
         while esp.waiting() == 0:
             esp.clear()
@@ -383,7 +383,7 @@ def black(direction):
         motorLeft.run(powertodegs(basic_speed))
         motorRight.run(powertodegs(basic_speed))
         while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50:
-            line_statue = UARTwithESP32_LineMode(10)[0]
+            line_statue = UARTwithESP32_LineMode(10,4)[0]
             if line_statue == 2 or line_statue == 3:
                 isRightBlack = True
             wait(10)
@@ -396,7 +396,7 @@ def black(direction):
         else:
             tank.drive_for_degrees(30,30,110) # 180°前に進んで機体を交差点の中心に持ってく
             esp.clear()
-            central_line_sensor = UARTwithESP32_LineMode(10)[2]
+            central_line_sensor = UARTwithESP32_LineMode(10,4)[2]
             if central_line_sensor == 0 or colorLeft.rgb()[1] <= highest_refrection_of_Black or colorRight.rgb()[1] <= highest_refrection_of_Black:
                 # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ もはやPicoに表示する瞬間も与えない
                 pass # 無視!
@@ -423,7 +423,7 @@ def black(direction):
         motorLeft.run(powertodegs(basic_speed))
         motorRight.run(powertodegs(basic_speed))
         while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50:
-            line_statue = UARTwithESP32_LineMode(10)[0]
+            line_statue = UARTwithESP32_LineMode(10,4)[0]
             if line_statue == 1 or line_statue == 3:
                 isLeftBlack = True
             wait(10)
@@ -436,7 +436,7 @@ def black(direction):
         else:
             tank.drive_for_degrees(30,30,100) # 180°前に進んで機体を交差点の中心に持ってく
             esp.clear()
-            central_line_sensor = UARTwithESP32_LineMode(10)[2]
+            central_line_sensor = UARTwithESP32_LineMode(10,4)[2]
             if central_line_sensor == 0 or colorLeft.rgb()[1] <= highest_refrection_of_Black or colorRight.rgb()[1] <= highest_refrection_of_Black:
                 # 真ん中ら辺のセンサが黒を読んでるからトの字やねぇ
                 pass # 無視!
@@ -480,7 +480,7 @@ def lost_line():
         tank.drive_for_degrees(30,30,50) # 外れてるならちゃんと外れてもらう
         tank.drive_for_degrees(-42,30,100) # 左に回転
         esp.clear()
-        line_sensors = UARTwithESP32_LineMode(10)
+        line_sensors = UARTwithESP32_LineMode(10,4)
         if line_sensors[2] == 0:
             pass
         elif line_sensors[0] == 1:
@@ -492,7 +492,7 @@ def lost_line():
         else:
             tank.drive_for_degrees(42,-30,200) # 右に回転
             esp.clear()
-            line_sensors = UARTwithESP32_LineMode(10)
+            line_sensors = UARTwithESP32_LineMode(10,4)
             if line_sensors[2] == 0:
                 pass
             elif line_sensors[0] == 1:
@@ -507,7 +507,7 @@ def lost_line():
                 esp.clear()
                 tank.drive(30,30)
                 while 1:
-                    line_sensors = UARTwithESP32_LineMode(10)
+                    line_sensors = UARTwithESP32_LineMode(10,4)
                     if line_sensors[0] == 1 or colorLeft.rgb()[1] <= highest_refrection_of_Black:
                         # 右にずれている 左に回れ
                         tank.drive_for_degrees(30,30,50)
@@ -534,7 +534,7 @@ def recover_to_line(direction):
         central_line_sensor = 0
         tank.drive(-30,30)
         while central_line_sensor != 0:
-            line_sensors = UARTwithESP32_LineMode(10)
+            line_sensors = UARTwithESP32_LineMode(10,4)
             central_line_sensor = line_sensors[2]
             wait(10)
         tank.drive_for_degrees(-30,30,50)
@@ -543,7 +543,7 @@ def recover_to_line(direction):
         central_line_sensor = 0
         tank.drive(30,-30)
         while central_line_sensor != 0:
-            UARTwithESP32_LineMode(10)
+            UARTwithESP32_LineMode(10,4)
             central_line_sensor = line_sensors[2]
             wait(10)
         tank.drive_for_degrees(30,-30,50)
@@ -569,19 +569,217 @@ def rescuekit():
 def avoid():
     tank.stop("brake")
     esp.clear()
-    tank.drive_for_degrees(-50,-50)
-    
+    tank.drive_for_degrees(-50,-50,180)
+    first_read = UARTwithESP32_LineMode(11,3)
+    # 方向の指定
+    if first_read[0] != 1:
+        direction_to_turn = "l"
+    else:
+        direction_to_turn = "r"
+
+    if direction_to_turn == "l": # 左回り
+        tank.turn_left(27)
+        tank.drive_for_degrees(30,30,150,"stop")
+        distance_go("r","on")
+        tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+        cause = distance_go("r","off")
+        if cause == "t": # タッチセンサが反応した時
+            direction_to_turn = "r"
+            tank.stop("brake")
+            tank.turn_right(180)
+            distance_go("l","on")
+            tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+            distance_go("l","off")
+    else: # 右回り
+        tank.turn_right(90)
+        tank.drive_for_degrees(30,30,150,"stop")
+        distance_go("l","on")
+        tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+        cause = distance_go("l","off")
+        if cause == "t": # タッチセンサが反応した時
+            direction_to_turn = "l"
+            tank.stop("brake")
+            tank.turn_right(180)
+            distance_go("r","on")
+            tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+            distance_go("r","off")
+
+    tank.drive_for_degrees(30,30,80) # チャタリング防止
+    # クソコードで草
+    if direction_to_turn =="l":
+        tank.turn_right(90) # 並行1
+        tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+        cause = distance_go("r","on",True)
+        # --------------------------------------------------
+        if not cause == "l":
+            if chattering_prevention("r",True):
+                cause == "l"
+            else:
+                cause = distance_go("r","off",True) # 並行2
+            # --------------------------------------------------
+            if not cause == "l":
+                if chattering_prevention("r",True):
+                    cause == "l"
+                else:
+                    tank.turn_right(90)
+                    tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+                    cause = distance_go("r","on",True) # 垂直1
+                # --------------------------------------------------
+                if not cause == "l":
+                    if chattering_prevention("r",True):
+                        cause == "l"
+                    else:
+                        cause = distance_go("r","off",True) # 垂直2
+                    # --------------------------------------------------
+                    if not cause == "l":
+                        if chattering_prevention("r",True):
+                            cause == "l"
+                        else:
+                            tank.turn_right(90)
+                            tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+                            tank.drive(30,30)
+                            while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+                                pass
+        # ラインに復帰
+        tank.drive_for_degrees(40,40,240)
+        tank.drive(-30,30)
+        while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+            pass
+        tank.drive_for_degrees(-30,30,180) # 機体をラインに沿わせる
+        motorLeft.brake() # 回転方向の運動を止める
+        motorRight.brake()
+    else: # right
+        tank.turn_left(27) # 並行1
+        tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+        cause = distance_go("l","on",True)
+        # --------------------------------------------------
+        if not cause == "l":
+            if chattering_prevention("r",True):
+                cause == "l"
+            else:
+                cause = distance_go("l","off",True) # 並行2
+            # --------------------------------------------------
+            if not cause == "l":
+                if chattering_prevention("r",True):
+                    cause == "l"
+                else:
+                    tank.turn_left(27)
+                    tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+                    cause = distance_go("l","on",True) # 垂直1
+                # --------------------------------------------------
+                if not cause == "l":
+                    if chattering_prevention("r",True):
+                        cause == "l"
+                    else:
+                        cause = distance_go("l","off",True) # 垂直2
+                    # --------------------------------------------------
+                    if not cause == "l":
+                        tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+                        tank.turn_left(27)
+                        tank.drive(30,30)
+                        while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+                            pass
+        # ラインに復帰
+        tank.drive_for_degrees(40,40,240)
+        tank.drive(30,-30)
+        while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+            pass
+        tank.drive_for_degrees(30,-30,180) # 機体をラインに沿わせる
+        motorLeft.brake() # 回転方向の運動を止める
+        motorRight.brake()
+
+# --------------------------------------------------------------------------------
+def chattering_prevention(direction, line_search=False):
+    isOverBlack = False
+    left_angle = motorLeft.angle()
+    right_angle = motorRight.angle()
+    motorLeft.run(powertodegs(basic_speed))
+    motorRight.run(powertodegs(basic_speed))
+    while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 80:
+        if line_search:
+            if direction == "l" and colorLeft.rgb()[2] < highest_refrection_of_Black:
+                isOverBlack = True
+            elif colorRight.rgb()[2] < highest_refrection_of_Black:
+                isOverBlack = True
+    return isOverBlack
+# --------------------------------------------------------------------------------
+def distance_go(direction,turn,line=False):
+    if direction == "l":
+        if turn == "on": # 左があるまで進む
+            tank.drive(30,30)
+            esp.clear()
+            while 1: # 左にあるようになるまで
+                whatread = UARTwithESP32_LineMode(11,3)
+                if whatread[0] == 1 or whatread[0] == 3:
+                    cause = "d"
+                    break
+                if whatread[1] != 0:
+                    cause = "t"
+                    break
+                if line and (whatread[2] == 2 or whatread[2] == 3):
+                    cause = "l"
+                    break
+                wait(5)
+        else:
+            # 左がないまで進む
+            tank.drive(30,30)
+            esp.clear()
+            while 1: # 左にないようになるまで
+                whatread = UARTwithESP32_LineMode(11,3)
+                if whatread[0] == 0 or whatread[0] == 2:
+                    cause = "d"
+                    break
+                if whatread[1] != 0:
+                    cause = "t"
+                    break
+                if line and (whatread[2] == 2 or whatread[2] == 3):
+                    cause = "l"
+                    break
+                wait(5)
+    else:
+        if turn == "on": # 右があるまで進む
+            tank.drive(30,30)
+            esp.clear()
+            while 1: # 右にあるようになるまで
+                whatread = UARTwithESP32_LineMode(11,3)
+                if whatread[0] == 2 or whatread[0] == 3:
+                    cause = "d"
+                    break
+                if whatread[1] != 0:
+                    cause = "t"
+                    break
+                if line and (whatread[2] == 1 or whatread[2] == 3):
+                    cause = "l"
+                    break
+                wait(5)
+        else:
+            # 右がないまで進む
+            tank.drive(30,30)
+            esp.clear()
+            while 1: # 右にないようになるまで
+                whatread = UARTwithESP32_LineMode(11,3)
+                if whatread[0] == 0 or whatread[0] == 1:
+                    cause = "d"
+                    break
+                if whatread[1] != 0:
+                    cause = "t"
+                    break
+                if line and (whatread[2] == 1 or whatread[2] == 3):
+                    cause = "l"
+                    break
+                wait(5)
+    return cause
 
 # ============================================================
 
-def UARTwithESP32_LineMode(mode):
+def UARTwithESP32_LineMode(mode,numbyte):
     """"
     ライントレースしてるときのUART
     通常時のと障害物回避ので2つつかえる
     """
     esp.write(mode.to_bytes(1,'big'))
     error_count = 0
-    while esp.waiting() < 4:
+    while esp.waiting() < numbyte:
         if error_count > 10: # 10回以上失敗してたら一時停止
             motorLeft.brake()
             motorRight.brake()
@@ -590,7 +788,7 @@ def UARTwithESP32_LineMode(mode):
         print("error sub")
         esp.write(mode.to_bytes(1,'big'))
         error_count += 1
-    whatread = esp.read(4)
+    whatread = esp.read(numbyte)
     return whatread
 
 # ============================================================
