@@ -185,6 +185,47 @@ class Tank:
             motorLeft.run(powertodegs(speed + u)) # 動かす
             motorRight.run(powertodegs(speed - u))
         self.stop(stop_type)
+
+    def turn_right(self,degree):
+        """degreeには180,90のどれか"""
+        esp.clear()
+        while esp.waiting() == 0:
+            esp.clear()
+            esp.write(degree.to_bytes(1,'big'))
+            wait(100)
+            print("send error")
+        hoge = esp.read(1) # read 18 or 9 
+
+        tank.drive(38,-30)
+        esp.clear()
+        while esp.waiting() == 0:
+            print("turning")
+        motorLeft.brake()
+        motorRight.brake()
+        hoge = esp.read(1) # read 180 or 90
+        esp.write(degree.to_bytes(1,'big'))
+        esp.clear()
+
+    def turn_left(self,degree):
+        """degreeには180,270のどれか"""
+        esp.clear()
+        while esp.waiting() == 0:
+            esp.clear()
+            esp.write(degree.to_bytes(1,'big'))
+            wait(100)
+            print("send error")
+        hoge = esp.read(1) # read 18 or 27
+
+        tank.drive(-30,38)
+        esp.clear()
+        while esp.waiting() == 0:
+            print("turning")
+        motorLeft.brake()
+        motorRight.brake()
+        hoge = esp.read(1) # read 180 or 270
+        esp.write(degree.to_bytes(1,'big'))
+        esp.clear()
+
 tank = Tank()
 
 # アーム関連のクラス ====================================================
@@ -324,24 +365,8 @@ def u_turn():
     # もう考えたくないからジャイロで180°ぶん回すんじゃー
     print_pico(113)
     #tank.drive_for_degrees(30,30,45) # 回転の中心の調整
-    esp.clear()
-    while esp.waiting() == 0:
-        esp.clear()
-        esp.write((180).to_bytes(1,'big'))
-        wait(100)
-        print("send error")
-    hoge = esp.read(1) # read 18
-
-    tank.drive(30,-30)
-    esp.clear()
-    while esp.waiting() == 0:
-        print("turning")
-    motorLeft.brake()
-    motorRight.brake()
-    hoge = esp.read(1) # read 180
-    esp.write((180).to_bytes(1,'big'))
+    tank.turn_right(180)
     tank.drive_for_degrees(30,30,100,"stop")
-    esp.clear()
 
 # 黒線①============================================================
 
@@ -541,6 +566,14 @@ def rescuekit():
 
 # ============================================================
 
+def avoid():
+    tank.stop("brake")
+    esp.clear()
+    tank.drive_for_degrees(-50,-50)
+    
+
+# ============================================================
+
 def UARTwithESP32_LineMode(mode):
     """"
     ライントレースしてるときのUART
@@ -555,7 +588,7 @@ def UARTwithESP32_LineMode(mode):
             ev3.speaker.say("E S P U A R T")
         wait(10)
         print("error sub")
-        esp.write((10).to_bytes(1,'big'))
+        esp.write(mode.to_bytes(1,'big'))
         error_count += 1
     whatread = esp.read(4)
     return whatread
@@ -581,6 +614,8 @@ def main():
         basic_speed = 25
         hill_statue = 0
         start_time = timer.time()
+        # アームを固定
+        arm_rotate.hold()
         print("start")
         # Get ready!!
         ev3.speaker.beep()
@@ -683,6 +718,10 @@ def main():
             elif whatread[3] == 0:
                 basic_speed = 25
                 hill_statue = 0
+
+            if whatread[1]%10 > 0:
+                avoid()
+                continue
 
             # UARTも鑑みつつ13ms待つ
             if error_count == 0:
