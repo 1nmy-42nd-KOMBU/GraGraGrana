@@ -189,17 +189,17 @@ class Tank:
     def turn_right(self,degree):
         """degreeには180,90のどれか"""
         esp.clear()
-        while esp.waiting() == 0:
-            esp.clear()
-            esp.write(degree.to_bytes(1,'big'))
-            wait(100)
-            print("send error")
+        print(degree)
+        esp.clear()
+        esp.write(degree.to_bytes(1,'big'))
+        wait(100)
         hoge = esp.read(1) # read 18 or 9 
 
-        tank.drive(38,-30)
+        tank.drive(30,-30)
         esp.clear()
         while esp.waiting() == 0:
             print("turning")
+            wait(100)
         motorLeft.brake()
         motorRight.brake()
         hoge = esp.read(1) # read 180 or 90
@@ -209,17 +209,17 @@ class Tank:
     def turn_left(self,degree):
         """degreeには180,27のどれか"""
         esp.clear()
-        while esp.waiting() == 0:
-            esp.clear()
-            esp.write(degree.to_bytes(1,'big'))
-            wait(100)
-            print("send error")
+        print(degree)
+        esp.clear()
+        esp.write(degree.to_bytes(1,'big'))
+        wait(100)
         hoge = esp.read(1) # read 18 or 27
 
-        tank.drive(-30,38)
+        tank.drive(-30,30)
         esp.clear()
         while esp.waiting() == 0:
             print("turning")
+            wait(100)
         motorLeft.brake()
         motorRight.brake()
         hoge = esp.read(1) # read 180 or 270
@@ -365,7 +365,7 @@ def u_turn():
     # もう考えたくないからジャイロで180°ぶん回すんじゃー
     print_pico(113)
     #tank.drive_for_degrees(30,30,45) # 回転の中心の調整
-    tank.turn_right(180)
+    tank.turn_left(180)
     tank.drive_for_degrees(30,30,100,"stop")
 
 # 黒線①============================================================
@@ -576,6 +576,7 @@ def avoid():
         direction_to_turn = "l"
     else:
         direction_to_turn = "r"
+    print(direction_to_turn)
 
     if direction_to_turn == "l": # 左回り
         tank.turn_left(27)
@@ -583,6 +584,9 @@ def avoid():
         distance_go("r","on")
         tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
         cause = distance_go("r","off")
+        tank.stop("brake")
+        while 1:
+            pass
         if cause == "t": # タッチセンサが反応した時
             direction_to_turn = "r"
             tank.stop("brake")
@@ -596,6 +600,7 @@ def avoid():
         distance_go("l","on")
         tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
         cause = distance_go("l","off")
+        print(cause)
         if cause == "t": # タッチセンサが反応した時
             direction_to_turn = "l"
             tank.stop("brake")
@@ -699,7 +704,7 @@ def chattering_prevention(direction, line_search=False):
         if line_search:
             if direction == "l" and colorLeft.rgb()[2] < highest_refrection_of_Black:
                 isOverBlack = True
-            elif colorRight.rgb()[2] < highest_refrection_of_Black:
+            elif colorRight.rgb()[1] < highest_refrection_of_Black:
                 isOverBlack = True
     return isOverBlack
 # --------------------------------------------------------------------------------
@@ -712,12 +717,15 @@ def distance_go(direction,turn,line=False):
                 whatread = UARTwithESP32_LineMode(11,3)
                 if whatread[0] == 1 or whatread[0] == 3:
                     cause = "d"
+                    print(whatread)
                     break
                 if whatread[1] != 0:
                     cause = "t"
+                    print(whatread)
                     break
                 if line and (whatread[2] == 2 or whatread[2] == 3):
                     cause = "l"
+                    print(whatread)
                     break
                 wait(5)
         else:
@@ -790,6 +798,44 @@ def UARTwithESP32_LineMode(mode,numbyte):
         error_count += 1
     whatread = esp.read(numbyte)
     return whatread
+
+# def gyro_range():
+#     esp.clear()
+#     whatread = UARTwithESP32_LineMode(12,6)
+#     start_angle = whatread[5]*2
+#     target_angle_range_min = start_angle + degree - 5; // 目標角の範囲の最小値
+#     target_angle_range_max = start_angle + degree + 5; // 目標角の範囲の最大値
+#     Serial.println(start_angle);
+#     // 繰り上がりとかを考慮しつつ180度回転するのを待つ
+#     if (target_angle_range_max <360){
+#     // そのままでOK
+#     while (1){
+#         sensors_event_t event;
+#         bno.getEvent(&event);
+#         int angle_now = event.orientation.x;
+#         if (target_angle_range_min <= angle_now && angle_now < target_angle_range_max){break;}
+#         delay(BNO055_SAMPLERATE_DELAY_MS);
+#         }
+#     } else if (target_angle_range_max >= 360 && target_angle_range_min < 360){
+#         target_angle_range_max -= 360;
+#         while (1){
+#         sensors_event_t event;
+#         bno.getEvent(&event);
+#         int angle_now = event.orientation.x;
+#         if (target_angle_range_min <= angle_now && angle_now < 360 || 0 <= angle_now && angle_now <= target_angle_range_max){break;}
+#         delay(BNO055_SAMPLERATE_DELAY_MS);
+#         }
+#     } else if (target_angle_range_min >= 360){
+#         target_angle_range_max -= 360;
+#         target_angle_range_min -= 360;
+#         while (1){
+#         sensors_event_t event;
+#         bno.getEvent(&event);
+#         int angle_now = event.orientation.x;
+#         if (target_angle_range_min <= angle_now && angle_now < target_angle_range_max){break;}
+#         delay(BNO055_SAMPLERATE_DELAY_MS);
+#         }
+#     }
 
 # ============================================================
 
@@ -888,6 +934,9 @@ def main():
             # 中央のセンサが黒を読んでいない場合
             if whatread[2] == 1 and rgb_left[2] > highest_refrection_of_Black and rgb_right[2] > highest_refrection_of_Black:
                 print_pico(130)
+                tank.stop("brake")
+                while 1:
+                    pass
                 lost_line()
                 print_pico(100)
                 wait(100)
