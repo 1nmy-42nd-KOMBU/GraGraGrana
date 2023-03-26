@@ -61,13 +61,13 @@ while 1:
     hsv_left = changeRGBtoHSV(rgb_left) # HSVの値をゲット
     if 140 < hsv_left[0] < 180 and hsv_left[1] > 50 and hsv_left[2] > 20:
         print("L")
-    print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
-    #print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
+    #print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
+    print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
 
     # 右の緑判定
     hsv_right = changeRGBtoHSV(rgb_right) # HSVの値をゲット
     if 140 < hsv_right[0] < 180 and hsv_right[1] > 50 and hsv_right[2] > 20:
         print("R")
-    print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
-    #print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
+    #print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
+    print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
     wait(500)
