@@ -103,7 +103,7 @@ class Tank:
         right_angle = motorRight.angle()
         motorLeft.run(powertodegs(left_speed))
         motorRight.run(powertodegs(right_speed))
-        while (abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= degrees) and not any(ev3.buttons.pressed()):
+        while abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= degrees:
             pass
         self.stop(stop_type)
 
@@ -130,7 +130,7 @@ class Tank:
         if seconds <= 0:
             raise ValueError
         time_run = timer.time() + seconds
-        while timer.time() <= time_run and not any(ev3.buttons.pressed()):
+        while timer.time() <= time_run:
             self.steering(speed,steering)
         self.stop(stop_type)
 
@@ -141,7 +141,7 @@ class Tank:
         left_angle = motorLeft.angle()
         right_angle = motorRight.angle()
         self.steering(power,steering)
-        while (not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees) and not any(ev3.buttons.pressed()) :
+        while not abs(left_angle - motorLeft.angle()) > degrees or abs(right_angle - motorRight.angle()) > degrees:
             pass
         self.stop(stop_type)
 
@@ -175,7 +175,7 @@ class Tank:
     def drive_pid_for_degrees(self,speed,degrees,stop_type):
         left_angle = motorLeft.angle()
         right_angle = motorRight.angle()
-        while (abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= degrees) and not any(ev3.buttons.pressed()):
+        while abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= degrees:
             rgb_left = colorLeft.rgb() # 左のRGBをゲットだぜ
             rgb_right = colorRight.rgb() # 右のRGｂをゲットだぜ
 
@@ -197,7 +197,7 @@ class Tank:
 
         tank.drive(30,-30)
         esp.clear()
-        while esp.waiting() == 0 and not any(ev3.buttons.pressed()):
+        while esp.waiting() == 0:
             print("turning")
             wait(100)
         motorLeft.brake()
@@ -217,7 +217,7 @@ class Tank:
 
         tank.drive(-30,30)
         esp.clear()
-        while esp.waiting() == 0 and not any(ev3.buttons.pressed()):
+        while esp.waiting() == 0:
             print("turning")
             wait(100)
         motorLeft.brake()
@@ -236,11 +236,7 @@ class Arm:
         arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True) 
     def close_arm(self):
         """アームをしまう"""
-        arm_rotate.run(-1*powertodegs(40)) # バケットを回す
-        wait(100)
-        while abs(arm_rotate.speed()) >= 5: # パワーが5以下(つまりこれ以上回せなくなる)になるまで回し続ける
-            pass
-        arm_rotate.hold()
+        arm_rotate.run_angle(powertodegs(-40),250,Stop.BRAKE,True)
 
     def open_bucket(self):
         """回るやつを開放状態にする"""
@@ -298,7 +294,7 @@ def onGreenMarker(direction):
         isRightGreen = False
         motorLeft.run(powertodegs(basic_speed))
         motorRight.run(powertodegs(basic_speed))
-        while abs(motorRight.angle() - start_angle_deg) <= 50 and not any(ev3.buttons.pressed()):
+        while abs(motorRight.angle() - start_angle_deg) <= 50:
             if isGreen('r'):
                 isRightGreen = True
         motorLeft.brake()
@@ -313,7 +309,7 @@ def onGreenMarker(direction):
             tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
             tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
             tank.drive(-30,30)
-            while colorLeft.rgb()[1] > highest_refrection_of_Black and not any(ev3.buttons.pressed()): # 緑ないし黒を左のセンサが見つけるまで回る
+            while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を左のセンサが見つけるまで回る
                 pass
             tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
             motorLeft.brake()
@@ -327,7 +323,7 @@ def onGreenMarker(direction):
         motorLeft.run(powertodegs(30))
         motorRight.run(powertodegs(30))
 
-        while abs(motorLeft.angle() - start_angle_deg) <= 50 and not any(ev3.buttons.pressed()):
+        while abs(motorLeft.angle() - start_angle_deg) <= 50:
             if isGreen('l'):
                 isLeftGreen = True
         motorLeft.brake()
@@ -341,7 +337,7 @@ def onGreenMarker(direction):
             tank.drive_for_degrees(30,30,180) # 180°前に進んで機体を交差点の中心に持ってく
             tank.drive_for_degrees(30,-30,180,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
             tank.drive(30,-30)
-            while colorRight.rgb()[1] > highest_refrection_of_Black and not any(ev3.buttons.pressed()): # 緑ないし黒を右のセンサが見つけるまで回る
+            while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
                 pass
             tank.drive_for_degrees(30,-30,110) # 機体をラインに沿わせる
             motorLeft.brake() # 回転方向の運動を止める
@@ -369,7 +365,6 @@ def u_turn():
     # もう考えたくないからジャイロで180°ぶん回すんじゃー
     print_pico(113)
     #tank.drive_for_degrees(30,30,45) # 回転の中心の調整
-    tank.drive_for_degrees(30,30,150)
     gyro_range11(-30,30,180)
     tank.drive_for_degrees(30,30,100,"stop")
 
@@ -387,7 +382,7 @@ def black(direction):
         right_angle = motorRight.angle()
         motorLeft.run(powertodegs(basic_speed))
         motorRight.run(powertodegs(basic_speed))
-        while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50 and not any(ev3.buttons.pressed()):
+        while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50:
             line_statue = UARTwithESP32_LineMode(10,4)[0]
             if line_statue == 2 or line_statue == 3:
                 isRightBlack = True
@@ -412,7 +407,7 @@ def black(direction):
                 print_pico(121)
                 tank.drive_for_degrees(-30,30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
                 tank.drive(-30,30)
-                while colorLeft.rgb()[1] > highest_refrection_of_Black and not any(ev3.buttons.pressed()): # 緑ないし黒を左のセンサが見つけるまで回る
+                while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を左のセンサが見つけるまで回る
                     pass
                 tank.drive_for_degrees(-30,30,180) # 機体をラインに沿わせる
                 motorLeft.brake()
@@ -427,7 +422,7 @@ def black(direction):
         right_angle = motorRight.angle()
         motorLeft.run(powertodegs(basic_speed))
         motorRight.run(powertodegs(basic_speed))
-        while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50 and not any(ev3.buttons.pressed()):
+        while abs(left_angle - motorLeft.angle()) <= 50 and abs(right_angle - motorRight.angle()) <= 50:
             line_statue = UARTwithESP32_LineMode(10,4)[0]
             if line_statue == 1 or line_statue == 3:
                 isLeftBlack = True
@@ -450,7 +445,7 @@ def black(direction):
                 print_pico(122)
                 tank.drive_for_degrees(30,-30,160,"stop") # 180°回転して左のカラーセンサー下にラインがないようにする
                 tank.drive(30,-30)
-                while colorRight.rgb()[1] > highest_refrection_of_Black and not any(ev3.buttons.pressed()): # 緑ないし黒を右のセンサが見つけるまで回る
+                while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
                     pass
                 tank.drive_for_degrees(30,-30,180) # 機体をラインに沿わせる
                 motorLeft.brake() # 回転方向の運動を止める
@@ -483,7 +478,7 @@ def lost_line():
         recover_to_line("r")
     else:
         tank.drive_for_degrees(30,30,50) # 外れてるならちゃんと外れてもらう
-        tank.drive_for_degrees(-42,30,50) # 左に回転
+        tank.drive_for_degrees(-42,30,100) # 左に回転
         esp.clear()
         line_sensors = UARTwithESP32_LineMode(10,4)
         if line_sensors[2] == 0:
@@ -495,7 +490,7 @@ def lost_line():
             # 左にずれいている 右に回れ
             recover_to_line("r")
         else:
-            tank.drive_for_degrees(42,-30,150) # 右に回転
+            tank.drive_for_degrees(42,-30,200) # 右に回転
             esp.clear()
             line_sensors = UARTwithESP32_LineMode(10,4)
             if line_sensors[2] == 0:
@@ -508,7 +503,7 @@ def lost_line():
                 recover_to_line("r")
             else:
                 # ギャップ
-                tank.drive_for_degrees(-35,30,80) # 元の位置に回転
+                tank.drive_for_degrees(-35,30,110) # 元の位置に回転
                 esp.clear()
                 tank.drive(30,30)
                 while not any(ev3.buttons.pressed()):
@@ -538,7 +533,7 @@ def recover_to_line(direction):
         print("l")
         central_line_sensor = 0
         tank.drive(-30,30)
-        while central_line_sensor != 0 and not any(ev3.buttons.pressed()):
+        while central_line_sensor != 0:
             line_sensors = UARTwithESP32_LineMode(10,4)
             central_line_sensor = line_sensors[2]
             wait(10)
@@ -547,7 +542,7 @@ def recover_to_line(direction):
         print("r")
         central_line_sensor = 0
         tank.drive(30,-30)
-        while central_line_sensor != 0 and not any(ev3.buttons.pressed()):
+        while central_line_sensor != 0:
             UARTwithESP32_LineMode(10,4)
             central_line_sensor = line_sensors[2]
             wait(10)
@@ -557,24 +552,17 @@ def recover_to_line(direction):
 
 def rescuekit():
     """レスキューキット検知後の動作"""
-    iskit = False
-    left_angle = motorLeft.angle()
-    right_angle = motorRight.angle()
-    motorLeft.run(powertodegs(basic_speed))
-    motorRight.run(powertodegs(basic_speed))
-    while abs(left_angle - motorLeft.angle()) <= 100 and abs(right_angle - motorRight.angle()) <= 100 and not any(ev3.buttons.pressed()):
-        print(str(colorLeft.rgb()[1])+str(colorRight.rgb()[1]))
-        if colorLeft.rgb()[1]<=35 or colorRight.rgb()[1]<=35:
-            iskit = True
-        wait(1)
-    tank.drive_for_degrees(30,30,700,"stop")
-
-    if iskit:
-        print("kit")
+    tank.drive_for_degrees(basic_speed,basic_speed,100)
+    print(str(colorRight.rgb()[1])+" "+str(colorLeft.rgb()[1]))
+    if colorLeft.rgb()[1]>=35 or colorRight.rgb()[1]>=35:
+        tank.drive_for_degrees(30,30,700,"stop")
+        while not (colorLeft.rgb()[1]>=35 or colorRight.rgb()[1]>=35):
+            pass
+        tank.drive_for_degrees(30,30,150,"stop")
+    else:
         tank.drive_for_degrees(-1*basic_speed,-1*basic_speed,350) # 一歩下がる
         arm_rotate.run_angle(powertodegs(40),250,Stop.COAST,True) # アームを下ろす
         tank.drive_for_degrees(basic_speed,basic_speed,350) # 前に進む
-        tank.stop("brake")
         arm_bucket.run_angle(-1*powertodegs(40),50,Stop.COAST,True) # バケットを少し回す(初速を付けるため)
         arm_bucket.run(-1*powertodegs(40)) # バケットを回す
         while abs(arm_bucket.speed()) >= 5: # パワーが5以下(つまりこれ以上回せなくなる)になるまで回し続ける
@@ -582,20 +570,15 @@ def rescuekit():
         arm_bucket.brake() # がっちり固定
         arm_rotate.run_angle(powertodegs(-40),250,Stop.BRAKE,True) # アームを上げる
         arm_bucket.run_angle(-1*powertodegs(-80),30,Stop.COAST,True) # レスキューキット開放
-        arm_bucket.run_angle(-1*powertodegs(80),110,Stop.BRAKE,True) # 元の位置に戻す
-    else:
-        #rescue
-        pass
-# ============================================================
+        arm_bucket.run_angle(-1*powertodegs(80),150,Stop.BRAKE,True) # 元の位置に戻す
 
-max_mm = const(40)
-min_mm = const(60)
+# ============================================================
 
 def avoid():
     print("a")
     tank.stop("brake")
     esp.clear()
-    tank.drive_for_degrees(-50,-50,175)
+    tank.drive_for_degrees(-50,-50,180)
     gyro_range11(-30,30,300)
     tank.drive(50,19)
     while colorLeft.rgb()[1] >= highest_refrection_of_Black:
@@ -608,7 +591,214 @@ def avoid():
     tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
     motorLeft.brake() # 回転方向の運動を止める
     motorRight.brake()
-    # ============================================================
+
+#     first_read = UARTwithESP32_LineMode(11,4)
+#     # 方向の指定
+#     if first_read[0] == 1: # 左に壁があったら
+#         direction_to_turn = "l"
+#     else:
+#         direction_to_turn = "r"
+#     print(direction_to_turn)
+
+#     if direction_to_turn == "l": # 左回り
+#         gyro_range11(-30,30,270)
+#         tank.drive_for_degrees(30,30,150,"stop")
+#         distance_go("r","on")
+#         tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+#         cause = distance_go("r","off")
+#         tank.stop("brake")
+#         if cause == "t": # タッチセンサが反応した時
+#             direction_to_turn = "r"
+#             tank.stop("brake")
+#             gyro_range11(-30,30,180)
+#             distance_go("l","on")
+#             tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+#             distance_go("l","off")
+#     else: # 右回り
+#         gyro_range11(30,-30,90)
+#         tank.drive_for_degrees(30,30,150,"stop")
+#         distance_go("l","on")
+#         tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+#         cause = distance_go("l","off")
+#         print(cause)
+#         if cause == "t": # タッチセンサが反応した時
+#             direction_to_turn = "l"
+#             tank.stop("brake")
+#             gyro_range11(-30,30,180)
+#             distance_go("r","on")
+#             tank.drive_for_degrees(30,30,80,"stop") # チャタリング防止
+#             distance_go("r","off")
+
+#     tank.drive_for_degrees(30,30,80) # チャタリング防止
+#     # クソコードで草
+#     if direction_to_turn =="l":
+#         tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+#         gyro_range11(30,-30,90) # 並行1
+#         cause = distance_go("r","on",True)
+#         # --------------------------------------------------
+#         if not cause == "l":
+#             if chattering_prevention("r",True):
+#                 cause == "l"
+#             else:
+#                 cause = distance_go("r","off",True) # 並行2
+#             # --------------------------------------------------
+#             if not cause == "l":
+#                 if chattering_prevention("r",True):
+#                     cause == "l"
+#                 else:
+#                     gyro_range11(30,-30,90)
+#                     tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+#                     cause = distance_go("r","on",True) # 垂直1
+#                 # --------------------------------------------------
+#                 if not cause == "l":
+#                     if chattering_prevention("r",True):
+#                         cause == "l"
+#                     else:
+#                         cause = distance_go("r","off",True) # 垂直2
+#                     # --------------------------------------------------
+#                     if not cause == "l":
+#                         if chattering_prevention("r",True):
+#                             cause == "l"
+#                         else:
+#                             gyro_range11(30,-30,90)
+#                             tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+#                             tank.drive(30,30)
+#                             while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+#                                 pass
+#         # ラインに復帰
+#         tank.drive_for_degrees(40,40,240)
+#         tank.drive(-30,30)
+#         while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+#             pass
+#         tank.drive_for_degrees(-30,30,180) # 機体をラインに沿わせる
+#         motorLeft.brake() # 回転方向の運動を止める
+#         motorRight.brake()
+#     else: # right
+#         gyro_range11(-30,30,270) # 並行1
+#         tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+#         cause = distance_go("l","on",True)
+#         # --------------------------------------------------
+#         if not cause == "l":
+#             if chattering_prevention("r",True):
+#                 cause == "l"
+#             else:
+#                 cause = distance_go("l","off",True) # 並行2
+#             # --------------------------------------------------
+#             if not cause == "l":
+#                 if chattering_prevention("r",True):
+#                     cause == "l"
+#                 else:
+#                     gyro_range11(-30,30,270)
+#                     tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+#                     cause = distance_go("l","on",True) # 垂直1
+#                 # --------------------------------------------------
+#                 if not cause == "l":
+#                     if chattering_prevention("r",True):
+#                         cause == "l"
+#                     else:
+#                         cause = distance_go("l","off",True) # 垂直2
+#                     # --------------------------------------------------
+#                     if not cause == "l":
+#                         tank.drive_for_degrees(30,30,80,"stop") # 位置調整
+#                         gyro_range11(-30,30,270)
+#                         tank.drive(30,30)
+#                         while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+#                             pass
+#         # ラインに復帰
+#         tank.drive_for_degrees(40,40,240)
+#         tank.drive(30,-30)
+#         while colorRight.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
+#             pass
+#         tank.drive_for_degrees(30,-30,180) # 機体をラインに沿わせる
+#         motorLeft.brake() # 回転方向の運動を止める
+#         motorRight.brake()
+
+# # --------------------------------------------------------------------------------
+# def chattering_prevention(direction, line_search=False,degrees=80):
+#     isOverBlack = False
+#     left_angle = motorLeft.angle()
+#     right_angle = motorRight.angle()
+#     motorLeft.run(powertodegs(basic_speed))
+#     motorRight.run(powertodegs(basic_speed))
+#     while abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= drive_pid_for_degrees:
+#         if line_search:
+#             if direction == "l" and colorLeft.rgb()[1] < highest_refrection_of_Black:
+#                 isOverBlack = True
+#             elif colorRight.rgb()[1] < highest_refrection_of_Black:
+#                 isOverBlack = True
+#     return isOverBlack
+# # --------------------------------------------------------------------------------
+# def distance_go(direction,turn,line=False):
+#     if direction == "l":
+#         if turn == "on": # 左があるまで進む
+#             tank.drive(30,30)
+#             esp.clear()
+#             while 1: # 左にあるようになるまで
+#                 whatread = UARTwithESP32_LineMode(11,4)
+#                 if whatread[0] == 1 or whatread[0] == 3:
+#                     cause = "d"
+#                     print(whatread)
+#                     break
+#                 if whatread[1] != 0:
+#                     cause = "t"
+#                     print(whatread)
+#                     break
+#                 if line and (whatread[2] == 2 or whatread[2] == 3):
+#                     cause = "l"
+#                     print(whatread)
+#                     break
+#                 wait(5)
+#         else:
+#             # 左がない,まで進む
+#             tank.drive(30,30)
+#             esp.clear()
+#             while 1: # 左にないようになるまで
+#                 whatread = UARTwithESP32_LineMode(11,4)
+#                 if whatread[0] == 0 or whatread[0] == 2:
+#                     cause = "d"
+#                     break
+#                 if whatread[1] != 0:
+#                     cause = "t"
+#                     break
+#                 if line and (whatread[2] == 2 or whatread[2] == 3):
+#                     cause = "l"
+#                     break
+#                 wait(5)
+#     else:
+#         if turn == "on": # 右があるまで進む
+#             tank.drive(30,30)
+#             esp.clear()
+#             while 1: # 右にあるようになるまで
+#                 whatread = UARTwithESP32_LineMode(11,4)
+#                 if whatread[0] == 2 or whatread[0] == 3:
+#                     cause = "d"
+#                     break
+#                 if whatread[1] != 0:
+#                     cause = "t"
+#                     break
+#                 if line and (whatread[2] == 1 or whatread[2] == 3):
+#                     cause = "l"
+#                     break
+#                 wait(5)
+#         else:
+#             # 右がないまで進む
+#             tank.drive(30,30)
+#             esp.clear()
+#             while 1: # 右にないようになるまで
+#                 whatread = UARTwithESP32_LineMode(11,4)
+#                 if whatread[0] == 0 or whatread[0] == 1:
+#                     cause = "d"
+#                     break
+#                 if whatread[1] != 0:
+#                     cause = "t"
+#                     break
+#                 if line and (whatread[2] == 1 or whatread[2] == 3):
+#                     cause = "l"
+#                     break
+#                 wait(5)
+#     return cause
+
+# ============================================================
 
 def UARTwithESP32_LineMode(mode,numbyte):
     """"
@@ -617,7 +807,7 @@ def UARTwithESP32_LineMode(mode,numbyte):
     """
     esp.write(mode.to_bytes(1,'big'))
     error_count = 0
-    while esp.waiting() < numbyte and not any(ev3.buttons.pressed()):
+    while esp.waiting() < numbyte:
         if error_count > 10: # 10回以上失敗してたら一時停止
             motorLeft.brake()
             motorRight.brake()
@@ -631,35 +821,34 @@ def UARTwithESP32_LineMode(mode,numbyte):
 
 def gyro_range11(left_power,right_power,degree):
     esp.clear()
-    whatread = UARTwithESP32_LineMode(11,7)
-    start_angle = whatread[6]*2
+    whatread = UARTwithESP32_LineMode(11,4)
+    start_angle = whatread[3]*2
     target_angle_range_min = start_angle + degree - 5; # 目標角の範囲の最小値
     target_angle_range_max = start_angle + degree + 5; # 目標角の範囲の最大値
     tank.drive(left_power,right_power)
     # 繰り上がりとかを考慮しつつ180度回転するのを待つ
     if (target_angle_range_max <360):
         # そのままでOK
-        pass
-        while not any(ev3.buttons.pressed()):
-            whatread = UARTwithESP32_LineMode(11,7)
-            angle_now = whatread[6]*2
+        while (1):
+            whatread = UARTwithESP32_LineMode(11,4)
+            angle_now = whatread[3]*2
             if (target_angle_range_min <= angle_now and angle_now < target_angle_range_max):
                 break
             wait(5)
     elif (target_angle_range_max >= 360 and target_angle_range_min < 360):
         target_angle_range_max -= 360
-        while not any(ev3.buttons.pressed()):
-            whatread = UARTwithESP32_LineMode(11,7)
-            angle_now = whatread[6]*2
+        while (1):
+            whatread = UARTwithESP32_LineMode(11,4)
+            angle_now = whatread[3]*2
             if ((target_angle_range_min <= angle_now and angle_now < 360) or (0 <= angle_now and angle_now <= target_angle_range_max)):
                 break
             wait(5)
     elif (target_angle_range_min >= 360):
         target_angle_range_max -= 360
         target_angle_range_min -= 360
-        while not any(ev3.buttons.pressed()):
-            whatread = UARTwithESP32_LineMode(11,7)
-            angle_now = whatread[6]*2
+        while (1):
+            whatread = UARTwithESP32_LineMode(11,4)
+            angle_now = whatread[3]*2
             if (target_angle_range_min <= angle_now and angle_now < target_angle_range_max):
                 break
             wait(5)
@@ -688,10 +877,6 @@ def main():
         hill_statue = 0
         start_time = timer.time()
         # アームを固定
-        arm_rotate.run(-1*powertodegs(40)) # バケットを回す
-        wait(100)
-        while abs(arm_rotate.speed()) >= 5: # パワーが5以下(つまりこれ以上回せなくなる)になるまで回し続ける
-            pass
         arm_rotate.hold()
         print("start")
         # Get ready!!
@@ -705,8 +890,6 @@ def main():
         
         # ここでESPとPicoにスタート信号を送る
         print_pico(100)
-
-        ev3.speaker.beep()
 
         while not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb() # 左のRGBをゲットだぜ
@@ -739,7 +922,7 @@ def main():
             # ESP32との通信
             esp.write((10).to_bytes(1,'big')) # ESP32に値のリクエスト(10)を送る
             error_count = 0
-            while esp.waiting() < 4 and not any(ev3.buttons.pressed()): # 受信バッファに4Byteたまるまで待つ
+            while esp.waiting() < 4: # 受信バッファに4Byteたまるまで待つ
                 if error_count > 10: # 10回以上失敗してたら一時停止
                     motorLeft.brake()
                     motorRight.brake()
@@ -753,7 +936,18 @@ def main():
             whatread = esp.read(4)
             #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
 
-
+            # 直角系
+            if whatread[0] != 0:
+                if whatread[0] == 1:
+                    # 左折コーナー
+                    black("l")
+                elif whatread[0] == 2:
+                    # 右折コーナー
+                    black("r")
+                elif whatread[0] == 3:
+                    black("both")
+                esp.clear()
+                continue # ループの最初に戻る(通信の内容を更新)
             
             # 中央のセンサが黒を読んでいない場合
             if whatread[2] == 1 and rgb_left[2] > highest_refrection_of_Black and rgb_right[2] > highest_refrection_of_Black:
@@ -783,23 +977,10 @@ def main():
                     hill_statue = 2
                 elif whatread [3] == 3: # 各速度がどえらいでかい時は一度止まろうよ
                     tank.stop("hold")
-                    wait(1000)
+                    wait(2500)
                     basic_speed = 20
                     hill_statue = 2
                 
-            # 直角系
-                if whatread[0] != 0:
-                    if whatread[0] == 1:
-                        # 左折コーナー
-                        black("l")
-                    elif whatread[0] == 2:
-                        # 右折コーナー
-                        black("r")
-                    elif whatread[0] == 3:
-                        black("both")
-                    esp.clear()
-                    continue # ループの最初に戻る(通信の内容を更新)
-                    
                 # レスキューキット 坂だと誤探知の可能性があるからここに置くンゴ -----
                 if whatread[2] == 2 or whatread[2] == 3: # whatread[2]==3(つまりラインを見失いかつレスキューキットを発見)になることはないと思うけどそん時はレスキューキット優先、あとで進行停止しよう
                     print_pico(777)
