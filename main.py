@@ -772,11 +772,7 @@ def main():
 
             # 坂関係
             if hill_statue == 0:
-                if whatread[3] >= 20:
-                    pass # 左に傾いている
-                elif whatread[3] >= 10:
-                    pass # 右に傾いている
-                elif whatread[3]%10 == 1:
+                if whatread[3]%10 == 1:
                     basic_speed = 60
                     hill_statue = 1
                 elif whatread[3]%10 == 2:
@@ -812,6 +808,12 @@ def main():
             elif whatread[3] == 0:
                 basic_speed = 35
                 hill_statue = 0
+            
+            # 斜め対策
+            if whatread[3] >= 20:
+                pass # 左に傾いている
+            elif whatread[3] >= 10:
+                pass # 右に傾いている
 
             if whatread[1]%10 > 0:
                 avoid()
