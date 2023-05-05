@@ -12,6 +12,7 @@ timer = StopWatch()
 
 # センサーとモーターをEV3と接続していくぅ↑---------------------------
 # 失敗した時はその内容を吐露しながら停止するよ
+# 存在確認ができなかったときにはOSError
 
 # カラーセンサを接続
 try:
@@ -177,7 +178,7 @@ class Tank:
         right_angle = motorRight.angle()
         while (abs(left_angle - motorLeft.angle()) <= degrees and abs(right_angle - motorRight.angle()) <= degrees) and not any(ev3.buttons.pressed()):
             rgb_left = colorLeft.rgb() # 左のRGBをゲットだぜ
-            rgb_right = colorRight.rgb() # 右のRGｂをゲットだぜ
+            rgb_right = colorRight.rgb() # 右のRGBをゲットだぜ
 
             # PID制御
             Tank.error = rgb_left[1] - rgb_right[1] # 偏差をゲットだぜ
@@ -185,46 +186,6 @@ class Tank:
             motorLeft.run(powertodegs(speed + u)) # 動かす
             motorRight.run(powertodegs(speed - u))
         self.stop(stop_type)
-
-    def turn_right(self,degree):
-        """degreeには180,90のどれか"""
-        esp.clear()
-        print(degree)
-        esp.clear()
-        esp.write(degree.to_bytes(1,'big'))
-        wait(100)
-        hoge = esp.read(1) # read 18 or 9 
-
-        tank.drive(30,-30)
-        esp.clear()
-        while esp.waiting() == 0 and not any(ev3.buttons.pressed()):
-            print("turning")
-            wait(100)
-        motorLeft.brake()
-        motorRight.brake()
-        hoge = esp.read(1) # read 180 or 90
-        esp.write(degree.to_bytes(1,'big'))
-        esp.clear()
-
-    def turn_left(self,degree):
-        """degreeには180,27のどれか"""
-        esp.clear()
-        print(degree)
-        esp.clear()
-        esp.write(degree.to_bytes(1,'big'))
-        wait(100)
-        hoge = esp.read(1) # read 18 or 27
-
-        tank.drive(-30,30)
-        esp.clear()
-        while esp.waiting() == 0 and not any(ev3.buttons.pressed()):
-            print("turning")
-            wait(100)
-        motorLeft.brake()
-        motorRight.brake()
-        hoge = esp.read(1) # read 180 or 270
-        esp.write(degree.to_bytes(1,'big'))
-        esp.clear()
 
 tank = Tank()
 
@@ -672,7 +633,7 @@ def print_pico(num):
     """Raspberry Pi Picoの7セグに3桁の数字を表示する"""
     number = num.to_bytes(2,'big')
     what_to_send =  bytearray([3,number[0],number[1]])
-    pico.write(what_to_send) # この後の数字を
+    pico.write(what_to_send) # この後の数字を表示
 
 # ============================================================
 def main():
@@ -692,7 +653,7 @@ def main():
         wait(100)
         while abs(arm_rotate.speed()) >= 5: # パワーが5以下(つまりこれ以上回せなくなる)になるまで回し続ける
             pass
-        arm_rotate.hold()
+        arm_rotate.hold() # アームを固定する
         print("start")
         # Get ready!!
         ev3.speaker.beep()
@@ -828,8 +789,6 @@ def main():
         motorLeft.hold()
         motorRight.hold()
 
-        # ここでESPとPicoにストップ&リセット信号を送る(予定)
-        
         # ボタンが離されるのを待つ
         while any(ev3.buttons.pressed()):
             pass
