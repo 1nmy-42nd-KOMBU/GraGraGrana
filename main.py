@@ -217,7 +217,10 @@ arm = Arm()
 # ただの計算だからネイティブコードエミッタで高速化してる
 @micropython.native
 def powertodegs(power):
-    """スピード(%)をdeg/sに変換する"""
+    """
+    スピード(%)をdeg/sに変換する
+    本来Lモータの最大角速度は1050らしいけど、100%で使うのは控えろとどこかに書いてあったから最大値を950に押さえている
+    """
     return 950 * power /100
 
 @micropython.native
@@ -549,26 +552,9 @@ def rescuekit():
         pass
 # ============================================================
 
-max_mm = const(40)
-min_mm = const(60)
-
 def avoid():
-    print("a")
-    tank.stop("brake")
-    esp.clear()
-    tank.drive_for_degrees(-50,-50,175)
-    gyro_range11(-30,30,300)
-    tank.drive(50,19)
-    while colorLeft.rgb()[1] >= highest_refrection_of_Black:
-        pass
-    tank.stop("brake")
-    tank.drive_for_degrees(30,30,180)
-    tank.drive(-30,30)
-    while colorLeft.rgb()[1] > highest_refrection_of_Black: # 緑ないし黒を右のセンサが見つけるまで回る
-        pass
-    tank.drive_for_degrees(-30,30,110) # 機体をラインに沿わせる
-    motorLeft.brake() # 回転方向の運動を止める
-    motorRight.brake()
+    pass
+    # ここは本番まで作り切れなかったのでがんばれ
     # ============================================================
 
 def UARTwithESP32_LineMode(mode,numbyte):
@@ -591,13 +577,20 @@ def UARTwithESP32_LineMode(mode,numbyte):
     return whatread
 
 def gyro_range11(left_power,right_power,degree):
+    """
+    なんでこんな関数名にしたのかは不明
+    ESP側で任意の角度回ったらそれをEV3に知らせる方式(Uターンのときと同じ)が何故かエラーを吐きまくったことから急遽作った。
+    BNOの値は0~360だからいい感じに繰り上げ、繰り下げをしようね
+    左右どちらに曲がるのにも対応してる「はず」
+    """
     esp.clear()
     whatread = UARTwithESP32_LineMode(11,7)
     start_angle = whatread[6]*2
+    # 機体が目標角ジャストになる保証はないので±5で幅を持たせるで
     target_angle_range_min = start_angle + degree - 5; # 目標角の範囲の最小値
     target_angle_range_max = start_angle + degree + 5; # 目標角の範囲の最大値
     tank.drive(left_power,right_power)
-    # 繰り上がりとかを考慮しつつ180度回転するのを待つ
+    # 「繰り上がりとかを考慮しつつ」180度回転するのを待つ
     if (target_angle_range_max <360):
         # そのままでOK
         pass
