@@ -18,7 +18,7 @@ ev3 = EV3Brick()
 # This will be run only on Port 1
 C1 = I2CDevice(Port.S1, 0x50)
 
-# set mode to Mefrection Mode
+# set mode to Refrection Mode
 # a register of sensor mode is 0x52
 # there is not a register of sensor type
 # For details, see the user guide of MUX
