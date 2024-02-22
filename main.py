@@ -724,8 +724,8 @@ def main():
                 print("Left sensor is over green")
                 onGreenMarker("l")
                 continue # ループの最初に戻る(通信の内容を更新)
-            #print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
-            #print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
+            # print("left hsv:  "+str(hsv_left[0])+", "+str(hsv_left[1])+", "+str(hsv_left[2]))
+            # print("left rgb:  "+str(rgb_left[0])+", "+str(rgb_left[1])+", "+str(rgb_left[2]))
 
             # 右の緑判定
             hsv_right = changeRGBtoHSV(rgb_right) # HSVの値をゲット
@@ -733,7 +733,7 @@ def main():
                 print("Right sensor is over green")
                 onGreenMarker("r")
                 continue # ループの最初に戻る(通信の内容を更新)
-            #print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
+            # print("right hsv: "+str(hsv_right[0])+", "+str(hsv_right[1])+", "+str(hsv_right[2]))
             # print("right rgb: "+str(rgb_right[0])+", "+str(rgb_right[1])+", "+str(rgb_right[2]))
             
             # ESP32との通信
@@ -752,7 +752,6 @@ def main():
             # whatread[n]の形で使うときは型がunsigned(正の数)になる
             whatread = esp.read(4)
             #print(str(whatread[0])+", "+str(whatread[1])+", "+str(whatread[2])+", "+str(whatread[3]))
-
 
             
             # 中央のセンサが黒を読んでいない場合
@@ -773,21 +772,19 @@ def main():
 
             # 坂関係
             if hill_statue == 0:
-                if whatread[3] == 0:
-                    pass
-                elif whatread[3] == 1:
+                if whatread[3]%10 == 1:
                     basic_speed = 60
                     hill_statue = 1
-                elif whatread [3] == 2:
+                elif whatread[3]%10 == 2:
                     basic_speed = 20
                     hill_statue = 2
-                elif whatread [3] == 3: # 各速度がどえらいでかい時は一度止まろうよ
+                elif whatread[3]%10 == 3: # 角速度がどえらいでかい時は一度止まろうよ
                     tank.stop("hold")
                     wait(1000)
                     basic_speed = 20
                     hill_statue = 2
-                
-            # 直角系
+
+                # 直角系 坂のときは判定しない
                 if whatread[0] != 0:
                     if whatread[0] == 1:
                         # 左折コーナー
@@ -811,6 +808,12 @@ def main():
             elif whatread[3] == 0:
                 basic_speed = 35
                 hill_statue = 0
+            
+            # 斜め対策
+            if whatread[3] >= 20:
+                pass # 左に傾いている
+            elif whatread[3] >= 10:
+                pass # 右に傾いている
 
             if whatread[1]%10 > 0:
                 avoid()
